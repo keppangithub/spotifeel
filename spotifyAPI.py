@@ -7,8 +7,8 @@ import json
 load_dotenv()
 
 #Import credentials
-client_id = os.getenv("CLIENT_ID")
-client_secret = os.getenv("CLIENT_SECRET")
+client_id = os.getenv('CLIENT_ID')
+client_secret = os.getenv('CLIENT_SECRET')
 
 def get_token():
     '''
@@ -31,7 +31,8 @@ def get_token():
     data = {'grant_type': 'client_credentials'}
     result = post(url, headers=headers, data=data)
     json_result = json.loads(result.content)
-    token = json_result["access_token"]
+    token = json_result['access_token']
     return token
 
 token = get_token()
+print(token)
