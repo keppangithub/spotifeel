@@ -52,14 +52,13 @@ class SpotifyAPI:
             track_info = json_result['tracks']['items'][0]
             track_name = track_info['name']
             artist_name = track_info['artists'][0]['name']
+            track_id = track_info['id']
+            track_uri = track_info['uri']
 
         if len(json_result) == 0:
             print('No artist with this name exists.')
             return None
-        return {'track_name': track_name, 'artist_name': artist_name}
-    
-    def get_track_uri(self):
-        pass
+        return track_name, artist_name, track_id, track_uri
     
     def create_playlist(self, ):
         '''
