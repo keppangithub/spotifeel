@@ -41,7 +41,7 @@ class SpotifyAPI:
     def search_track(self, track, artist):
         url = 'https://api.spotify.com/v1/search'
         headers = self.get_auth_header()
-        query = f'?q=remaster%2520{track}%3ADoxy%2520{artist}%3AMiles%2520Davis&type=track%2Cartist&market=US&limit=1&offset=0'
+        query = f'?q=track:"{track}" artist:"{artist}"&type=track&market=US&limit=1'
 
         query_url = url + query
         result = get(query_url, headers=headers)
