@@ -37,7 +37,7 @@ class SpotifyAPI:
         return self.token
 
     def get_auth_header(self):
-        return {'Authorization': 'Bearer ' + self.token}
+        return {'Authorization': 'Bearer ' + self.token, 'Content-Type' : 'application/json'}
     
     def search_track(self, track, artist):
         url = self.url + 'search'
@@ -58,24 +58,35 @@ class SpotifyAPI:
             return None
         return {'track_name': track_name, 'artist_name': artist_name}
     
-    def create_playlist(self, ):
+    def add_to_playlist(self, playlist_id: str, tracks: list[str]):
         '''
-        Create a playlist through spotify's API.
+        Add tracks to a playlist via Spotify's API.
         
         Parameters: 
-        - 
+        - playlist_id: str (ex. 3cEYpjA9oz9GiPac4AsH4n, from spotify)
+        - tracks: list of str (ex. spotify:track:1301WleyT98MSxVHPZCA6M, from spotify)
         
         Returns:
-        -
+        - snapshot_id: str (ex. abc, from spotify)
         
         '''
+        query_url = self.url + 'playlists/' + f'{playlist_id}/' 
         
+        for track_uri in tracks:
+            if track_uri != tracks[-1]:
+                query_url = query_url + track_uri + ','
+                
+            else: 
+                query_url = query_url + track_uri
         
+        headers = self.get_auth_header()
+           
         result = post(query_url, headers=headers)
+        snapshot_id = json.loads(result.content)
         
-        pass
-
-spotifyapi = SpotifyAPI()
+        return snapshot_id
+                       
+spotifyapi = SpotifyAPI() 
 token = spotifyapi.get_token()
 song = spotifyapi.search_track('Baby', 'Justin Bieber')
 print(song)
