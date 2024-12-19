@@ -6,6 +6,9 @@ import json
 
 class SpotifyAPI:
     def __init__(self) -> None:
+        '''
+        Intialises the SpotifyAPI object by loading environement variables and setting up the requored credentials and API URI.
+        '''
         load_dotenv()
         self.client_id = os.getenv('CLIENT_ID')
         self.client_secret = os.getenv('CLIENT_SECRET')
@@ -37,10 +40,26 @@ class SpotifyAPI:
         return self.token
 
     def get_auth_header(self):
+        '''
+        Generates the authorization header for making requests to Spotify API.
+
+        Returns:
+        - A dictionary containing the 'Authorization' and 'Content-Type' headers
+        '''
         return {'Authorization': 'Bearer ' + self.token, 
                 'Content-Type' : 'application/json'}
     
     def search_track(self, track, artist):
+        '''
+        Searcch for a specific track and return its details including track ID and URI.
+
+        Parameters:
+        - track: str
+        - artists: str
+
+        Returns:
+        - A dictionary containing the track name, artist, track ID, and URI.
+        '''
         url = self.url + 'search'
         headers = self.get_auth_header()
         query = f'?q=track:"{track}" artist:"{artist}"&type=track&market=US&limit=1'
