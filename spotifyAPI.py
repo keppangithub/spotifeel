@@ -53,11 +53,14 @@ class SpotifyAPI:
             track_info = json_result['tracks']['items'][0]
             track_name = track_info['name']
             artist_name = track_info['artists'][0]['name']
+            track_id = track_info['id']
+            track_uri = track_info['uri']
 
         if len(json_result) == 0:
             print('No artist with this name exists.')
             return None
-        return {'track_name': track_name, 'artist_name': artist_name}
+        
+        return track_name, artist_name, track_id, track_uri
     
     def create_new_playlist(self, user_id: str, new_playlist_name: str):
         '''
@@ -110,4 +113,4 @@ spotifyapi = SpotifyAPI()
 token = spotifyapi.get_token()
 song = spotifyapi.search_track('Baby', 'Justin Bieber')
 print(song)
-print(spotifyapi.create_new_playlist('i1217ccdaax1rwrq588j1ymax', 'Ellen test'))
+#print(spotifyapi.create_new_playlist('i1217ccdaax1rwrq588j1ymax', 'Ellen test'))
