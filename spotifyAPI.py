@@ -10,6 +10,7 @@ class SpotifyAPI:
         self.client_id = os.getenv('CLIENT_ID')
         self.client_secret = os.getenv('CLIENT_SECRET')
         self.token = None
+        self.url = 'https://api.spotify.com/v1/'
 
     def get_token(self):
         '''
@@ -39,7 +40,7 @@ class SpotifyAPI:
         return {'Authorization': 'Bearer ' + self.token}
     
     def search_track(self, track, artist):
-        url = 'https://api.spotify.com/v1/search'
+        url = self.url + 'search'
         headers = self.get_auth_header()
         query = f'?q=track:"{track}" artist:"{artist}"&type=track&market=US&limit=1'
 
@@ -56,6 +57,23 @@ class SpotifyAPI:
             print('No artist with this name exists.')
             return None
         return {'track_name': track_name, 'artist_name': artist_name}
+    
+    def create_playlist(self, ):
+        '''
+        Create a playlist through spotify's API.
+        
+        Parameters: 
+        - 
+        
+        Returns:
+        -
+        
+        '''
+        
+        
+        result = post(query_url, headers=headers)
+        
+        pass
 
 spotifyapi = SpotifyAPI()
 token = spotifyapi.get_token()
