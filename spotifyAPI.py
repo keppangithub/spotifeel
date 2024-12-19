@@ -58,7 +58,25 @@ class SpotifyAPI:
             return None
         return {'track_name': track_name, 'artist_name': artist_name}
     
-    def add_to_playlist(self, playlist_id: str, tracks: list[str]):
+    def create_new_playlist(self, user_id: str, new_playlist_name: str):
+        '''
+        Create a new playlist via Spotify's API.
+        
+        Parameters:
+        - 
+        
+        Returns:
+        - 
+        '''
+        query_url = self.url + f'{user_id}/playlists'
+        headers = self.get_auth_header()
+        
+        data = {"name": new_playlist_name}
+        
+        result = post(query_url, headers=headers, json=data)
+        return result
+    
+    def add_to_playlist(self, playlist_id: str, tracks: list[str]) -> str:
         '''
         Add tracks to a playlist via Spotify's API.
         
@@ -90,3 +108,4 @@ spotifyapi = SpotifyAPI()
 token = spotifyapi.get_token()
 song = spotifyapi.search_track('Baby', 'Justin Bieber')
 print(song)
+print(spotifyapi.create_new_playlist('i1217ccdaax1rwrq588j1ymax', 'Ellen test'))
