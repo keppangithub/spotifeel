@@ -37,7 +37,8 @@ class SpotifyAPI:
         return self.token
 
     def get_auth_header(self):
-        return {'Authorization': 'Bearer ' + self.token, 'Content-Type' : 'application/json'}
+        return {'Authorization': 'Bearer ' + self.token, 
+                'Content-Type' : 'application/json'}
     
     def search_track(self, track, artist):
         url = self.url + 'search'
@@ -63,7 +64,8 @@ class SpotifyAPI:
         Create a new playlist via Spotify's API.
         
         Parameters:
-        - 
+        - user_id: str 
+        - new_playlist_name: str
         
         Returns:
         - 
