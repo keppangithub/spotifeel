@@ -12,12 +12,16 @@ class SpotifyAPI:
         variables and setting up the requored credentials and API URI.
         '''
         load_dotenv()
+        
         self.client_id = os.getenv('CLIENT_ID')
         self.client_secret = os.getenv('CLIENT_SECRET')
+        
         self.token = None
+        
         self.url = 'https://api.spotify.com/v1/'
         self.token_url = 'https://accounts.spotify.com/api/token'
         self.redirect_uri = 'http://localhost:8888/callback'
+        self.auth_url = 'https://accounts.spotify.com/authorize'
 
     def get_token(self):
         '''
@@ -68,7 +72,7 @@ class SpotifyAPI:
             'redirect_uri': self.redirect_uri,
         }
         
-        auth_url = AUTH_URL + '?' + urllib.parse.urlencode(query_params)
+        auth_url = self.auth_url + '?' + urllib.parse.urlencode(query_params)
         return auth_url
     
     def login_Callback(self):

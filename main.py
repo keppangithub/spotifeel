@@ -10,9 +10,14 @@ def index():
 
 @app.route('/login')
 def login():
-    auth_url = SpotifyAPI.login()
-    return redirect(auth_url)
+    auth_url = user.login()
+    return redirect(auth_url) 
 
-@app.route('/callback')
-def callback():
-    SpotifyAPI.login_Callback()
+@app.route('/login callback')
+def login_callback():
+    pass
+
+# Starta servern
+if __name__ == '__main__':
+    user = SpotifyAPI()
+    app.run(port=8888)
