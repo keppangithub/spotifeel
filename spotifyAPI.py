@@ -16,8 +16,10 @@ class SpotifyAPI:
         self.client_secret = os.getenv('CLIENT_SECRET')
         self.token = None
         self.url = 'https://api.spotify.com/v1/'
+        self.token_url = 'https://accounts.spotify.com/api/token'
+        self.redirect_uri = 'http://localhost:8888/callback'
 
-    def get_client_token(self):
+    def get_token(self):
         '''
         Get access token from spotify for developers which can be used to
         access a given resource or user's data. 
@@ -38,23 +40,10 @@ class SpotifyAPI:
         data = {'grant_type': 'client_credentials'}
         result = post(url, headers=headers, data=data)
         json_result = json.loads(result.content)
+        
         self.token = json_result['access_token']
+        
         return self.token
-    
-    def get_server_token(self):
-        code = request.args.get('code')
-    
-        response = post(TOKEN_URL, data={
-            'grant_type': 'authorization_code',
-            'code': code,
-            'redirect_uri': REDIRECT_URI,
-            'client_id': CLIENT_ID,
-            'client_secret': CLIENT_SECRET,
-        })
-        response_data = response.json()
-        access_token = response_data.get('access_token')
-
-        return f'Access Token: {access_token}'
 
     def get_auth_header(self):
         '''
@@ -70,18 +59,32 @@ class SpotifyAPI:
         
     def login(self):
         scope = 'user-read-private user-read-email'
-        REDIRECT_URI = 'http://localhost:8888/callback'
         AUTH_URL = 'https://accounts.spotify.com/authorize'
 
         query_params = {
             'response_type': 'code',
             'client_id': self.client_id,
             'scope': scope, 
-            'redirect_uri': REDIRECT_URI,
+            'redirect_uri': self.redirect_uri,
         }
         
         auth_url = AUTH_URL + '?' + urllib.parse.urlencode(query_params)
         return auth_url
+    
+    def login_Callback(self):
+        code = get('code')
+    
+        response = post(self.token_url, data={
+            'grant_type': 'authorization_code',
+            'code': code,
+            'redirect_uri': self.redirect_uri,
+            'client_id': self.client_id,
+            'client_secret': self.client_secret,
+        })
+        response_data = response.json()
+        access_token = response_data.get('access_token')
+
+        return f'Access Token: {access_token}'
         
     
     def search_track(self, track, artist):
@@ -166,7 +169,7 @@ class SpotifyAPI:
         return snapshot_id
                        
 spotifyapi = SpotifyAPI() 
-token = spotifyapi.get_client_token()
+token = spotifyapi.get_token()
 song = spotifyapi.search_track('Baby', 'Justin Bieber')
 print(song)
 #print(spotifyapi.create_new_playlist('i1217ccdaax1rwrq588j1ymax', 'Ellen test'))

@@ -15,4 +15,4 @@ def login():
 
 @app.route('/callback')
 def callback():
-    spo
+    SpotifyAPI.login_Callback()
