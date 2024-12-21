@@ -1,0 +1,39 @@
+body,
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background-color: pink;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.header>aside {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+}
+
+.header a {
+    color: white;
+    font-size: 26px;
+    text-decoration: none;
+    font-family: "Montserrat", serif;
+    font-weight: bold;
+}
+
+.header a>span {
+    color: #1ED760;
+}
+
+.header>.menu {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+    margin-left: auto;
+}

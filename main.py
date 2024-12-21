@@ -32,7 +32,7 @@ def login_callback():
 
 @app.route('/home')
 def home_page():
-    render_template('index.html')
+    return render_template('index.html')
 
 
 # Starta servern
