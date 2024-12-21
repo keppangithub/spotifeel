@@ -1,7 +1,9 @@
 body {
-    background-color: #D18AB4;
+    background-color: #D18AB4 !important;
 }
 
-#playlist_item {
-    background-color: blue;
+.playlist_item {
+    background-color: blue !important;
+    border-radius: 25px;
+    height: 500px;
 }
