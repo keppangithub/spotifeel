@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    '''Return template index.html'''
+    '''Return template login.html'''
     return render_template('login.html')
 
 @app.route('/login')
@@ -17,7 +17,6 @@ def login():
     
     '''
     auth_url = user.login()
-    print(f'Redirecting to: {auth_url}')
     return redirect(auth_url)
 
 @app.route('/callback')
@@ -32,7 +31,7 @@ def login_callback():
 
 @app.route('/home')
 def home_page():
-    return render_template('index.html')
+    return render_template('playlist.html')
 
 
 # Starta servern
