@@ -35,6 +35,7 @@ def login():
 @app.route('/callback')
 def callback():
     code = request.args.get('code')
+    
     response = post(TOKEN_URL, data={
         'grant_type': 'authorization_code',
         'code': code,
@@ -44,7 +45,7 @@ def callback():
     })
     response_data = response.json()
     access_token = response_data.get('access_token')
-    print(access_token)
+
     return f'Access Token: {access_token}'
 
 

@@ -1,3 +1,4 @@
 Requirments:
 - Module: requests (2.32.3)
 - Module: dotenv (1.0.1)
+- Flask
