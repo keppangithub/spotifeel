@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 import os
 import urllib.parse
 import base64
-from requests import post, get
+from requests import post, get, request
 import json
 
 class SpotifyAPI:
@@ -18,7 +18,7 @@ class SpotifyAPI:
         
         self.token = None
         
-        self.url = 'https://api.spotify.com/v1/'
+        self.base_url = 'https://api.spotify.com/v1/'
         self.token_url = 'https://accounts.spotify.com/api/token'
         self.redirect_uri = 'http://localhost:8888/callback'
         self.auth_url = 'https://accounts.spotify.com/authorize'
@@ -63,7 +63,6 @@ class SpotifyAPI:
         
     def login(self):
         scope = 'user-read-private user-read-email'
-        AUTH_URL = 'https://accounts.spotify.com/authorize'
 
         query_params = {
             'response_type': 'code',
@@ -75,8 +74,12 @@ class SpotifyAPI:
         auth_url = self.auth_url + '?' + urllib.parse.urlencode(query_params)
         return auth_url
     
-    def login_Callback(self):
-        code = get('code')
+    def login_callback(self, request):      
+        
+        code = request.args.get('code')
+        
+        if not code:
+            return "Authorization code missing from the request"
     
         response = post(self.token_url, data={
             'grant_type': 'authorization_code',
@@ -85,10 +88,18 @@ class SpotifyAPI:
             'client_id': self.client_id,
             'client_secret': self.client_secret,
         })
-        response_data = response.json()
-        access_token = response_data.get('access_token')
+        
+        if response.status_code != 200:
+            return f"Error exchanging code for token: {response.status_code}"
+        
+        token_info = response.json()
+        
+        access_token = token_info.get('access_token')
+        refresh_token = token_info.get('refresh_token')
+        expires_in = token_info.get('expired_in')
+        
 
-        return f'Access Token: {access_token}'
+        return f'Access Token: {access_token}, Refresh Token: {refresh_token}, Token info: {expires_in}'
         
     
     def search_track(self, track, artist):
@@ -104,7 +115,7 @@ class SpotifyAPI:
         - A dictionary containing the track name, artist, track ID,
             and URI.
         '''
-        url = self.url + 'search'
+        url = self.base_url + 'search'
         headers = self.get_auth_header()
         query = f'?q=track:"{track}" artist:"{artist}"&type=track&market=US&limit=1'
 
@@ -136,7 +147,7 @@ class SpotifyAPI:
         Returns:
         - 
         '''
-        query_url = self.url + f'{user_id}/playlists'
+        query_url = self.base_url + f'{user_id}/playlists'
         headers = self.get_auth_header()
         
         data = {"name": new_playlist_name}
@@ -156,7 +167,7 @@ class SpotifyAPI:
         - snapshot_id: str (ex. abc, from spotify)
         
         '''
-        query_url = self.url + 'playlists/' + f'{playlist_id}/' 
+        query_url = self.base_url + 'playlists/' + f'{playlist_id}/' 
         
         for track_uri in tracks:
             if track_uri != tracks[-1]:
