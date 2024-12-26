@@ -62,6 +62,12 @@ class SpotifyAPI:
                 'Content-Type' : 'application/json'}
         
     def login(self):
+        '''
+        Use spotify's API to create a authorization URL through which a user can login to their Spotify Account (OAuth).
+        
+        Returns:
+        - auth_url
+        '''
         scope = 'user-read-private user-read-email'
 
         query_params = {
@@ -74,7 +80,16 @@ class SpotifyAPI:
         auth_url = self.auth_url + '?' + urllib.parse.urlencode(query_params)
         return auth_url
     
-    def login_callback(self, request):      
+    def login_callback(self, request): 
+        '''
+        Get code from 
+        
+        Returns:
+        - String with:
+           - acess_token
+           - refresh_token
+           - expires_in
+        '''     
         
         code = request.args.get('code')
         
