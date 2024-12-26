@@ -17,6 +17,9 @@ class SpotifyAPI:
         self.client_secret = os.getenv('CLIENT_SECRET')
         
         self.token = None
+        self.access_token = None
+        self.refresh_token = None
+        self.expires_in = None
         
         self.base_url = 'https://api.spotify.com/v1/'
         self.token_url = 'https://accounts.spotify.com/api/token'
@@ -44,7 +47,7 @@ class SpotifyAPI:
         data = {'grant_type': 'client_credentials'}
         result = post(url, headers=headers, data=data)
         json_result = json.loads(result.content)
-        
+
         self.token = json_result['access_token']
         
         return self.token
@@ -110,12 +113,17 @@ class SpotifyAPI:
         
         token_info = response.json()
         
-        access_token = token_info.get('access_token')
-        refresh_token = token_info.get('refresh_token')
-        expires_in = token_info.get('expired_in')
         
-
-        return f'Access Token: {access_token}, Refresh Token: {refresh_token}, Token info: {expires_in}'
+        self.access_token = token_info.get('access_token')
+        self.refresh_token = token_info.get('refresh_token')
+        self.expires_in = token_info.get('expired_in')
+    
+    def get_user_information(self):
+            
+        headers = self.get_auth_header()
+        
+        response = get(self.base_url + 'me', headers=headers)
+        return response
         
     
     def search_track(self, track, artist):

@@ -27,15 +27,27 @@ def login_callback():
     Redirect user to the home page
     
     '''   
-    print(user.login_callback(request))
+    user.login_callback(request)
     return redirect('/home')
 
 @app.route('/home')
 def home_page():
+    user_information = user.get_user_information()
+    print(user_information)
+    if not user_information:
+        return render_template('login.html')
+    
+    else:
+        return render_template('home.html')
+    
+
+@app.route('/playlist')
+def playlist_page():
     return render_template('playlist.html')
 
 
 # Starta servern
 if __name__ == '__main__':
     user = SpotifyAPI()
+    user.get_token()
     app.run(port=8888)
