@@ -82,7 +82,8 @@ class SpotifyAPI:
     
     def login_callback(self, request): 
         '''
-        Get code from 
+        Get acess token, refresh token and information about when the token expires from SpotifyAPI.
+        Redirect the user to the defined redirect_uri. 
         
         Returns:
         - String with:
