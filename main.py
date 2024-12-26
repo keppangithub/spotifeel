@@ -27,6 +27,7 @@ def login_callback():
     Redirect user to the home page
     
     '''   
+    print(user.login_callback(request))
     return redirect('/home')
 
 @app.route('/home')

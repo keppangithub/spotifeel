@@ -3,7 +3,7 @@ body {
 }
 
 .playlist_item {
-    background-color: blue !important;
+    background-color: rgb(103, 103, 221) !important;
     border-radius: 25px;
     height: 500px;
 }
