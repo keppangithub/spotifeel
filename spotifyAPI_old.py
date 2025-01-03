@@ -1,10 +1,8 @@
 from dotenv import load_dotenv
 import os
-
 import urllib.parse
 import base64
-
-from requests import post, get
+from requests import post, get, request
 import json
 
 class SpotifyAPI:
@@ -18,30 +16,55 @@ class SpotifyAPI:
         self.client_id = os.getenv('CLIENT_ID')
         self.client_secret = os.getenv('CLIENT_SECRET')
         
-        self.redirect_uri = 'http://localhost:8888/callback'
-        self.auth_url = 'https://accounts.spotify.com/authorize'
-        
+        self.token = None
         self.access_token = None
         self.refresh_token = None
         self.expires_in = None
         
         self.base_url = 'https://api.spotify.com/v1/'
         self.token_url = 'https://accounts.spotify.com/api/token'
+        self.redirect_uri = 'http://localhost:8888/callback'
+        self.auth_url = 'https://accounts.spotify.com/authorize'
 
-        
-    def is_user_logged_in(self) -> None:
+    def get_token(self):
         '''
-        Check if user is logged in by seeing if a code has been generated from the redirectToAuthCodeFlow method.
-        
-        If the code has not been received, run the redirectToAuthCodeFlow method. Else return.
+        Get access token from spotify for developers which can be used to
+        access a given resource or user's data. 
+
+        Returns: 
+        token - str
         '''
-        if self.access_token == None:
-            return False
+        auth_string = self.client_id + ':' + self.client_secret
+        auth_bytes = auth_string.encode('utf-8')
+        auth_base64 = str(base64.b64encode (auth_bytes), 'utf-8')
+
+        url = 'https://accounts.spotify.com/api/token'
+        headers = {
+            'Authorization': 'Basic ' + auth_base64,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+
+        data = {'grant_type': 'client_credentials'}
+        result = post(url, headers=headers, data=data)
+        json_result = json.loads(result.content)
+
+        self.token = json_result['access_token']
         
-        else:
-            return True
-    
-    def redirectToAuthCodeFlow(self) -> str:
+        return self.token
+
+    def get_auth_header(self):
+        '''
+        Generates the authorization header for making requests to
+        Spotify API.
+
+        Returns:
+        - A dictionary containing the 'Authorization' and
+            'Content-Type' headers
+        '''
+        return {'Authorization': 'Bearer ' + self.token, 
+                'Content-Type' : 'application/json'}
+        
+    def login(self):
         '''
         Use spotify's API to create a authorization URL through which a user can login to their Spotify Account (OAuth).
         
@@ -53,14 +76,15 @@ class SpotifyAPI:
         query_params = {
             'client_id': self.client_id,
             'response_type': 'code',
-            'scope': scope,
             'redirect_uri': self.redirect_uri,
+            'scope': scope, 
+            
         }
         
         auth_url = self.auth_url + '?' + urllib.parse.urlencode(query_params)
         return auth_url
     
-    def login_callback(self, code): 
+    def login_callback(self, request): 
         '''
         Get acess token, refresh token and information about when the token expires from SpotifyAPI.
         Redirect the user to the defined redirect_uri. 
@@ -70,47 +94,38 @@ class SpotifyAPI:
            - acess_token
            - refresh_token
            - expires_in
-        '''       
-        req_body = {
-            'code': code,
+        '''     
+        
+        code = request.args.get('code')
+        
+        if not code:
+            return "Authorization code missing from the request"
+    
+        response = post(self.token_url, data={
             'grant_type': 'authorization_code',
+            'code': code,
             'redirect_uri': self.redirect_uri,
             'client_id': self.client_id,
             'client_secret': self.client_secret,
-        }
+        })
         
-        response = post(self.token_url, data = req_body)        
+        if response.status_code != 200:
+            return f"Error exchanging code for token: {response.status_code}"
+        
         token_info = response.json()
+        
         
         self.access_token = token_info.get('access_token')
         self.refresh_token = token_info.get('refresh_token')
-        self.expires_in = token_info.get('expires_in')
-        
-        return
+        self.expires_in = token_info.get('expired_in')
     
-    def get_auth_header(self):
-        '''
-        Generates the authorization header for making requests to
-        Spotify API.
-
-        Returns:
-        - A dictionary containing the 'Authorization' and
-            'Content-Type' headers
-        '''
-        return {'Authorization': 'Bearer ' + self.access_token, 
-                'Content-Type' : 'application/json'}
-        
     def get_user_information(self):
-        '''
-        Get information about the logged in user from the SPotify API.
-        '''
-        headers = {'Authorization': f'Bearer ' + self.access_token}
+            
+        headers = self.get_auth_header()
         
-        url = self.base_url + 'me'
+        response = get(self.base_url + 'me', headers=headers)
+        return response
         
-        response = get(url, headers=headers)
-        print(response)
-        return
     
     def search_track(self, track, artist):
         '''
@@ -192,31 +207,9 @@ class SpotifyAPI:
         snapshot_id = json.loads(result.content)
         
         return snapshot_id
-    
-    
-    
-    #Tror inte vi behöver detta
-    def get_token(self):
-        '''
-        #Get access token from spotify for developers which can be used to
-        #access a given resource or user's data. 
-
-        #Returns: 
-        #token - str
-        
-        auth_string = self.client_id + ':' + self.client_secret
-        auth_bytes = auth_string.encode('utf-8')
-        auth_base64 = str(base64.b64encode (auth_bytes), 'utf-8')
-
-        headers = self.get_auth_header(auth_base64)
-
-        data = {'grant_type': 'client_credentials'}
-        result = post(self.token_url, headers=headers, data=data)
-        json_result = json.loads(result.content)
-
-        self.token = json_result['access_token']
-        
-        return
-        '''  
-        
-    #Vi struntar i refreshtoken? Överkurs... Mer än 1 h användning typ
+                       
+spotifyapi = SpotifyAPI() 
+token = spotifyapi.get_token()
+song = spotifyapi.search_track('Baby', 'Justin Bieber')
+print(song)
+#print(spotifyapi.create_new_playlist('i1217ccdaax1rwrq588j1ymax', 'Ellen test'))
