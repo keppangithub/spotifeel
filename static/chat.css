@@ -1,0 +1,25 @@
+body{
+    background-color: pink;
+}
+#question-section {
+    color: #D3DCCD;
+    font-size: 36px;
+    text-decoration: none;
+    font-family: "Montserrat", serif;
+    font-weight: bold;
+
+}
+#date{
+    color: #6B717E;
+    font-size: 26px;
+    text-decoration: none;
+    font-family: "Montserrat", serif;
+    font-weight: 500;
+}
+#question-section{
+    display:flex;
+    margin: 0 12% 0 12%;
+}
+#text-section{
+    border-radius: 20%;
+}
