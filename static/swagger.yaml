@@ -4,10 +4,10 @@ info:
   title: Spotifeel
   description: 'API for retrieving playlists based on emotions'
 servers:
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/SVENLINKASPER/Spotifeel/1.0.0
+  - description: Local server
+    url: http://localhost:8888
 paths:
-  /playlists/emotion/{id}:
+  /playlists/emotion/{emotionId}:
     get:
       summary: Get playlist based on emotion
       description: Retrieves a curated playlist based on a specific emotion and its intensity

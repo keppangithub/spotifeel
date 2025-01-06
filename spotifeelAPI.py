@@ -1,23 +1,9 @@
-from flask import Flask, jsonify
-from flask_swagger_ui import get_swaggerui_blueprint
+from flask import Flask, jsonify, redirect, request, url_for
 import yaml
 import os
 import json
-
-
-app = Flask('__name__') # Specify static folder explicitly
-SWAGGER_URL = '/swagger'
-API_URL = '/static/swagger.json'
-
-swaggerui_blueprint = get_swaggerui_blueprint(
-    SWAGGER_URL,
-    API_URL,
-    config={
-        'app_name': "Spotifeel API"
-    }
-)
-app.register_blueprint(swaggerui_blueprint,url_prefix = SWAGGER_URL)
-
+import promptGPT
+from app import app
 
 yaml_file_path = os.path.join(os.getcwd(), 'static', 'swagger.yaml')
 json_file_path = os.path.join(os.getcwd(), 'static', 'swagger.json')
@@ -33,5 +19,25 @@ with open(json_file_path, 'w') as json_file:
 def swagger_json():
     return jsonify(SWAGGER_SPEC)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route('/playlists/emotion/<int:emotionId>', methods=['GET'])
+def get_playlist(emotionId):
+    print(promptGPT.create_playlist(get_emotion_by_id(f"{emotionId}")))
+
+
+def get_emotion_by_id(emotionId):
+    emotions = {
+        "1": "Furious",
+        "2": "Frustrated",
+        "3": "Horrified",
+        "4": "Disappointed",
+        "5": "Euphoric",
+        "6": "Loving",
+        "7": "Happy",
+        "8": "Useless",
+        "9": "Regretful",
+        "10": "Dejected",
+        "11": "Unhappy",
+        "12": "Scared",
+        "13": "Anxious"
+    }
+    return emotions[emotionId]

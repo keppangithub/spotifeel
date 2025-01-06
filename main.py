@@ -3,11 +3,25 @@ from spotifyAPI import SpotifyAPI
 from datetime import date
 import promptGPT
 import feelings
+from app import app
+from flask_swagger_ui import get_swaggerui_blueprint
 
-app = Flask(__name__)
-app.secret_key = 'enhemlignyckel'
+'''Set the path for Swagger documentation'''
+SWAGGER_URL = '/swagger'
+API_URL = '/static/swagger.json'
+
+''' Configure Swagger UI blueprint with application name '''
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "Spotifeel API"
+    }
+)
+app.register_blueprint(swaggerui_blueprint, url_prefix='/swagger')
+
+
 user = SpotifyAPI()
-
 
 @app.route('/login')
 def login_page():
@@ -18,9 +32,9 @@ def login_page():
 def oauth_spotify():
     '''
     Get auth_url via login() function in class SpotifyApi
-    
+
     Redirect user to the login function via Spotify's API
-    
+
     '''
     auth_url = user.redirectToAuthCodeFlow()
     return redirect(auth_url)
@@ -28,18 +42,18 @@ def oauth_spotify():
 @app.route('/callback')
 def login_callback():
     '''
-    The user has been redirected to this endpoint after having logged in to Spotify 
-    
+    The user has been redirected to this endpoint after having logged in to Spotify
+
     Redirect user to the index page
-    
-    '''   
+
+    '''
     if 'error' in request.args:
             return jsonify({'error': request.args['error']})
-        
+
     if 'code' in request.args:
         code = request.args['code']
         user.login_callback(code)
-        
+
         return redirect('/')
 
 @app.route('/', methods=['POST', 'GET'])
@@ -47,22 +61,22 @@ def index():
     if not user.is_user_logged_in():
         print("ERROR: user is not logged in")
         return redirect ('/login')
-    
+
     else:
         user.get_user_information()
         if request.method == 'POST':
             userPrompt = request.form.get('userPrompt')
             response = promptGPT.run_prompt(userPrompt)
             return redirect(url_for('verify', response=response))
-        
+
         today = date.today()
         return render_template('chat.html', today=today)
-    
+
 @app.route('/playlist', methods=['POST'])
 def playlist():
     data = request.get_json()
     action = data.get("message")
-    feeling = session.get('feeling')    
+    feeling = session.get('feeling')
     print("This should be either true or false: "+ action)
     print("This is the feeling in /playlist:"+feeling)
     if action == "false":
@@ -94,4 +108,3 @@ def verify():
 # Starta servern
 if __name__ == '__main__':
     app.run(debug=True, port=8888)
-    
