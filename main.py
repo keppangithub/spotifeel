@@ -59,19 +59,29 @@ def index():
         return render_template('chat.html', today=today)
     
 @app.route('/playlist', methods=['POST'])
+
 def playlist():
-    data = request.get_json()
-    action = data.get("message")
-    feeling = session.get('feeling')    
-    print("This should be either true or false: "+ action)
-    print("This is the feeling in /playlist:"+feeling)
-    if action == "false":
-        feeling = feelings.negated_feeling(feeling)
-        print("This is the negated feeling:" + feeling)
+    if not user.is_user_logged_in():
+        print("ERROR: user is not logged in")
+        return redirect ('/login')
+    
+    else:
+        data = request.get_json()
+        action = data.get("message")
+        feeling = session.get('feeling')    
+        print("This should be either true or false: "+ action)
+        print("This is the feeling in /playlist:"+feeling)
+        
+        if action == "false":
+            feeling = feelings.negated_feeling(feeling)
+            print("This is the negated feeling:" + feeling)
 
-    playlist = promptGPT.create_playlist(feeling)
-
-    return render_template('playlist.html')
+        user.get_user_information()
+        songs_for_playlist = promptGPT.create_playlist(feeling)
+        new_playlist_id = user.create_new_playlist(user.user_id, "Test")
+        user.add_to_playlist(new_playlist_id, songs_for_playlist)
+        
+        return render_template('playlist.html')
 
 
 

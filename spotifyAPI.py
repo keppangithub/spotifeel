@@ -22,9 +22,12 @@ class SpotifyAPI:
         self.auth_endpoint = 'https://accounts.spotify.com/authorize'
         
         self.access_token = None
+        self.refresh_token = None
         
         self.base_url = 'https://api.spotify.com/v1'
         self.token_url = 'https://accounts.spotify.com/api/token'
+        
+        self.user_id = None
         
             
     def is_user_logged_in(self) -> None:
@@ -47,7 +50,7 @@ class SpotifyAPI:
         Returns:
         - auth_url
         '''
-        scope = 'user-read-private user-read-email'
+        scope = 'user-read-private user-read-email playlist-modify-public'
 
         query_params = {
             'client_id': self.client_id,
@@ -89,9 +92,10 @@ class SpotifyAPI:
         token_info = response.json()
         
         self.access_token = token_info.get('access_token')
+        self.refresh_token = token_info.get('refresh_token')
         
         return
-    
+        
     def get_auth_header(self):
         '''
         Generates the authorization header for making requests to Spotify API.
@@ -110,13 +114,11 @@ class SpotifyAPI:
         req_header = self.get_auth_header()
         
         response = requests.get(url, headers=req_header)
+        response = response.json()
+   
+        self.user_id = response['id']
         
-        print(f"Response Status Code: {response.status_code}")
-        print(f"Response Content-Type: {response.headers.get('Content-Type')}")
-        print("Raw response content:")
-        print(response.text)  # This will show the raw response content
-        
-        return
+        return 
     
     def search_track(self, track, artist):
         '''
@@ -163,13 +165,28 @@ class SpotifyAPI:
         Returns:
         - 
         '''
-        query_url = self.base_url + f'{user_id}/playlists'
-        headers = self.get_auth_header()
+        query_url = self.base_url + f'/users/{user_id}/playlists'
+        print(query_url)
+    
+        req_headers = {
+            'Authorization': 'Bearer ' + self.access_token,
+            'name' : new_playlist_name
+            }
+        print(new_playlist_name)
         
-        data = {"name": new_playlist_name}
+        req_data = {
+            'name': new_playlist_name
+            }
         
-        result = requests.post(query_url, headers=headers, json=data)
-        return result
+        result = requests.post(query_url, headers=req_headers, json=req_data)
+        print(result)
+        
+        result = result.json()
+        print(result)
+        playlist_id = result['id']
+        print(playlist_id)
+        
+        return playlist_id
     
     def add_to_playlist(self, playlist_id: str, tracks: list[str]) -> str:
         '''
@@ -199,36 +216,7 @@ class SpotifyAPI:
         
         return snapshot_id
     
-
-        
+    
+    
+     
     #Vi struntar i refreshtoken? Överkurs... Mer än 1 h användning typ
-    
-    
-    #Denna behövs ej då den är för serve4r-server, man kan inte få ut user data
-    '''
-    def get_token(self):
-   
-        Get access token from spotify for developers which can be used to
-        access a given resource or user's data. 
-
-        Returns: 
-        token - str
-
-        auth_string = self.client_id + ':' + self.client_secret
-        auth_bytes = auth_string.encode('utf-8')
-        auth_base64 = str(base64.b64encode (auth_bytes), 'utf-8')
-
-        url = 'https://accounts.spotify.com/api/token'
-        headers = {
-            'Authorization': 'Basic ' + auth_base64,
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
-
-        data = {'grant_type': 'client_credentials'}
-        result = requests.post(url, headers=headers, data=data)
-        json_result = json.loads(result.content)
-
-        self.token = json_result['access_token']
-        
-        return self.token
-    '''
