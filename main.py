@@ -78,5 +78,5 @@ def verify():
 
 # Starta servern
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=8888)
     
