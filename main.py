@@ -6,6 +6,7 @@ import feelings
 from app import app
 from flask_swagger_ui import get_swaggerui_blueprint
 
+swagger_access = False
 '''Set the path for Swagger documentation'''
 SWAGGER_URL = '/swagger'
 API_URL = '/static/swagger.json'
@@ -18,8 +19,13 @@ swaggerui_blueprint = get_swaggerui_blueprint(
         'app_name': "Spotifeel API"
     }
 )
-app.register_blueprint(swaggerui_blueprint, url_prefix='/swagger')
 
+@swaggerui_blueprint.before_request
+def check_swagger_access():
+    if not swagger_access:
+        return render_template('login.html')
+    else:
+        return None
 
 user = SpotifyAPI()
 
@@ -53,7 +59,9 @@ def login_callback():
     if 'code' in request.args:
         code = request.args['code']
         user.login_callback(code)
-
+        ''' Flag for swagger'''
+        global swagger_access
+        swagger_access = True
         return redirect('/')
 
 @app.route('/', methods=['POST', 'GET'])
@@ -104,6 +112,8 @@ def verify():
     else:
         title, button1, button2 = "Error", "Invalid", "Response"
     return render_template('verify.html', title=title, button1=button1, button2=button2)
+
+app.register_blueprint(swaggerui_blueprint, url_prefix='/swagger')
 
 # Starta servern
 if __name__ == '__main__':

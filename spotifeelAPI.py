@@ -1,9 +1,10 @@
-from flask import Flask, jsonify, redirect, request, url_for
+from flask import Flask, jsonify, redirect, request, url_for, render_template, session
 import yaml
 import os
 import json
 import promptGPT
 from app import app
+from main import user
 
 yaml_file_path = os.path.join(os.getcwd(), 'static', 'swagger.yaml')
 json_file_path = os.path.join(os.getcwd(), 'static', 'swagger.json')
@@ -19,9 +20,13 @@ with open(json_file_path, 'w') as json_file:
 def swagger_json():
     return jsonify(SWAGGER_SPEC)
 
+
 @app.route('/playlists/emotion/<int:emotionId>', methods=['GET'])
 def get_playlist(emotionId):
-    print(promptGPT.create_playlist(get_emotion_by_id(f"{emotionId}")))
+        print(promptGPT.create_playlist(get_emotion_by_id(f"{emotionId}")))
+        
+
+
 
 
 def get_emotion_by_id(emotionId):
