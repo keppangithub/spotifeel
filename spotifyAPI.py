@@ -27,6 +27,8 @@ class SpotifyAPI:
         self.base_url = 'https://api.spotify.com/v1'
         self.token_url = 'https://accounts.spotify.com/api/token'
         
+        self.user_id = None
+        
             
     def is_user_logged_in(self) -> None:
         '''
@@ -48,7 +50,7 @@ class SpotifyAPI:
         Returns:
         - auth_url
         '''
-        scope = 'user-read-private user-read-email'
+        scope = 'user-read-private user-read-email playlist-modify-public'
 
         query_params = {
             'client_id': self.client_id,
@@ -92,39 +94,8 @@ class SpotifyAPI:
         self.access_token = token_info.get('access_token')
         self.refresh_token = token_info.get('refresh_token')
         
-        print(self.access_token)
-        print(self.refresh_token)
-        
-        return
-    
-    def refresh_user_login(self):
-        
-        auth_string = self.client_id + ':' + self.client_secret
-        auth_bytes = auth_string.encode('utf-8')
-        auth_base64 = str(base64.b64encode (auth_bytes), 'utf-8')
-        
-        req_headers = {
-            'Authorization': 'Basic ' + auth_base64,
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
-        
-        req_body = {
-            'grant_type': 'refresh_token',
-            'refresh_token': self.refresh_token
-        }
-        
-        response = requests.post(self.token_url, headers=req_headers, data=req_body)   
-        token_info = response.json()
-        
-        self.access_token = token_info.get('access_token')
-        self.refresh_token = token_info.get('refresh_token')
-        
-        print(self.access_token)
-        print(self.refresh_token)
-        
         return
         
-    
     def get_auth_header(self):
         '''
         Generates the authorization header for making requests to Spotify API.
@@ -143,13 +114,11 @@ class SpotifyAPI:
         req_header = self.get_auth_header()
         
         response = requests.get(url, headers=req_header)
+        response = response.json()
+   
+        self.user_id = response['id']
         
-        print(f"Response Status Code: {response.status_code}")
-        print(f"Response Content-Type: {response.headers.get('Content-Type')}")
-        print("Raw response content:")
-        print(response.text)  # This will show the raw response content
-        
-        return
+        return 
     
     def search_track(self, track, artist):
         '''
@@ -196,14 +165,28 @@ class SpotifyAPI:
         Returns:
         - 
         '''
-        query_url = self.base_url + f'{user_id}/playlists'
-        headers = self.get_auth_header()
+        query_url = self.base_url + f'/users/{user_id}/playlists'
+        print(query_url)
+    
+        req_headers = {
+            'Authorization': 'Bearer ' + self.access_token,
+            'name' : new_playlist_name
+            }
+        print(new_playlist_name)
         
-        data = {"name": new_playlist_name}
+        req_data = {
+            'name': new_playlist_name
+            }
         
-        result = requests.post(query_url, headers=headers, json=data)
+        result = requests.post(query_url, headers=req_headers, json=req_data)
         print(result)
-        return result
+        
+        result = result.json()
+        print(result)
+        playlist_id = result['id']
+        print(playlist_id)
+        
+        return playlist_id
     
     def add_to_playlist(self, playlist_id: str, tracks: list[str]) -> str:
         '''

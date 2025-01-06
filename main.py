@@ -76,15 +76,11 @@ def playlist():
             feeling = feelings.negated_feeling(feeling)
             print("This is the negated feeling:" + feeling)
 
-        user.refresh_user_login()
-        user_inf = user.get_user_information()
-        print(user_inf)
+        user.get_user_information()
         songs_for_playlist = promptGPT.create_playlist(feeling)
-        new_playlist_id = user.create_new_playlist()
+        new_playlist_id = user.create_new_playlist(user.user_id, "Test")
         user.add_to_playlist(new_playlist_id, songs_for_playlist)
         
-        
-
         return render_template('playlist.html')
 
 
