@@ -1,11 +1,11 @@
+from dotenv import load_dotenv
 from openai import OpenAI
-#installera openai med: pip install openai
-#Exportera nyckeln i VS terminal med kommandot nedan
-#Byt ut "api_key" mot den faktiska nyckeln
-#export OPENAI_API_KEY="api_key"
+import os
 
-client = OpenAI(api_key = "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")
-
+load_dotenv()
+key = os.getenv('OPENAI_API_KEY')
+client = OpenAI(api_key=key)
+      
 
 def run_prompt(text):
     completion = client.chat.completions.create(
@@ -46,3 +46,5 @@ def create_playlist(emotion):
     print(songs)
 
     return songs
+
+print(run_prompt("happy"))
