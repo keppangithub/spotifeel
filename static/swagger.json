@@ -11,9 +11,19 @@
       "url": "http://localhost:8888"
     }
   ],
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
   "paths": {
     "/playlists/emotion/{emotionId}": {
       "get": {
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "summary": "Get playlist based on emotion",
         "description": "Retrieves a curated playlist based on a specific emotion and its intensity",
         "parameters": [
@@ -110,6 +120,14 @@
             "example": 240
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "schema": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Spotify authentication token"
       }
     }
   }

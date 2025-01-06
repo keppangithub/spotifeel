@@ -6,6 +6,8 @@ import promptGPT
 from app import app
 from main import user
 
+
+
 yaml_file_path = os.path.join(os.getcwd(), 'static', 'swagger.yaml')
 json_file_path = os.path.join(os.getcwd(), 'static', 'swagger.json')
 
@@ -23,10 +25,7 @@ def swagger_json():
 
 @app.route('/playlists/emotion/<int:emotionId>', methods=['GET'])
 def get_playlist(emotionId):
-        print(promptGPT.create_playlist(get_emotion_by_id(f"{emotionId}")))
-        
-
-
+    return(f"{emotionId}")
 
 
 def get_emotion_by_id(emotionId):
