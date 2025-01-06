@@ -1,5 +1,6 @@
 from flask import Flask, redirect, render_template, request, jsonify, url_for, session
 from spotifyAPI import SpotifyAPI
+from datetime import date
 import promptGPT
 import feelings
 
@@ -53,7 +54,9 @@ def index():
             userPrompt = request.form.get('userPrompt')
             response = promptGPT.run_prompt(userPrompt)
             return redirect(url_for('verify', response=response))
-        return render_template('chat.html')
+        
+        today = date.today()
+        return render_template('chat.html', today=today)
     
 @app.route('/playlist', methods=['POST'])
 def playlist():
