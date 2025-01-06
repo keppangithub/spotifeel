@@ -22,6 +22,7 @@ class SpotifyAPI:
         self.auth_endpoint = 'https://accounts.spotify.com/authorize'
         
         self.access_token = None
+        self.refresh_token = None
         
         self.base_url = 'https://api.spotify.com/v1'
         self.token_url = 'https://accounts.spotify.com/api/token'
@@ -89,8 +90,40 @@ class SpotifyAPI:
         token_info = response.json()
         
         self.access_token = token_info.get('access_token')
+        self.refresh_token = token_info.get('refresh_token')
+        
+        print(self.access_token)
+        print(self.refresh_token)
         
         return
+    
+    def refresh_user_login(self):
+        
+        auth_string = self.client_id + ':' + self.client_secret
+        auth_bytes = auth_string.encode('utf-8')
+        auth_base64 = str(base64.b64encode (auth_bytes), 'utf-8')
+        
+        req_headers = {
+            'Authorization': 'Basic ' + auth_base64,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        
+        req_body = {
+            'grant_type': 'refresh_token',
+            'refresh_token': self.refresh_token
+        }
+        
+        response = requests.post(self.token_url, headers=req_headers, data=req_body)   
+        token_info = response.json()
+        
+        self.access_token = token_info.get('access_token')
+        self.refresh_token = token_info.get('refresh_token')
+        
+        print(self.access_token)
+        print(self.refresh_token)
+        
+        return
+        
     
     def get_auth_header(self):
         '''
@@ -169,6 +202,7 @@ class SpotifyAPI:
         data = {"name": new_playlist_name}
         
         result = requests.post(query_url, headers=headers, json=data)
+        print(result)
         return result
     
     def add_to_playlist(self, playlist_id: str, tracks: list[str]) -> str:
@@ -199,36 +233,7 @@ class SpotifyAPI:
         
         return snapshot_id
     
-
-        
+    
+    
+     
     #Vi struntar i refreshtoken? Överkurs... Mer än 1 h användning typ
-    
-    
-    #Denna behövs ej då den är för serve4r-server, man kan inte få ut user data
-    '''
-    def get_token(self):
-   
-        Get access token from spotify for developers which can be used to
-        access a given resource or user's data. 
-
-        Returns: 
-        token - str
-
-        auth_string = self.client_id + ':' + self.client_secret
-        auth_bytes = auth_string.encode('utf-8')
-        auth_base64 = str(base64.b64encode (auth_bytes), 'utf-8')
-
-        url = 'https://accounts.spotify.com/api/token'
-        headers = {
-            'Authorization': 'Basic ' + auth_base64,
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
-
-        data = {'grant_type': 'client_credentials'}
-        result = requests.post(url, headers=headers, data=data)
-        json_result = json.loads(result.content)
-
-        self.token = json_result['access_token']
-        
-        return self.token
-    '''

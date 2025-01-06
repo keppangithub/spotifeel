@@ -42,7 +42,6 @@ def create_playlist(emotion):
 )
     
     songs = completion.choices[0].message.content
-    songs = [line.split(". ", 1)[1] for line in songs.split("\n")]
     print(songs)
 
     return songs
