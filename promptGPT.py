@@ -5,7 +5,7 @@ import os
 load_dotenv()
 key = os.getenv('OPENAI_API_KEY')
 client = OpenAI(api_key=key)
-      
+
 
 def run_prompt(text):
     completion = client.chat.completions.create(
@@ -16,7 +16,7 @@ def run_prompt(text):
             "role": "user",
             "content":'"'+text+'"'
         }
-] 
+]
 )
     response_content = completion.choices[0].message
     emotion = str(response_content).split("content='")[1].split("'")[0]
@@ -38,9 +38,9 @@ def create_playlist(emotion):
         }
       ]
     }
-] 
+]
 )
-    
+
     songs = completion.choices[0].message.content
     songs = [line.split(". ", 1)[1] for line in songs.split("\n")]
     formatted_songs = [
@@ -50,5 +50,3 @@ def create_playlist(emotion):
     print(formatted_songs)
 
     return songs
-
-create_playlist("happy")

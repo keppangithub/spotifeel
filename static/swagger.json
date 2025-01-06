@@ -1,0 +1,116 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Spotifeel",
+    "description": "API for retrieving playlists based on emotions"
+  },
+  "servers": [
+    {
+      "description": "Local server",
+      "url": "http://localhost:8888"
+    }
+  ],
+  "paths": {
+    "/playlists/emotion/{emotionId}": {
+      "get": {
+        "summary": "Get playlist based on emotion",
+        "description": "Retrieves a curated playlist based on a specific emotion and its intensity",
+        "parameters": [
+          {
+            "name": "emotionId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the emotions: 1=furious, 2=frustrated, 3=horrified, 4=disappointed, 5=euphoric, 6=loving, 7=happy, 8=useless, 9=regretful, 10=dejected, 11=unhappy, 12=scared, 13=anxious",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 13
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Playlist found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Playlist"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No playlist found for given emotion/intensity"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Emotion": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "example": "Happy"
+          },
+          "description": {
+            "type": "string",
+            "example": "Positive state of mind"
+          }
+        }
+      },
+      "Playlist": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "example": "Happy Mix"
+          },
+          "songs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Song"
+            }
+          },
+          "totalDuration": {
+            "type": "integer",
+            "description": "Total playtime in seconds",
+            "example": 3600
+          },
+          "spotifyUrl": {
+            "type": "string",
+            "description": "URL to the playlist on Spotify",
+            "example": "https://open.spotify.com/playlist/xyz123"
+          }
+        }
+      },
+      "Song": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Happy"
+          },
+          "artist": {
+            "type": "string",
+            "example": "Pharrell Williams"
+          },
+          "duration": {
+            "type": "integer",
+            "description": "Song duration in seconds",
+            "example": 240
+          }
+        }
+      }
+    }
+  }
+}
