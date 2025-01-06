@@ -68,7 +68,7 @@ def playlist():
     else:
         data = request.get_json()
         action = data.get("message")
-        feeling = session.get('feeling')    
+        feeling = session.get('feeling')
         print("This should be either true or false: "+ action)
         print("This is the feeling in /playlist:"+feeling)
         
@@ -78,6 +78,7 @@ def playlist():
 
         user.get_user_information()
         songs_for_playlist = promptGPT.create_playlist(feeling)
+        print(songs_for_playlist)
         new_playlist_id = user.create_new_playlist(user.user_id, "Test")
         user.add_to_playlist(new_playlist_id, songs_for_playlist)
         

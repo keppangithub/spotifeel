@@ -133,26 +133,23 @@ class SpotifyAPI:
         - A dictionary containing the track name, artist, track ID,
             and URI.
         '''
-        url = self.base_url + 'search'
-        headers = self.get_auth_header()
-        query = f'?q=track:"{track}" artist:"{artist}"&type=track&market=US&limit=1'
-
-        query_url = url + query
-        result = requests.get(query_url, headers=headers)
-        json_result = json.loads(result.content)
-
-        if 'tracks' in json_result and json_result['tracks']['items']:
-            track_info = json_result['tracks']['items'][0]
-            track_name = track_info['name']
-            artist_name = track_info['artists'][0]['name']
-            track_id = track_info['id']
-            track_uri = track_info['uri']
-
-        if len(json_result) == 0:
-            print('No artist with this name exists.')
-            return None
+        url = self.base_url + '/search'
         
-        return track_name, artist_name, track_id, track_uri
+        params = {
+            "q": f"artist:{artist} track:{track}",
+            "type": "track"
+        }
+        
+        headers = self.get_auth_header()
+        
+        result = requests.get(url, headers=headers, params=params)
+        if result.status_code == 200:
+            data = result.json()
+            uri = data['uri']
+            print(uri)
+
+            return uri
+
     
     def create_new_playlist(self, user_id: str, new_playlist_name: str):
         '''
@@ -163,7 +160,7 @@ class SpotifyAPI:
         - new_playlist_name: str
         
         Returns:
-        - 
+        - playlist id (str)
         '''
         query_url = self.base_url + f'/users/{user_id}/playlists'
         print(query_url)
@@ -182,9 +179,7 @@ class SpotifyAPI:
         print(result)
         
         result = result.json()
-        print(result)
         playlist_id = result['id']
-        print(playlist_id)
         
         return playlist_id
     
@@ -199,22 +194,31 @@ class SpotifyAPI:
         Returns:
         - snapshot_id: str (ex. abc, from spotify)
         
-        '''
-        query_url = self.base_url + 'playlists/' + f'{playlist_id}/' 
+        '''       
+        query_url = self.base_url + '/playlists/' + f'{playlist_id}/tracks'  
         
         for track_uri in tracks:
-            if track_uri != tracks[-1]:
-                query_url = query_url + track_uri + ','
+            for track in track_uri:
+                track.replace('-', '')
+                title, artist = track.split(',', 1)
+                title = title.strip()
+                artist = artist.strip()
                 
-            else: 
-                query_url = query_url + track_uri
-        
-        headers = self.get_auth_header()
-           
-        result = requests.post(query_url, headers=headers)
-        snapshot_id = json.loads(result.content)
-        
-        return snapshot_id
+                uri = self.search_track(title, artist)
+                
+                req_data = {
+                    'uris' : uri
+                }
+                        
+                headers = self.get_auth_header()
+
+                try:
+                    requests.post(query_url, headers=headers, json=req_data)
+                    
+                except Exception as e:
+                    print(f"No can do sir: {e}")
+
+        return
     
     
     

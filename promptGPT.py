@@ -40,15 +40,19 @@ def create_playlist(emotion):
     }
 ] 
 )
-    
     songs = completion.choices[0].message.content
-    songs = [line.split(". ", 1)[1] for line in songs.split("\n")]
-    formatted_songs = [
-    song.replace('"', "")  # Remove all quotes from the song titles
-    for song in songs
-   ]
-    print(formatted_songs)
-
-    return songs
-
-create_playlist("happy")
+    print(songs)
+    
+    formated_songs = []
+    
+    for song in songs.split("\n"):
+        if ". " in song:
+            title_artist = song.split(". ", 1)[1]
+            title_artist = title_artist.replace('"', '')
+            title_artist = title_artist.replace(' by ', ',')
+            
+            formated_songs.append([title_artist])
+                
+    print(formated_songs)            
+    
+    return formated_songs
