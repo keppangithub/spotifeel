@@ -1,7 +1,12 @@
-from flask import Flask, redirect, render_template, request, jsonify
+from flask import Flask, redirect, render_template, request, jsonify, url_for, session
 from spotifyAPI import SpotifyAPI
+import promptGPT
+import feelings
 
 app = Flask(__name__)
+app.secret_key = 'enhemlignyckel'
+user = SpotifyAPI()
+
 
 @app.route('/login')
 def login_page():
@@ -36,7 +41,7 @@ def login_callback():
         
         return redirect('/')
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def index():
     if not user.is_user_logged_in():
         print("ERROR: user is not logged in")
@@ -44,15 +49,34 @@ def index():
     
     else:
         user.get_user_information()
-        return render_template('index.html')
+        if request.method == 'POST':
+            userPrompt = request.form.get('userPrompt')
+            response = promptGPT.run_prompt(userPrompt)
+            return redirect(url_for('verify', response=response))
+        return render_template('chat.html')
     
 @app.route('/playlist')
 def playlist():
     return render_template('playlist.html')
 
+
+
+@app.route("/verify")
+def verify():
+    response = request.args.get('response', None)
+    if response is None:
+        return redirect(url_for('hello'))
+    print("This is the response:" + response)
+    feeling = feelings.get_feelings(response)
+    session['feeling'] = response
+    if len(feeling) == 3:
+        title, button1, button2 = feeling
+        print(title)
+    else:
+        title, button1, button2 = "Error", "Invalid", "Response"
+    return render_template('verify.html', title=title, button1=button1, button2=button2)
+
 # Starta servern
 if __name__ == '__main__':
-    user = SpotifyAPI()
-    app.run(port=8888)
+    app.run(debug=True)
     
-#Behöver vi secret key? (Flask sessions)
