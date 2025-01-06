@@ -3,9 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Validate Emotion</title>
+   <style>
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #A5668B;
+        }
+
+      
+        h1 {
+            font-size: 100px;
+            font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            max-width: 800px;
+            text-align: center;
+            margin: 0;
+            color: #0E103D; 
+        }
+
+      
+        .button-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        button {
+            font-size: 1rem;
+            padding: 10px 20px;
+            background-color: #0E103D;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer; 
+            transition: background-color 0.3s ease; 
+        }
+
+   
+        button:hover {
+            background-color: #0056b3;
+        }
+   </style>
+
 </head>
 <body>
-    <h1>hej</h1>
+    <h1 id="title" name="title">{{title}}</h1>
+    <div class="button-container">
+            <button id="button1" name="button1">{{button1}}</button>
+            <button id="button2" name="button2">{{button2}}</button>
+    </div>
+
 </body>
+<script>
+    function handleButtonClick(action) {
+        fetch("/playlist", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                message:action
+            }),
+        })
+        .then((response) => response.text())
+        .then((html) => {
+            document.body.innerHTML = html;
+        });
+    }
+
+    document.getElementById("button1").addEventListener("click", () => handleButtonClick("true"));
+    document.getElementById("button2").addEventListener("click", () => handleButtonClick("false"));
+</script>
 </html>
+
