@@ -46,5 +46,3 @@ def create_playlist(emotion):
     print(songs)
 
     return songs
-
-print(run_prompt("happy"))
