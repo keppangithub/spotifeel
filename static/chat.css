@@ -1,24 +1,20 @@
 body{
-    background-color: pink;
+    background-color: pink !important; 
 }
 #question-section {
-    color: #D3DCCD;
-    font-size: 36px;
+    color: #783B80;
+    font-size: 100px !important;
     text-decoration: none;
-    font-family: "Montserrat", serif;
-    font-weight: bold;
+    font-family: "Montserrat", serif !important;
+    font-weight: bold !important;
 
 }
 #date{
-    color: #6B717E;
-    font-size: 26px;
+    color: #783B80;
+    font-size: 50px !important;
     text-decoration: none;
-    font-family: "Montserrat", serif;
-    font-weight: 500;
-}
-#question-section{
-    display:flex;
-    margin: 0 12% 0 12%;
+    font-family: "Montserrat", serif !important;
+    font-weight: 500 !important;
 }
 #text-section{
     border-radius: 20%;
