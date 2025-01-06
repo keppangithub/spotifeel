@@ -11,7 +11,7 @@ def run_prompt(text):
     completion = client.chat.completions.create(
      model="gpt-3.5-turbo",
          messages=[
-        {"role": "system", "content": "Your task is to determine which of the following feelings suits the text the most: furious, frustrated, horrified, disappointed, euphoric, loving, happy, useless, regretful, dejected, unhappy, scared, and anxious. Respond with only one of these words in english and without capital letters."},
+        {"role": "system", "content": "Your task is to determine which of the following feelings, and only one of the following feeling suits the text the most: furious, frustrated, horrified, disappointed, euphoric, loving, happy, useless, regretful, dejected, unhappy, scared, and anxious. Respond with only one of these words in english and without capital letters."},
         {
             "role": "user",
             "content":'"'+text+'"'

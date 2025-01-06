@@ -1,8 +1,8 @@
 def get_feelings(feeling):  
     feelings = {
         "happy": ["euphoric", "loving", "happy", "Euphoric", "Loving", "Happy"],
-        "angry": ["urious", "frustrated", "Furious", "Frustrated"],
-        "sad": ["horrified", "disappointed", "useless", "regretful", "dejected", "unhappy", "scared", "anxious", "Horrified", "Disappointed", "Useless", "Regretful", "Dejected", "Unhappy", "Dcared", "Anxious"]
+        "angry": ["furious", "frustrated", "Furious", "Frustrated"],
+        "sad": ["horrified", "disappointed", "useless", "regretful", "dejected", "unhappy", "scared", "anxious", "Horrified", "Disappointed", "Useless", "Regretful", "Dejected", "Unhappy", "Scared", "Anxious", "sad", "Sad"]
     } 
     for category, feelings in feelings.items():
         if feeling in feelings:

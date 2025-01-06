@@ -55,8 +55,19 @@ def index():
             return redirect(url_for('verify', response=response))
         return render_template('chat.html')
     
-@app.route('/playlist')
+@app.route('/playlist', methods=['POST'])
 def playlist():
+    data = request.get_json()
+    action = data.get("message")
+    feeling = session.get('feeling')    
+    print("This should be either true or false: "+ action)
+    print("This is the feeling in /playlist:"+feeling)
+    if action == "false":
+        feeling = feelings.negated_feeling(feeling)
+        print("This is the negated feeling:" + feeling)
+
+    playlist = promptGPT.create_playlist(feeling)
+
     return render_template('playlist.html')
 
 
@@ -65,10 +76,11 @@ def playlist():
 def verify():
     response = request.args.get('response', None)
     if response is None:
-        return redirect(url_for('hello'))
+        return redirect(url_for('index'))
     print("This is the response:" + response)
     feeling = feelings.get_feelings(response)
     session['feeling'] = response
+    print(feeling)
     if len(feeling) == 3:
         title, button1, button2 = feeling
         print(title)
