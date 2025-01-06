@@ -1,21 +1,46 @@
 body{
     background-color: pink !important; 
 }
-#question-section {
-    color: #783B80;
-    font-size: 100px !important;
+
+form {
+    flex-wrap: wrap !important;
+}
+
+.form-control {
+    z-index: 1;
+}
+
+#chatbox {
     text-decoration: none;
     font-family: "Montserrat", serif !important;
-    font-weight: bold !important;
-
 }
+
+.question-style {
+    color: #783B80;
+    font-size: 130px !important;
+    font-weight: bold !important;
+}
+
 #date{
     color: #783B80;
-    font-size: 50px !important;
-    text-decoration: none;
-    font-family: "Montserrat", serif !important;
-    font-weight: 500 !important;
+    font-size: 40px !important;
+    font-weight: normal !important;
 }
-#text-section{
-    border-radius: 20%;
+
+#userPrompt {
+    height: 50vh !important;
+    width: 95% !important;
+    border-radius: 40px !important;
+}
+
+.btn {
+    background-color: #783B80 !important;
+    color: #F3D7ED !important;
+    font-size: 35px !important;
+    font-weight: bold !important;
+    border-radius: 20px !important;
+    float: right !important;
+    z-index: 2 !important;
+    margin-top: -5vh !important;
+
 }

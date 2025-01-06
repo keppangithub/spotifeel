@@ -29,26 +29,29 @@
         <li><a href="#">Log Out</a></li>
       </ul>
     </header>
-    <section id="question-section" class="container">
+    <section class="container chatbox">
       <div class="row">
         <!--Fråga-->
-        <div class="col-8">
-          <h1 id="question">Hur var din dag?</h1>
+        <div class="col-1"></div>
+        <div class="col-6 text-left">
+          <h1 id="question" class="question-style">Hur var din dag?</h1>
           <date id="date">{{today}}</date>
         </div>
         <!--Chatruta-->
         <div class="col-4">
           <section id="text-section">
-            <form action="/" method="POST">
+            <form action="/" method="POST" class="me-2">
               <input
+                class="form-control rounded"
                 type="text"
                 id="userPrompt"
                 name="userPrompt"
                 placeholder="Beskriv din dag..."
                 required
               />
-              <button type="submit">Skicka</button>
+              <button type="submit" class="btn">Analysera</button>
             </form>
+            <div class="col-1"></div>
           </section>
         </div>
       </div>
