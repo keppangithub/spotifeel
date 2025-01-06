@@ -43,8 +43,7 @@ def index():
         return redirect ('/login')
     
     else:
-        information = user.get_user_information()
-        print(information)
+        user.get_user_information()
         return render_template('index.html')
     
 @app.route('/playlist')

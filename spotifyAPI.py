@@ -110,10 +110,13 @@ class SpotifyAPI:
         req_header = self.get_auth_header()
         
         response = requests.get(url, headers=req_header)
-        user_inf = response.json()
-        print(user_inf)
-    
-        return user_inf
+        
+        print(f"Response Status Code: {response.status_code}")
+        print(f"Response Content-Type: {response.headers.get('Content-Type')}")
+        print("Raw response content:")
+        print(response.text)  # This will show the raw response content
+        
+        return
     
     def search_track(self, track, artist):
         '''
