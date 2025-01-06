@@ -1,12 +1,22 @@
 from flask import Flask, redirect, render_template, request, jsonify, url_for, session
-from spotifyAPI import SpotifyAPI
+from spotipy.oauth2 import SpotifyOAuth
 from datetime import date
-import promptGPT
+import promptGPT, spotipy
 import feelings
 
 app = Flask(__name__)
 app.secret_key = 'enhemlignyckel'
-user = SpotifyAPI()
+
+CLIENT_ID = '752df86356504cff94ef280e40b0a2c4'
+CLIENT_SECRET = '3aca6de943994c13be870ab0092e2b15'
+REDIRECT_URI = 'http://127.0.0.1:5000/callback'
+SCOPE = 'user-library-read user-read-private playlist-modify-private playlist-modify-public'
+
+sp_oauth = SpotifyOAuth(client_id=CLIENT_ID,
+                         client_secret=CLIENT_SECRET,
+                         redirect_uri=REDIRECT_URI,
+                         scope=SCOPE)
+
 
 
 @app.route('/login')
@@ -22,34 +32,23 @@ def oauth_spotify():
     Redirect user to the login function via Spotify's API
     
     '''
-    auth_url = user.redirectToAuthCodeFlow()
-    return redirect(auth_url)
+    return redirect(sp_oauth.get_authorize_url()) 
 
 @app.route('/callback')
 def login_callback():
-    '''
-    The user has been redirected to this endpoint after having logged in to Spotify 
-    
-    Redirect user to the index page
-    
-    '''   
-    if 'error' in request.args:
-            return jsonify({'error': request.args['error']})
-        
-    if 'code' in request.args:
-        code = request.args['code']
-        user.login_callback(code)
-        
-        return redirect('/')
+    token_info = sp_oauth.get_access_token(request.args['code'])
+    session['token_info'] = token_info 
+    return redirect('/')
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-    if not user.is_user_logged_in():
-        print("ERROR: user is not logged in")
-        return redirect ('/login')
-    
-    else:
-        user.get_user_information()
+            # Get the access token from the session
+        token_info = session.get('token_info', None)
+
+        if not token_info:
+            return redirect('/login')
+
+        sp = spotipy.Spotify(auth=token_info['access_token'])
         if request.method == 'POST':
             userPrompt = request.form.get('userPrompt')
             response = promptGPT.run_prompt(userPrompt)
@@ -69,7 +68,8 @@ def playlist():
         feeling = feelings.negated_feeling(feeling)
         print("This is the negated feeling:" + feeling)
 
-    playlist = promptGPT.create_playlist(feeling)
+    token_info = session.get('token_info', None)
+    promptGPT.create_playlist(feeling, token_info)
 
     return render_template('playlist.html')
 
@@ -93,5 +93,5 @@ def verify():
 
 # Starta servern
 if __name__ == '__main__':
-    app.run(debug=True, port=8888)
+    app.run(debug=True)
     
