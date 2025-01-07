@@ -26,9 +26,6 @@ def get_playlist(emotionId):
         print(promptGPT.create_playlist(get_emotion_by_id(f"{emotionId}")))
         
 
-
-
-
 def get_emotion_by_id(emotionId):
     emotions = {
         "1": "Furious",

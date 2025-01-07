@@ -4,3 +4,10 @@ Requirments:
 - Python module: openai (1.59.3)
 - Python module: flask-swagger-ui (4.11.1)
 - Flask
+
+In order to run the mashup service you need to create a .env file in which you should put the received keys like this
+CLIENT_ID='PUT KEY HERE'
+CLIENT_SECRET='PUT KEY HERE'
+OPENAI_API_KEY='PUT KEY HERE'
+
+Next step is to run the file main.py. Then go to http://127.0.0.1:8888 where the website will be running.
