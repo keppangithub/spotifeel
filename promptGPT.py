@@ -6,8 +6,49 @@ load_dotenv()
 key = os.getenv('OPENAI_API_KEY')
 client = OpenAI(api_key=key)
 
+def is_emotion_valid(emotion: str) -> bool:
+    '''
+    Check if the emotion received from the 'run_prompt' function is one of the valid feelings.
+    
+    Valid feelings: 
+    - Furious
+    - Frustrated
+    - Horrified
+    - Disappointed
+    - Euphoric
+    - Loving
+    - Happy
+    - Useless
+    - Regretful
+    - Dejected
+    - Unhappy
+    - Scared
+    - Anxious
+    
+    Returns Boolean (depending on if the feeling received is valid or not)
+    '''
+    valid_feelings = ['furious', 'frustrated', 'horrified', 'disappointed', 'euphoric', 'loving', 'happy', 'useless', 'regretful', 'dejected', 'unhappy', 'scared','anxious']
+    
+    if emotion.lower() in valid_feelings:
+        print(emotion)
+        print('True')
+        return True
+    
+    else: 
+        print(emotion)
+        print('False')
+        return False
 
-def run_prompt(text):
+
+def run_prompt(text: str) -> str:
+    '''
+    Take the user input, diary entry, as an argument. Use OPEN AI API to get back the emotion which corresponds best with the user input.
+    
+    Check if the emotion is valid via the is_emotion_valid function.
+    
+    Returns: 
+    - emotion (str)
+    '''
     completion = client.chat.completions.create(
      model="gpt-3.5-turbo",
          messages=[
@@ -20,9 +61,12 @@ def run_prompt(text):
 )
     response_content = completion.choices[0].message
     emotion = str(response_content).split("content='")[1].split("'")[0]
-    print(emotion)
-    return emotion
-
+    
+    if is_emotion_valid(emotion):
+        return emotion
+    
+    else: 
+        print('Invalid chooise of emotion by Open AI')
 
 def create_playlist(emotion):
     completion = client.chat.completions.create(
@@ -40,7 +84,6 @@ def create_playlist(emotion):
     }
 ]
 )
-
     songs = completion.choices[0].message.content
     print(songs)
     

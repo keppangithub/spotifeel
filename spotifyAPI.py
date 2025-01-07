@@ -136,22 +136,26 @@ class SpotifyAPI:
         url = self.base_url + '/search'
         
         params = {
-            "q": f"artist:{artist} track:{track}",
+            "q": f"artist:{artist}&track:{track}",
             "type": "track"
         }
         
         headers = self.get_auth_header()
         
-        result = requests.get(url, headers=headers, params=params)
-        if result.status_code == 200:
-            data = result.json()
-            uri = data['uri']
-            print(uri)
+        try:
+            result = requests.get(url, headers=headers, params=params)
+            if result.status_code == 200:
+                data = result.json()
+                uri = data['uri']
+                print(uri)
 
-            return uri
+                return uri
+            
+        except Exception as e:
+            print(f'Error: {e}')
+            
 
-    
-    def create_new_playlist(self, user_id: str, new_playlist_name: str):
+    def create_new_playlist(self, user_id: str, new_playlist_name: str) -> str:
         '''
         Create a new playlist via Spotify's API.
         
@@ -197,6 +201,21 @@ class SpotifyAPI:
         '''       
         query_url = self.base_url + '/playlists/' + f'{playlist_id}/tracks'  
         
+        print(tracks)
+        
+        for track in tracks:
+            print(track)
+            for i in track:
+                print(i)
+                title, artist = i.split(',', 1)
+                print(title)
+                print(artist)
+                uri = self.search_track(title, artist)
+                
+                
+                
+                
+        '''
         for track_uri in tracks:
             for track in track_uri:
                 track.replace('-', '')
@@ -217,10 +236,6 @@ class SpotifyAPI:
                     
                 except Exception as e:
                     print(f"No can do sir: {e}")
+        '''
 
         return
-    
-    
-    
-     
-    #Vi struntar i refreshtoken? Överkurs... Mer än 1 h användning typ

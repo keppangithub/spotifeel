@@ -27,6 +27,7 @@ def check_swagger_access():
     else:
         return None
 
+#Initiate user object
 user = SpotifyAPI()
 
 @app.route('/login')
@@ -81,7 +82,6 @@ def index():
         return render_template('chat.html', today=today)
 
 @app.route('/playlist', methods=['POST'])
-
 def playlist():
     if not user.is_user_logged_in():
         print("ERROR: user is not logged in")
@@ -98,15 +98,14 @@ def playlist():
             feeling = feelings.negated_feeling(feeling)
             print("This is the negated feeling:" + feeling)
 
+        #Create playlist, OPEN & Spotify work together
+        today = date.today()
         user.get_user_information()
         songs_for_playlist = promptGPT.create_playlist(feeling)
-        print(songs_for_playlist)
-        new_playlist_id = user.create_new_playlist(user.user_id, "Test")
+        new_playlist_id = user.create_new_playlist(user.user_id, f'{feeling.capitalize()} - [{today}]')
         user.add_to_playlist(new_playlist_id, songs_for_playlist)
 
         return render_template('playlist.html')
-
-
 
 @app.route("/verify")
 def verify():
