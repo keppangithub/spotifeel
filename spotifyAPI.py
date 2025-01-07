@@ -120,41 +120,6 @@ class SpotifyAPI:
         
         return 
     
-    def search_track(self, track, artist):
-        '''
-        Searcch for a specific track and return its details including
-        track ID and URI.
-
-        Parameters:
-        - track: str
-        - artists: str
-
-        Returns:
-        - A dictionary containing the track name, artist, track ID,
-            and URI.
-        '''
-        url = self.base_url + '/search?'
-        
-        params = {
-            "q": f"artist:{artist} track:{track}",
-            "type": "track",
-            "limit": 1
-        }
-        
-        headers = self.get_auth_header()
-        
-        try:
-            result = requests.get(url, headers=headers, params=params)
-            if result.status_code == 200:
-                data = result.json()
-                uri = data['uri']
-                print(uri)
-
-                return uri
-            
-        except Exception as e:
-            print(f'Error: {e}')
-            
 
     def create_new_playlist(self, user_id: str, new_playlist_name: str) -> str:
         '''
@@ -200,7 +165,10 @@ class SpotifyAPI:
         - snapshot_id: str (ex. abc, from spotify)
         
         '''       
-        query_url = self.base_url + '/playlists/' + f'{playlist_id}/tracks'  
+        query_url = f"{self.base_url}/playlists/{playlist_id}/tracks"  
+        req_header = self.get_auth_header()
+        
+        collected_uris = []
         
         print(tracks)
         
@@ -208,35 +176,73 @@ class SpotifyAPI:
             print(track)
             for i in track:
                 print(i)
-                title, artist = i.split(',', 1)
+                if ',' in i:
+                    title, artist = i.split(',', 1)
+                    
+                elif '-' in i:  
+                    title, artist = i.split('-', 1)
+                    
+                else:
+                    print(f"Track Error: Invalid format from OPEN AI")
+                
+                title = title.strip()
+                artist = artist.strip()   
+                
                 print(title)
                 print(artist)
-                uri = self.search_track(title, artist)
                 
-                
-                
-                
-        '''
-        for track_uri in tracks:
-            for track in track_uri:
-                track.replace('-', '')
-                title, artist = track.split(',', 1)
-                title = title.strip()
-                artist = artist.strip()
-                
-                uri = self.search_track(title, artist)
-                
-                req_data = {
-                    'uris' : uri
-                }
-                        
-                headers = self.get_auth_header()
-
-                try:
-                    requests.post(query_url, headers=headers, json=req_data)
+                query = f"track:{title} artist:{artist}"
+                                
+                uri = self.search_track(query)
+                if uri:
+                    print(f"Found URI: {uri}")
+                    collected_uris.append(uri)
                     
-                except Exception as e:
-                    print(f"No can do sir: {e}")
-        '''
+            if not collected_uris:
+                print("No valid tracks found to add to playlist")
+                return
+            
+        print(collected_uris)
+             
+        req_body = {
+            "uris": collected_uris
+        }
+            
+        requests.post(query_url, headers=req_header, json=req_body)
+        
+        return collected_uris
+    
+    def search_track(self, query: str) -> str | None:
+        url = f"{self.base_url}/search"
+        
+        req_params = {
+            "q": query,
+            "type": "track",
+            "limit": 1
+        }
+        
+        print(req_params)
+        
+        req_header = self.get_auth_header()
 
-        return
+        try:
+            result = requests.get(url, headers=req_header, params=req_params)
+            
+            if result.status_code == 200:
+                data = result.json()
+                
+                if 'tracks' in data and 'items' in data['tracks']:
+                    track_uri = data['tracks']['items'][0]['uri']
+                    return track_uri
+                
+                else:
+                    print("No tracks found.")
+                    return None
+                
+            else:
+                print(f"Error: {result.status_code}")
+                return None
+            
+        except Exception as e:
+            print(f'Error: {e}')
+            return None
