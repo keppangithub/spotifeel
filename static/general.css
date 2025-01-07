@@ -1,9 +1,10 @@
-body,
-ul {
+body, ul{
+    background-color: pink !important; 
     margin: 0;
     padding: 0;
 }
 
+/*Header CSS*/
 .header {
     display: flex;
     align-items: center;

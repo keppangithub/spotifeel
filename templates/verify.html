@@ -1,83 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--General CSS-->
+    <link href="/static/general.css" rel="stylesheet" type="text/css" />
+
+    <!--Specific CSS-->
+    <link rel="stylesheet" href="/static/verify.css" type="text/css" />
+
+    <!--Font download-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <!--No Bootstrap in this HTML-->
+
     <title>Validate Emotion</title>
-   <style>
+  </head>
+  <body>
+    <header class="header">
+      <a href="/">Spoti<span>feel</span></a>
+      <ul class="menu">
+        <li><a href="#">My Profile</a></li>
+        <li><a href="#">Log Out</a></li>
+      </ul>
+    </header>
+    <section>
+      <h1 id="title" name="title">{{title}}</h1>
+      <div class="button-container">
+        <button id="button1" name="button1">{{button1}}</button>
+        <button id="button2" name="button2">{{button2}}</button>
+      </div>
+    </section>
 
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #A5668B;
-        }
-
-      
-        h1 {
-            font-size: 100px;
-            font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-            max-width: 800px;
-            text-align: center;
-            margin: 0;
-            color: #0E103D; 
-        }
-
-      
-        .button-container {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        button {
-            font-size: 1rem;
-            padding: 10px 20px;
-            background-color: #0E103D;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer; 
-            transition: background-color 0.3s ease; 
-        }
-
-   
-        button:hover {
-            background-color: #0056b3;
-        }
-   </style>
-
-</head>
-<body>
-    <h1 id="title" name="title">{{title}}</h1>
-    <div class="button-container">
-            <button id="button1" name="button1">{{button1}}</button>
-            <button id="button2" name="button2">{{button2}}</button>
-    </div>
-
-</body>
-<script>
-    function handleButtonClick(action) {
+    <!--JavaScript Button functionality-->
+    <script>
+      function handleButtonClick(action) {
         fetch("/playlist", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                message:action
-            }),
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: action,
+          }),
         })
-        .then((response) => response.text())
-        .then((html) => {
+          .then((response) => response.text())
+          .then((html) => {
             document.body.innerHTML = html;
-        });
-    }
+          });
+      }
 
-    document.getElementById("button1").addEventListener("click", () => handleButtonClick("true"));
-    document.getElementById("button2").addEventListener("click", () => handleButtonClick("false"));
-</script>
+      document
+        .getElementById("button1")
+        .addEventListener("click", () => handleButtonClick("true"));
+      document
+        .getElementById("button2")
+        .addEventListener("click", () => handleButtonClick("false"));
+    </script>
+  </body>
 </html>
-
