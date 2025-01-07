@@ -61,11 +61,11 @@ p{
 
 #info{
     display: flex;
-    margin: 0 12% 0 12%;
+    margin: 0 10vw 0 20vw;
 
 }
 
 #info>p{
-    width: 40%;
-    margin-right: 15px;
+    width: 20vw;
+    margin-right: 10vw;
 }
