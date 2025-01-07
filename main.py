@@ -2,6 +2,7 @@ from flask import Flask, redirect, render_template, request, jsonify, url_for, s
 from datetime import date
 import promptGPT
 import feelings
+import spotifeelAPI
 from app import app, user
 from flask_swagger_ui import get_swaggerui_blueprint
 
@@ -70,7 +71,6 @@ def index():
         return render_template('chat.html', today=today)
 
 @app.route('/playlist', methods=['POST'])
-
 def playlist():
     data = request.get_json()
     action = data.get("message")
@@ -106,8 +106,12 @@ def verify():
         title, button1, button2 = "Error", "Invalid", "Response"
     return render_template('verify.html', title=title, button1=button1, button2=button2)
 
-
-
+'''Returns a playlist based on the emotionId provided inside the URL'''
+@app.route('/playlists/emotion/<int:emotionId>', methods=['GET'])
+def get_playlist(emotionId):
+    #KODEN HÄR MÅSTE FÄRDIGSTÄLLAS FÖR ATT KUNNA FUNGERA SOM AVSETT
+    print(f"{emotionId}")
+    return(promptGPT.create_playlist(spotifeelAPI.getEmotionById(f"{emotionId}")))
 
 
 

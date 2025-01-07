@@ -4,31 +4,26 @@ import os
 import json
 import promptGPT
 from app import app
-from main import user
 
-
-
+'''Sets the file paths for the YAML and JSON file'''
 yaml_file_path = os.path.join(os.getcwd(), 'static', 'swagger.yaml')
 json_file_path = os.path.join(os.getcwd(), 'static', 'swagger.json')
 
+'''Reads the Yaml file for API documentation'''
 with open(yaml_file_path, 'r') as yaml_file:
     SWAGGER_SPEC = yaml.safe_load(yaml_file)
-
+'''Writes the API documentation to a JSON file'''
 with open(json_file_path, 'w') as json_file:
     json.dump(SWAGGER_SPEC, json_file, indent=2)
 
 
+'''Routing for API documentation'''
 @app.route('/static/swagger.json')
 def swagger_json():
     return jsonify(SWAGGER_SPEC)
 
-
-@app.route('/playlists/emotion/<int:emotionId>', methods=['GET'])
-def get_playlist(emotionId):
-    return(f"{emotionId}")
-
-
-def get_emotion_by_id(emotionId):
+'''Returns a given emotion based on its ID'''
+def getEmotionById(emotionId):
     emotions = {
         "1": "Furious",
         "2": "Frustrated",
