@@ -133,11 +133,12 @@ class SpotifyAPI:
         - A dictionary containing the track name, artist, track ID,
             and URI.
         '''
-        url = self.base_url + '/search'
+        url = self.base_url + '/search?'
         
         params = {
-            "q": f"artist:{artist}&track:{track}",
-            "type": "track"
+            "q": f"artist:{artist} track:{track}",
+            "type": "track",
+            "limit": 1
         }
         
         headers = self.get_auth_header()
