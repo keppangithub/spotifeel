@@ -1,19 +1,21 @@
 from flask import Flask, redirect, render_template, request, jsonify, url_for, session
 from spotipy.oauth2 import SpotifyOAuth
 from datetime import date
+from dotenv import load_dotenv
 import promptGPT, spotipy
-import feelings
+import feelings, os
 
 app = Flask(__name__)
 app.secret_key = 'enhemlignyckel'
+load_dotenv()
 
-CLIENT_ID = '752df86356504cff94ef280e40b0a2c4'
-CLIENT_SECRET = '3aca6de943994c13be870ab0092e2b15'
+
+
 REDIRECT_URI = 'http://127.0.0.1:5000/callback'
 SCOPE = 'user-library-read user-read-private playlist-modify-private playlist-modify-public'
 
-sp_oauth = SpotifyOAuth(client_id=CLIENT_ID,
-                         client_secret=CLIENT_SECRET,
+sp_oauth = SpotifyOAuth(client_id=os.getenv('CLIENT_ID'),
+                         client_secret=os.getenv('CLIENT_SECRET'),
                          redirect_uri=REDIRECT_URI,
                          scope=SCOPE)
 

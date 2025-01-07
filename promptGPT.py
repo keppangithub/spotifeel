@@ -2,7 +2,6 @@ from dotenv import load_dotenv
 from openai import OpenAI
 import os
 from spotipy.oauth2 import SpotifyOAuth
-from datetime import date
 import spotipy
 load_dotenv()
 key = os.getenv('OPENAI_API_KEY')
@@ -46,19 +45,17 @@ def create_playlist(emotion, token_info):
     songs = completion.choices[0].message.content
     songs = [line.split(". ", 1)[1] for line in songs.split("\n")]
     formatted_songs = [
-    song.replace('"', '')  # Remove all quotes from the song titles
+    song.replace('"', '')
     for song in songs
    ]
 
-# Optionally, add double quotes around each song name if needed
     formatted_songs = [f'"{song}"' for song in formatted_songs]
 
     print(formatted_songs)
     sp = spotipy.Spotify(auth=token_info['access_token'])
 
-    user_profile = sp.current_user()
     user = sp.current_user()
-    user_id = user['id']  # User's Spotify ID
+    user_id = user['id']
 
 # Step 2: Create a new playlist
     playlist_name = "My Awesome Playlist 2"
@@ -76,10 +73,10 @@ def create_playlist(emotion, token_info):
     track_uris = []
     for song in formatted_songs:
         results = sp.search(q=song, type='track', limit=1)
-    if results['tracks']['items']:
-        track_uris.append(results['tracks']['items'][0]['uri'])  # Get the URI of the first result
-    else:
-        print(f"Track not found: {song}")
+        if results['tracks']['items']:
+            track_uris.append(results['tracks']['items'][0]['uri'])
+        else:
+            print(f"Track not found: {song}")
 
 # Step 2: Add tracks to the playlist
     if track_uris:
