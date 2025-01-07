@@ -2,4 +2,5 @@ Requirments:
 - Module: requests (2.32.3)
 - Module: dotenv (1.0.1)
 - Module: openai ()
+- Module: flask-swagger-ui (4.11.1)
 - Flask
