@@ -9,9 +9,9 @@ def get_feelings(feeling):
             if category == "happy":
                 return ["Det verkar som du haft en bra dag idag!", "Fortsätt i samma vibe.", "Lugna ner"]
             if category == "angry":
-                return ["Det verkar som idag har varit en frustrerande dag.", "Muntra upp", "Få ut ilskan (rock/snabb musik)"]
+                return ["Det verkar som idag har varit en frustrerande dag.", "Få ut ilskan", "Muntra upp"]
             if category == "sad":
-                return ["Det verkar som om du haft en jobbig dag.", "Muntra upp", "Grotta i känslan ett tag"]
+                return ["Det verkar som om du haft en jobbig dag.", "Grotta i känslan ett tag", "Muntra upp"]
 
     return "Feeling not found"
 
