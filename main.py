@@ -1,12 +1,11 @@
 from flask import Flask, redirect, render_template, request, jsonify, url_for, session
-from spotifyAPI import SpotifyAPI
 from datetime import date
 import promptGPT
 import feelings
-from app import app
+import spotifeelAPI
+from app import app, user
 from flask_swagger_ui import get_swaggerui_blueprint
 
-swagger_access = False
 '''Set the path for Swagger documentation'''
 SWAGGER_URL = '/swagger'
 API_URL = '/static/swagger.json'
@@ -19,16 +18,7 @@ swaggerui_blueprint = get_swaggerui_blueprint(
         'app_name': "Spotifeel API"
     }
 )
-
-@swaggerui_blueprint.before_request
-def check_swagger_access():
-    if not swagger_access:
-        return render_template('login.html')
-    else:
-        return None
-
-#Initiate user object
-user = SpotifyAPI()
+app.register_blueprint(swaggerui_blueprint, url_prefix='/swagger')
 
 @app.route('/login')
 def login_page():
@@ -60,9 +50,7 @@ def login_callback():
     if 'code' in request.args:
         code = request.args['code']
         user.login_callback(code)
-        ''' Flag for swagger'''
-        global swagger_access
-        swagger_access = True
+        session['user_token'] = user.access_token
         return redirect('/')
 
 @app.route('/', methods=['POST', 'GET'])
@@ -123,7 +111,14 @@ def verify():
         title, button1, button2 = "Error", "Invalid", "Response"
     return render_template('verify.html', title=title, button1=button1, button2=button2)
 
-app.register_blueprint(swaggerui_blueprint, url_prefix='/swagger')
+'''Returns a playlist based on the emotionId provided inside the URL'''
+@app.route('/playlists/emotion/<int:emotionId>', methods=['GET'])
+def get_playlist(emotionId):
+    #KODEN HÄR MÅSTE FÄRDIGSTÄLLAS FÖR ATT KUNNA FUNGERA SOM AVSETT
+    print(f"{emotionId}")
+    return(promptGPT.create_playlist(spotifeelAPI.getEmotionById(f"{emotionId}")))
+
+
 
 # Starta servern
 if __name__ == '__main__':
