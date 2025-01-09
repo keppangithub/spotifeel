@@ -1,66 +1,62 @@
 <!DOCTYPE html>
 <html lang="sv">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!--General CSS-->
-    <link href="/static/general.css" rel="stylesheet" type="text/css" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!--Specific CSS-->
-    <link rel="stylesheet" href="/static/verify.css" type="text/css" />
+  <!--General CSS-->
+  <link href="/static/general.css" rel="stylesheet" type="text/css" />
 
-    <!--Font download-->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-      rel="stylesheet"
-    />
-    <!--No Bootstrap in this HTML-->
+  <!--Specific CSS-->
+  <link rel="stylesheet" href="/static/verify.css" type="text/css" />
 
-    <title>Validate Emotion</title>
-  </head>
-  <body>
-    <header class="header">
-      <a href="/">Spoti<span>feel</span></a>
-      <ul class="menu">
-        <li><a href="#">My Profile</a></li>
-        <li><a href="#">Log Out</a></li>
-      </ul>
-    </header>
-    <section>
-      <h1 id="title" name="title">{{title}}</h1>
-      <div class="button-container">
-        <button id="button1" name="button1">{{button1}}</button>
-        <button id="button2" name="button2">{{button2}}</button>
-      </div>
-    </section>
+  <!--Font download-->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet" />
+  <!--No Bootstrap in this HTML-->
 
-    <!--JavaScript Button functionality-->
-    <script>
-      function handleButtonClick(action) {
-        fetch("/playlist", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            message: action,
-          }),
-        })
-          .then((response) => response.text())
-          .then((html) => {
-            document.body.innerHTML = html;
-          });
-      }
+  <title>Validate Emotion</title>
+</head>
 
-      document
-        .getElementById("button1")
-        .addEventListener("click", () => handleButtonClick("true"));
-      document
-        .getElementById("button2")
-        .addEventListener("click", () => handleButtonClick("false"));
-    </script>
-  </body>
+<body>
+  {% include 'header.html' %}
+
+  <section>
+    <h1 id="title" name="title">{{title}}</h1>
+    <div class="button-container">
+      <button id="button1" name="button1">{{button1}}</button>
+      <button id="button2" name="button2">{{button2}}</button>
+    </div>
+  </section>
+
+  <!--JavaScript Button functionality-->
+  <script>
+    function handleButtonClick(action) {
+      fetch("/playlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: action,
+        }),
+      })
+        .then((response) => response.text())
+        .then((html) => {
+          document.body.innerHTML = html;
+        });
+    }
+
+    document
+      .getElementById("button1")
+      .addEventListener("click", () => handleButtonClick("true"));
+    document
+      .getElementById("button2")
+      .addEventListener("click", () => handleButtonClick("false"));
+  </script>
+</body>
+
 </html>
