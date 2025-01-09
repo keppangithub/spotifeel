@@ -113,12 +113,10 @@ def verify():
 
 '''Returns a playlist based on the emotionId provided inside the URL'''
 @app.route('/playlists/emotion/<int:emotionId>', methods=['GET'])
-def get_playlist(emotionId):
+def get_playlist_api(emotionId):
     #KODEN HÄR MÅSTE FÄRDIGSTÄLLAS FÖR ATT KUNNA FUNGERA SOM AVSETT
     print(f"{emotionId}")
     return(promptGPT.create_playlist(spotifeelAPI.getEmotionById(f"{emotionId}")))
-
-
 
 # Starta servern
 if __name__ == '__main__':
