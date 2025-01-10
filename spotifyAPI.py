@@ -30,11 +30,12 @@ class SpotifyAPI:
         self.user_id = None
         
             
-    def is_user_logged_in(self) -> None:
+    def is_user_logged_in(self) -> bool:
         '''
         Check if user is logged in by seeing if a code has been generated from the redirectToAuthCodeFlow method.
         
-        If the code has not been received, run the redirectToAuthCodeFlow method. Else return.
+        Returns:
+        - Boolean depending on if the token has been generated or not. 
         '''
         if self.access_token == None:
             return False
@@ -48,7 +49,7 @@ class SpotifyAPI:
         Use spotify's API to create a authorization URL through which a user can login to their Spotify Account (OAuth).
         
         Returns:
-        - auth_url
+        - auth_url (str)
         '''
         scope = 'user-read-private user-read-email playlist-modify-public'
 
@@ -96,18 +97,22 @@ class SpotifyAPI:
         
         return
         
-    def get_auth_header(self):
+    def get_auth_header(self) -> dict:
         '''
         Generates the authorization header for making requests to Spotify API.
 
         Returns:
-        - A dictionary containing the 'Authorization' and 'Content-Type' headers
+        - A dictionary containing the 'Authorization' header (dict)
         '''
         return {'Authorization': 'Bearer ' + self.access_token}
         
-    def get_user_information(self):
+    def get_user_information(self) -> None:
         '''
-        Get information about the logged in user from the SPotify API.
+        Get the user_id for the logged in user from the SPotify API.
+        Store the user id in self.user_id
+        
+        Returns:
+        - void
         '''
         url = self.base_url + '/me'
         
@@ -118,7 +123,7 @@ class SpotifyAPI:
    
         self.user_id = response['id']
         
-        return 
+        return
     
 
     def create_new_playlist(self, user_id: str, new_playlist_name: str) -> str:
@@ -130,7 +135,7 @@ class SpotifyAPI:
         - new_playlist_name: str
         
         Returns:
-        - playlist id (str)
+        - playlist_id (str)
         '''
         query_url = self.base_url + f'/users/{user_id}/playlists'
         print(query_url)
@@ -162,20 +167,15 @@ class SpotifyAPI:
         - tracks: list of str (ex. spotify:track:1301WleyT98MSxVHPZCA6M, from spotify)
         
         Returns:
-        - snapshot_id: str (ex. abc, from spotify)
-        
+        - void
         '''       
         query_url = f"{self.base_url}/playlists/{playlist_id}/tracks"  
         req_header = self.get_auth_header()
         
         collected_uris = []
         
-        print(tracks)
-        
         for track in tracks:
-            print(track)
             for i in track:
-                print(i)
                 if ',' in i:
                     title, artist = i.split(',', 1)
                     
@@ -184,18 +184,16 @@ class SpotifyAPI:
                     
                 else:
                     print(f"Track Error: Invalid format from OPEN AI")
+                    return False
                 
                 title = title.strip()
                 artist = artist.strip()   
                 
-                print(title)
-                print(artist)
-                
                 query = f"track:{title} artist:{artist}"
                                 
                 uri = self.search_track(query)
+                
                 if uri:
-                    print(f"Found URI: {uri}")
                     collected_uris.append(uri)
                     
             if not collected_uris:
