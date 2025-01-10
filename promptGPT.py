@@ -5,7 +5,7 @@ import os
 load_dotenv()
 key = os.getenv('OPENAI_API_KEY')
 client = OpenAI(api_key=key)
-prompt_counter =0
+prompt_counter = 0
 
 def is_emotion_valid(emotion: str) -> bool:
     '''
