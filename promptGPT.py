@@ -5,6 +5,7 @@ import os
 load_dotenv()
 key = os.getenv('OPENAI_API_KEY')
 client = OpenAI(api_key=key)
+prompt_counter =0
 
 def is_emotion_valid(emotion: str) -> bool:
     '''
@@ -65,8 +66,10 @@ def run_prompt(text: str) -> str:
     if is_emotion_valid(emotion):
         return emotion
     
-    else: 
-        print('Invalid chooise of emotion by Open AI')
+    else:
+        if(prompt_counter<10):
+            run_prompt(text)
+            prompt_counter+1
 
 def create_playlist(emotion):
     completion = client.chat.completions.create(

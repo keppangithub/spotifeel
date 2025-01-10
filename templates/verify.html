@@ -27,14 +27,22 @@
   <section>
     <h1 id="title" name="title">{{title}}</h1>
     <div class="button-container">
-      <button id="button1" name="button1">{{button1}}</button>
-      <button id="button2" name="button2">{{button2}}</button>
+      <button id="button1" name="button1" onclick="handleButtonClick('true')">{{button1}}</button>
+      <button id="button2" name="button2" onclick="handleButtonClick('false')">{{button2}}</button>
     </div>
   </section>
 
   <!--JavaScript Button functionality-->
   <script>
     function handleButtonClick(action) {
+      document.getElementById("button1").remove();
+      document.getElementById("button2").remove();
+      let iframe = document.createElement('iframe');
+      iframe.src = 'https://giphy.com/embed/3oEhmM10mIi1dkMfmg';
+
+    const container = document.querySelector(".button-container");
+    container.appendChild(iframe);
+
       fetch("/playlist", {
         method: "POST",
         headers: {
@@ -48,14 +56,9 @@
         .then((html) => {
           document.body.innerHTML = html;
         });
-    }
 
-    document
-      .getElementById("button1")
-      .addEventListener("click", () => handleButtonClick("true"));
-    document
-      .getElementById("button2")
-      .addEventListener("click", () => handleButtonClick("false"));
+
+    }
   </script>
 </body>
 

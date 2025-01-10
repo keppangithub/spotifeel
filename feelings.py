@@ -7,7 +7,7 @@ def get_feelings(feeling):
     for category, feelings in feelings.items():
         if feeling in feelings:
             if category == "happy":
-                return ["Det verkar som du haft en bra dag idag!", "Fortsätt i samma vibe.", "Lugna ner"]
+                return ["Det verkar som du haft en bra dag idag!", "Fortsätt i samma vibe", "Lugna ner"]
             if category == "angry":
                 return ["Det verkar som idag har varit en frustrerande dag.", "Få ut ilskan", "Muntra upp"]
             if category == "sad":
