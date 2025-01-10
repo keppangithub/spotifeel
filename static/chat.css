@@ -27,6 +27,10 @@ form {
     height: 50vh !important;
     width: 95% !important;
     border-radius: 40px !important;
+    padding: 15%;
+    word-wrap: break-word; /* Allows text to break onto the next line */
+    white-space: normal; /* Ensures text wraps to the next line */
+    resize: none; /* Optional: Disables resizing if using a textarea */
 }
 
 .btn {
