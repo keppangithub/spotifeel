@@ -138,20 +138,17 @@ class SpotifyAPI:
         - playlist_id (str)
         '''
         query_url = self.base_url + f'/users/{user_id}/playlists'
-        print(query_url)
     
         req_headers = {
             'Authorization': 'Bearer ' + self.access_token,
             'name' : new_playlist_name
             }
-        print(new_playlist_name)
         
         req_data = {
             'name': new_playlist_name
             }
         
         result = requests.post(query_url, headers=req_headers, json=req_data)
-        print(result)
         
         result = result.json()
         playlist_id = result['id']
@@ -199,8 +196,6 @@ class SpotifyAPI:
             if not collected_uris:
                 print("No valid tracks found to add to playlist")
                 return
-            
-        print(collected_uris)
              
         req_body = {
             "uris": collected_uris
@@ -211,6 +206,15 @@ class SpotifyAPI:
         return collected_uris
     
     def search_track(self, query: str) -> str | None:
+        '''
+        Search for a track through the Spotify API.
+        
+        parameter: 
+        - query (str)
+        
+        returns: 
+        - None or track_id
+        '''
         url = f"{self.base_url}/search"
         
         req_params = {
@@ -218,8 +222,6 @@ class SpotifyAPI:
             "type": "track",
             "limit": 1
         }
-        
-        print(req_params)
         
         req_header = self.get_auth_header()
 

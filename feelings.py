@@ -1,4 +1,13 @@
-def get_feelings(feeling):  
+def get_feelings(feeling: str) -> str:  
+    '''
+    Check what category the feeling received from OPEN AI API is part of in order to return a relevant message to the user
+    
+    parameter:
+    - a feeling (str)
+    
+    returns:
+    - a message (str)
+    '''
     feelings = {
         "happy": ["euphoric", "loving", "happy", "Euphoric", "Loving", "Happy"],
         "angry": ["furious", "frustrated", "Furious", "Frustrated"],
@@ -6,17 +15,29 @@ def get_feelings(feeling):
     } 
     for category, feelings in feelings.items():
         if feeling in feelings:
+            
             if category == "happy":
                 return ["Det verkar som du haft en bra dag idag!", "Fortsätt i samma vibe", "Lugna ner"]
+            
             if category == "angry":
                 return ["Det verkar som idag har varit en frustrerande dag.", "Få ut ilskan", "Muntra upp"]
+            
             if category == "sad":
                 return ["Det verkar som om du haft en jobbig dag.", "Grotta i känslan ett tag", "Muntra upp"]
 
     return "Feeling not found"
 
 
-def negated_feeling(feeling):
+def negated_feeling(feeling: str) -> str:
+    '''
+    Check which category the feeling received is a part of and return the oposit emotion.
+    
+    parameter:
+    - a feeling (str)
+    
+    returns:
+    - a feeling (str)
+    '''
     feelings = {
         "happy": ["euphoric", "loving", "happy", "Euphoric", "Loving", "Happy"],
         "angry": ["urious", "frustrated", "Furious", "Frustrated"],
@@ -25,12 +46,11 @@ def negated_feeling(feeling):
     for category, feelings in feelings.items():
         if feeling in feelings:
             if category == "happy":
-                print("Negated category = sad")
                 return "sad"
+            
             if category == "angry":
-                print("Negated category = chill")
                 return "chill"
+            
             if category == "sad":
-                print("Negated category = happy")
                 return "happy"
             
