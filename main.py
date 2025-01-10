@@ -74,14 +74,14 @@ def playlist():
     if not user.is_user_logged_in():
         print("ERROR: user is not logged in")
         return redirect ('/login')
-    
+
     else:
         data = request.get_json()
         action = data.get("message")
         feeling = session.get('feeling')
         print("This should be either true or false: "+ action)
         print("This is the feeling in /playlist:"+feeling)
-        
+
         if action == "false":
             feeling = feelings.negated_feeling(feeling)
             print("This is the negated feeling:" + feeling)
@@ -94,7 +94,7 @@ def playlist():
         user.add_to_playlist(new_playlist_id, songs_for_playlist)
 
         return render_template('playlist.html')
-    
+
 
 @app.route("/verify")
 def verify():
@@ -120,25 +120,27 @@ def getAllEmotions():
 def getEmotionById(emotionId):
     return jsonify(spotifeelAPI.getEmotionById(f'{emotionId}'))
 
-@app.route('/playlists/<int:emotionId>', methods=['POST'])
+@app.route('/playlists/<int:emotionId>', methods=['POST', 'GET'])
 def postPlaylist(emotionId):
     if 'user_token' not in session:
         print("ERROR: user is not logged in")
-        return redirect('/login')  
-    
+        return redirect('/login')
+
     feeling = spotifeelAPI.getEmotionById(f'{emotionId}')
-    
+
     today = date.today()
-    user.get_user_information()  
-    songs_for_playlist = promptGPT.create_playlist(feeling)  
+    user.get_user_information()
+    songs_for_playlist = promptGPT.create_playlist(feeling)
     new_playlist_id = user.create_new_playlist(user.user_id, f'{feeling.capitalize()} - {today}')  # Skapa ny playlist
-    user.add_to_playlist(new_playlist_id, songs_for_playlist)  
+    user.add_to_playlist(new_playlist_id, songs_for_playlist)
 
     playlist = user.get_user_playlist(new_playlist_id)
 
-    
+
+
     formatted_playlist = {
         "name": playlist["name"],
+        "uri": playlist["uri"],
         "songs": []
     }
 
@@ -148,11 +150,11 @@ def postPlaylist(emotionId):
             "artist": ', '.join(artist["name"] for artist in item["track"]["artists"]),
             "uri": item["track"]["uri"]
         }
-        formatted_playlist["songs"].append(formatted_song)   
+        formatted_playlist["songs"].append(formatted_song)
 
-    return jsonify(formatted_playlist)  
+    return jsonify(formatted_playlist)
 
-    
+
 # Starta servern
 if __name__ == '__main__':
     app.run(debug=True, port=8888)
