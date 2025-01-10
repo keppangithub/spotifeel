@@ -12,6 +12,7 @@ json_file_path = os.path.join(os.getcwd(), 'static', 'swagger.json')
 '''Reads the Yaml file for API documentation'''
 with open(yaml_file_path, 'r') as yaml_file:
     SWAGGER_SPEC = yaml.safe_load(yaml_file)
+    
 '''Writes the API documentation to a JSON file'''
 with open(json_file_path, 'w') as json_file:
     json.dump(SWAGGER_SPEC, json_file, indent=2)

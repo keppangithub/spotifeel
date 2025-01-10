@@ -26,18 +26,15 @@ def is_emotion_valid(emotion: str) -> bool:
     - Scared
     - Anxious
     
-    Returns Boolean (depending on if the feeling received is valid or not)
+    returns:
+    - Boolean (depending on if the feeling received is valid or not)
     '''
     valid_feelings = ['furious', 'frustrated', 'horrified', 'disappointed', 'euphoric', 'loving', 'happy', 'useless', 'regretful', 'dejected', 'unhappy', 'scared','anxious']
     
     if emotion.lower() in valid_feelings:
-        print(emotion)
-        print('True')
         return True
     
     else: 
-        print(emotion)
-        print('False')
         return False
 
 
@@ -47,7 +44,7 @@ def run_prompt(text: str) -> str:
     
     Check if the emotion is valid via the is_emotion_valid function.
     
-    Returns: 
+    returns: 
     - emotion (str)
     '''
     completion = client.chat.completions.create(
@@ -71,7 +68,17 @@ def run_prompt(text: str) -> str:
             run_prompt(text)
             prompt_counter+1
 
-def create_playlist(emotion):
+def create_playlist(emotion: str) -> list:
+    '''
+    Get six recommended songs based on a received emotion (argument).
+    Manipulate them to a specific format and add to the list formated_songs
+    
+    parameter:
+    - emotions (str)
+    
+    returns:
+    - formated_songs (list)
+    '''
     completion = client.chat.completions.create(
      model="gpt-3.5-turbo",
          messages=[
@@ -88,7 +95,6 @@ def create_playlist(emotion):
 ]
 )
     songs = completion.choices[0].message.content
-    print(songs)
     
     formated_songs = []
     
@@ -98,8 +104,6 @@ def create_playlist(emotion):
             title_artist = title_artist.replace('"', '')
             title_artist = title_artist.replace(' by ', ',')
             
-            formated_songs.append([title_artist])
-                
-    print(formated_songs)            
+            formated_songs.append([title_artist])           
     
     return formated_songs
