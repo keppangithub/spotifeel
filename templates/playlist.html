@@ -28,12 +28,17 @@
   {% include 'header.html' %}
 
   <div class="container">
-    <h1 class="text-center">Feeling - date</h1>
+    <h1 class="text-center">{{feeling}} - {{today}}</h1>
 
     <!--Carousell with playlist information-->
+    {% for song in songs %}
     <div class="d-flex justify-content-center">
-      <div class="playlist_item w-25"></div>
+      <div class="playlist_item w-25">
+        <p id="song_title">{{ song.title }}</p>
+        <p id="song-artist">{{ song.artist }}</p>
+      </div>
     </div>
+    {% endfor %}
   </div>
 
   <!--JavaScript Bootstrap-->
