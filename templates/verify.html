@@ -37,11 +37,11 @@
     function handleButtonClick(action) {
       document.getElementById("button1").remove();
       document.getElementById("button2").remove();
-      let iframe = document.createElement('iframe');
-      iframe.src = 'https://giphy.com/embed/3oEhmM10mIi1dkMfmg';
+      let img = document.createElement('img');
+      img.src = "/static/images/spinning-cd.gif";
 
     const container = document.querySelector(".button-container");
-    container.appendChild(iframe);
+    container.appendChild(img);
 
       fetch("/playlist", {
         method: "POST",
