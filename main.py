@@ -94,6 +94,7 @@ def playlist():
         user.add_to_playlist(new_playlist_id, songs_for_playlist)
 
         return render_template('playlist.html')
+    
 
 @app.route("/verify")
 def verify():
@@ -111,13 +112,47 @@ def verify():
         title, button1, button2 = "Error", "Invalid", "Response"
     return render_template('verify.html', title=title, button1=button1, button2=button2)
 
-'''Returns a playlist based on the emotionId provided inside the URL'''
-@app.route('/playlists/emotion/<int:emotionId>', methods=['GET'])
-def get_playlist_api(emotionId):
-    #KODEN HÄR MÅSTE FÄRDIGSTÄLLAS FÖR ATT KUNNA FUNGERA SOM AVSETT
-    print(f"{emotionId}")
-    return(promptGPT.create_playlist(spotifeelAPI.getEmotionById(f"{emotionId}")))
+@app.route('/feelings', methods=['GET'])
+def getAllEmotions():
+    return jsonify(spotifeelAPI.getEmotions())
 
+@app.route('/feelings/<int:emotionId>', methods=['GET'])
+def getEmotionById(emotionId):
+    return jsonify(spotifeelAPI.getEmotionById(f'{emotionId}'))
+
+@app.route('/playlists/<int:emotionId>', methods=['POST'])
+def postPlaylist(emotionId):
+    if 'user_token' not in session:
+        print("ERROR: user is not logged in")
+        return redirect('/login')  
+    
+    feeling = spotifeelAPI.getEmotionById(f'{emotionId}')
+    
+    today = date.today()
+    user.get_user_information()  
+    songs_for_playlist = promptGPT.create_playlist(feeling)  
+    new_playlist_id = user.create_new_playlist(user.user_id, f'{feeling.capitalize()} - {today}')  # Skapa ny playlist
+    user.add_to_playlist(new_playlist_id, songs_for_playlist)  
+
+    playlist = user.get_user_playlist(new_playlist_id)
+
+    
+    formatted_playlist = {
+        "name": playlist["name"],
+        "songs": []
+    }
+
+    for item in playlist["tracks"]["items"]:
+        formatted_song = {
+            "name": item["track"]["name"],
+            "artist": ', '.join(artist["name"] for artist in item["track"]["artists"]),
+            "uri": item["track"]["uri"]
+        }
+        formatted_playlist["songs"].append(formatted_song)   
+
+    return jsonify(formatted_playlist)  
+
+    
 # Starta servern
 if __name__ == '__main__':
     app.run(debug=True, port=8888)

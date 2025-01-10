@@ -246,3 +246,11 @@ class SpotifyAPI:
         except Exception as e:
             print(f'Error: {e}')
             return None
+        
+    def get_user_playlist(self, playlistID):
+        query_url = f"{self.base_url}/playlists/{playlistID}"
+        req_header = self.get_auth_header()
+        
+        response = requests.get(query_url, headers=req_header)
+        return response.json()
+        

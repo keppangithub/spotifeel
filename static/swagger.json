@@ -17,21 +17,37 @@
     }
   ],
   "paths": {
-    "/playlists/emotion/{emotionId}": {
+    "/feelings": {
       "get": {
-        "security": [
-          {
-            "BearerAuth": []
+        "summary": "Retrieve all emotions",
+        "description": "Retrieves a list of all emotions supported by the API",
+        "responses": {
+          "200": {
+            "description": "List of all emotions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Emotion"
+                  }
+                }
+              }
+            }
           }
-        ],
-        "summary": "Get playlist based on emotion",
-        "description": "Retrieves a curated playlist based on a specific emotion and its intensity",
+        }
+      }
+    },
+    "/feelings/{emotionId}": {
+      "get": {
+        "summary": "Retrieve emotion by ID",
+        "description": "Retrieves a specific emotion based on its ID",
         "parameters": [
           {
             "name": "emotionId",
             "in": "path",
             "required": true,
-            "description": "ID of the emotions: 1=furious, 2=frustrated, 3=horrified, 4=disappointed, 5=euphoric, 6=loving, 7=happy, 8=useless, 9=regretful, 10=dejected, 11=unhappy, 12=scared, 13=anxious",
+            "description": "ID for emotions: 1=furious, 2=frustrated, 3=horrified, 4=disappointed, 5=euphoric, 6=loving, 7=happy, 8=useless, 9=regretful, 10=dejected, 11=unhappy, 12=scared, 13=anxious",
             "schema": {
               "type": "integer",
               "minimum": 1,
@@ -41,7 +57,46 @@
         ],
         "responses": {
           "200": {
-            "description": "Playlist found",
+            "description": "Emotion found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Emotion"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Emotion with the specified ID does not exist"
+          }
+        }
+      }
+    },
+    "/playlists/{emotionId}": {
+      "post": {
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Create a playlist based on emotion",
+        "description": "Creates a new playlist based on the user's emotion and returns the created playlist",
+        "parameters": [
+          {
+            "name": "emotionId",
+            "in": "path",
+            "required": true,
+            "description": "ID for emotions: 1=furious, 2=frustrated, 3=horrified, 4=disappointed, 5=euphoric, 6=loving, 7=happy, 8=useless, 9=regretful, 10=dejected, 11=unhappy, 12=scared, 13=anxious",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 13
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Playlist created and found",
             "content": {
               "application/json": {
                 "schema": {
@@ -50,8 +105,11 @@
               }
             }
           },
+          "401": {
+            "description": "User must be logged in to create a playlist"
+          },
           "404": {
-            "description": "No playlist found for given emotion/intensity"
+            "description": "Emotion with the specified ID does not exist"
           }
         }
       }
@@ -66,12 +124,10 @@
             "type": "string"
           },
           "name": {
-            "type": "string",
-            "example": "Happy"
+            "type": "string"
           },
           "description": {
-            "type": "string",
-            "example": "Positive state of mind"
+            "type": "string"
           }
         }
       },
@@ -82,8 +138,7 @@
             "type": "string"
           },
           "name": {
-            "type": "string",
-            "example": "Happy Mix"
+            "type": "string"
           },
           "songs": {
             "type": "array",
@@ -91,15 +146,9 @@
               "$ref": "#/components/schemas/Song"
             }
           },
-          "totalDuration": {
-            "type": "integer",
-            "description": "Total playtime in seconds",
-            "example": 3600
-          },
           "spotifyUrl": {
             "type": "string",
-            "description": "URL to the playlist on Spotify",
-            "example": "https://open.spotify.com/playlist/xyz123"
+            "description": "URL to the playlist on Spotify"
           }
         }
       },
@@ -107,27 +156,9 @@
         "type": "object",
         "properties": {
           "name": {
-            "type": "string",
-            "example": "Happy"
-          },
-          "artist": {
-            "type": "string",
-            "example": "Pharrell Williams"
-          },
-          "duration": {
-            "type": "integer",
-            "description": "Song duration in seconds",
-            "example": 240
+            "type": "string"
           }
         }
-      }
-    },
-    "securitySchemes": {
-      "BearerAuth": {
-        "type": "http",
-        "schema": "bearer",
-        "bearerFormat": "JWT",
-        "description": "Spotify authentication token"
       }
     }
   }
