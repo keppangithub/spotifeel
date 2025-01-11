@@ -110,7 +110,6 @@ def playlist():
             feeling = feelings.negated_feeling(feeling)
 
         #Create playlist, OPEN & Spotify work together
-        new_playlist_id = user.create_new_playlist(user.user_id, f'{feeling.capitalize()} - {today}')
         today = date.today()
         user.get_user_information()
         songs_for_playlist = promptGPT.create_playlist(feeling)
