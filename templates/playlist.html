@@ -31,16 +31,18 @@
     <h1 class="text-center">{{feeling}} - {{today}}</h1>
 
     <!--Carousell with playlist information-->
-    {% if songs_for_playlist%}
-    {% for songs in songs_for_playlist%}
+
     <div class="d-flex justify-content-center">
       <div class="playlist_item w-25">
+        {% if songs_for_playlist%}
+        {% for songs in songs_for_playlist%}
         {% set song = songs[0].split(',') %}
         <p id="print_song">{{song[0]}} - {{song[1]}}</p>
+        {%endfor%}
+        {%endif%}
       </div>
     </div>
-    {%endfor%}
-    {%endif%}
+
   </div>
 
   <!--JavaScript Bootstrap-->
