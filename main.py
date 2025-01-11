@@ -115,9 +115,7 @@ def playlist():
         songs_for_playlist = promptGPT.create_playlist(feeling)
 
         new_playlist_id = user.create_new_playlist(user.user_id, f'{feeling.capitalize()} - {today}')
-        user.add_to_playlist(new_playlist_id, songs_for_playlist)
 
-        return render_template('playlist.html')
 
 
 @app.route("/verify")

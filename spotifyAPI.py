@@ -170,6 +170,7 @@ class SpotifyAPI:
         req_header = self.get_auth_header()
         
         collected_uris = []
+        song_info = []
         
         for track in tracks:
             for i in track:
@@ -192,6 +193,10 @@ class SpotifyAPI:
                 
                 if uri:
                     collected_uris.append(uri)
+                    song_info.append({
+                        'title': title,
+                        'artist': artist
+                    })
                     
             if not collected_uris:
                 print("No valid tracks found to add to playlist")
@@ -203,7 +208,7 @@ class SpotifyAPI:
             
         requests.post(query_url, headers=req_header, json=req_body)
         
-        return collected_uris
+        return collected_uris, song_info
     
     def search_track(self, query: str) -> str | None:
         '''
