@@ -1,5 +1,6 @@
-body, ul{
-    background-color: pink !important; 
+body,
+ul {
+    background-color: #D18AB4 !important;
     margin: 0;
     padding: 0;
 }
@@ -19,7 +20,7 @@ body, ul{
 }
 
 .header a {
-    color: white;
+    color: #F3D7ED;
     font-size: 26px;
     text-decoration: none;
     font-family: "Montserrat", serif;

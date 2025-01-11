@@ -1,5 +1,38 @@
+#playlist_container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 50px;
+    padding: 20px;
+}
+
 .playlist_item {
-    background-color: rgb(103, 103, 221) !important;
-    border-radius: 25px;
-    height: 500px;
+    background-color: #69306D !important;
+    border-radius: 200px;
+    min-width: 300px;
+    height: 300px;
+    padding: 80px 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.playlist_item>#print_song {
+    color: #F3D7ED;
+    font-size: 16pt;
+    font-family: "Montserrat", serif;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+#feeling_date {
+    color: #69306D;
+    font-family: "Montserrat", serif !important;
+    text-align: center;
+    font-size: 36pt;
+    font-weight: bold;
+    margin: 20px 10px;
+    display: block;
 }

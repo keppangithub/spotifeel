@@ -27,21 +27,18 @@
 <body>
   {% include 'header.html' %}
 
-  <div class="container">
-    <h1 class="text-center">{{feeling}} - {{today}}</h1>
+  <h1 id="feeling_date" class="text-center">{{display_feeling}} - {{today}}</h1>
+  <div class="container" id="playlist_container">
 
     <!--Carousell with playlist information-->
-
-    <div class="d-flex justify-content-center">
-      <div class="playlist_item w-25">
-        {% if songs_for_playlist%}
-        {% for songs in songs_for_playlist%}
-        {% set song = songs[0].split(',') %}
-        <p id="print_song">{{song[0]}} - {{song[1]}}</p>
-        {%endfor%}
-        {%endif%}
-      </div>
+    {% if songs_for_playlist%}
+    {% for songs in songs_for_playlist%}
+    <div class="playlist_item w-25">
+      {% set song = songs[0].split(',') %}
+      <p id="print_song">{{song[0]}} - {{song[1]}}</p>
     </div>
+    {%endfor%}
+    {%endif%}
 
   </div>
 
