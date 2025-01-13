@@ -46,7 +46,7 @@ paths:
         '404':
           description: Emotion with the specified ID does not exist
 
-  /playlists/{emotionId}:
+  /playlist/{emotionId}:
     post:
       security:
         - BearerAuth: []
@@ -72,6 +72,40 @@ paths:
           description: User must be logged in to create a playlist
         '404':
           description: Emotion with the specified ID does not exist
+
+  /playlists:
+    get:
+      summary: Retrieve all created playlists
+      description: Returns all playlist in a list with their ID and URI if there is any playlists created.
+      responses:
+        '200':
+          description: List of all playlists
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Playlist_item'
+
+  /playlists/{id}:
+    get:
+      summary: Retrieve a specific playlist
+      description: Returns a single playlist based on the ID.
+      parameters:
+        - name: search_id
+          in: path
+          required: true
+      responses:
+        '200':
+          description: List of all playlists
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Playlist'
+                  
+
 
 components:
   schemas:
@@ -116,4 +150,12 @@ components:
       type: object
       properties:
         name:
+          type: string
+
+    Playlist_item:
+      type: object
+      properties:
+        id:
+          type: integer
+        URI:
           type: string
