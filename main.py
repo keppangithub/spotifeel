@@ -84,7 +84,7 @@ def index():
 @app.route('/playlist', methods=['POST'])
 def playlist():
     '''
-    Method used to create a playlist using GPT and post to Spotify. 
+    Method used to create a playlist using GPT and post to Spotify.
     Check if user is logged in.
     If the user is not logged in redirect them to the login page.
 
@@ -116,9 +116,10 @@ def playlist():
         song_info = user.add_to_playlist(new_playlist_id, songs_for_playlist)
         display_feeling = feeling.capitalize()
 
+
         playlists.add_to_playlist(new_playlist_id)
-            
-        return render_template('playlist.html', song_info=song_info, display_feeling=display_feeling, today=today)
+
+        return render_template('playlist.html', new_playlist_id=new_playlist_id, song_info=song_info, display_feeling=display_feeling, today=today)
 
 @app.route("/verify")
 def verify():
