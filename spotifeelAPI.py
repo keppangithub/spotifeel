@@ -70,5 +70,5 @@ def get_emotions():
 def get_playlists():
     return playlists.get_playlists()
 
-def get_platlists_by_id():
-    return "playlist(id)"
+def get_platlists_by_id(id):
+    return playlists.get_platlists_by_id(id)
