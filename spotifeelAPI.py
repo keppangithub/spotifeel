@@ -48,7 +48,7 @@ def swagger_json():
 
 
 
-def getEmotionById(emotionId):
+def get_emotion_by_id(emotion_id):
     '''
    Retrieves a specific emotion based on its ID.
 
@@ -58,10 +58,10 @@ def getEmotionById(emotionId):
     Returns:
         str: The emotion corresponding to the provided ID.
     '''
-    return emotions[emotionId]
+    return emotions[emotion_id]
 
 
-def getEmotions():
+def get_emotions():
     '''
     Retrieves the complete dictionary of emotions.
 
@@ -69,3 +69,9 @@ def getEmotions():
         dict: A dictionary containing all emotions with their IDs as keys.
     '''
     return emotions
+
+def get_playlists():
+    return "playlists"
+
+def get_platlists_by_id():
+    return "playlist(id)"

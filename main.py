@@ -126,17 +126,17 @@ def playlist():
 
 
 @app.route('/feelings', methods=['GET'])
-def getAllEmotions():
+def get_all_emotions():
     '''
     Gets all available emotions from the API.
 
     Returns:
     - JSON response of all emotions.
     '''
-    return jsonify(spotifeelAPI.getEmotions())
+    return jsonify(spotifeelAPI.get_emotions())
 
 @app.route('/feelings/<int:emotionId>', methods=['GET'])
-def getEmotionById(emotionId):
+def get_emotion_by_id(emotionId):
     '''
     Gets a specific emotion by its ID from the API.
 
@@ -146,10 +146,10 @@ def getEmotionById(emotionId):
     Returns:
     - JSON response containing the emotion with the specified ID.
     '''
-    return jsonify(spotifeelAPI.getEmotionById(f'{emotionId}'))
+    return jsonify(spotifeelAPI.get_emotion_by_id(f'{emotionId}'))
 
 @app.route('/playlists/<int:emotionId>', methods=['POST', 'GET'])
-def postPlaylist(emotionId):
+def post_playlist(emotionId):
     '''
     Creates a playlist based on a specific emotion and adds it to the user's Spotify account.
 
@@ -170,7 +170,7 @@ def postPlaylist(emotionId):
         print("ERROR: user is not logged in")
         return redirect('/login')
 
-    feeling = spotifeelAPI.getEmotionById(f'{emotionId}')
+    feeling = spotifeelAPI.get_emotion_by_id(f'{emotionId}')
 
     today = date.today()
     user.get_user_information()
@@ -198,6 +198,14 @@ def postPlaylist(emotionId):
 
     return jsonify(formatted_playlist)
 
+
+@app.route('/playlists', methods=['GET'])
+def get_all_playlists():
+    return jsonify("spotifeelAPI.get_playlists()")
+
+@app.route('/playlists/<int:id>', methods=['GET'])
+def get_playlist_by_id(playlist_id):
+    return jsonify("spotifeelAPI.get_platlists_by_id(f'{playlist_id}')")
 
 '''
 Starting server with port - 8888
