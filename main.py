@@ -1,8 +1,6 @@
 from flask import Flask, redirect, render_template, request, jsonify, url_for, session
 from datetime import date
-import promptGPT
-import feelings
-import spotifeelAPI
+import promptGPT, feelings, spotifeelAPI, playlists
 from app import app, user
 from flask_swagger_ui import get_swaggerui_blueprint
 
@@ -115,7 +113,9 @@ def playlist():
         songs_for_playlist = promptGPT.create_playlist(feeling)
         new_playlist_id = user.create_new_playlist(user.user_id, f'{feeling.capitalize()} - {today}')
         user.add_to_playlist(new_playlist_id, songs_for_playlist)
-        display_feeling = feeling.capitalize()    
+        display_feeling = feeling.capitalize()
+
+        playlists.add_to_playlist(new_playlist_id)
             
         return render_template('playlist.html', songs_for_playlist=songs_for_playlist, display_feeling=display_feeling, today=today)
 

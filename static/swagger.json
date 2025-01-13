@@ -29,7 +29,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Emotion"
+                    "$ref": "#/components/schemas/Emotions"
                   }
                 }
               }
@@ -117,15 +117,32 @@
   },
   "components": {
     "schemas": {
+      "Emotions": {
+        "type": "object",
+        "properties": {
+          "emotions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "description": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "id": 1,
+                "description": "Happy"
+              }
+            }
+          }
+        }
+      },
       "Emotion": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
           "description": {
             "type": "string"
           }
