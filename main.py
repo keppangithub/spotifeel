@@ -115,11 +115,32 @@ def playlist():
         new_playlist_id = user.create_new_playlist(user.user_id, f'{feeling.capitalize()} - {today}')
         user.add_to_playlist(new_playlist_id, songs_for_playlist)
         display_feeling = feeling.capitalize()
-        
+
         playlists.add_to_playlist(new_playlist_id)
             
         return render_template('playlist.html', songs_for_playlist=songs_for_playlist, display_feeling=display_feeling, today=today)
 
+@app.route("/verify")
+def verify():
+    '''
+    returns:
+    - verify.html
+    '''
+    response = request.args.get('response', None)
+
+    if response is None:
+        return redirect(url_for('index'))
+
+    feeling = feelings.get_feelings(response)
+    session['feeling'] = response
+
+    if len(feeling) == 3:
+        title, button1, button2 = feeling
+
+    else:
+        title, button1, button2 = "Error", "Invalid", "Response"
+
+    return render_template('verify.html', title=title, button1=button1, button2=button2)
 
 
 
@@ -201,11 +222,11 @@ def post_playlist(emotionId):
 
 @app.route('/playlists', methods=['GET'])
 def get_all_playlists():
-    return jsonify("spotifeelAPI.get_playlists()")
+    return jsonify(spotifeelAPI.get_playlists())
 
 @app.route('/playlists/<int:id>', methods=['GET'])
 def get_playlist_by_id(playlist_id):
-    return jsonify("spotifeelAPI.get_platlists_by_id(f'{playlist_id}')")
+    return jsonify(spotifeelAPI.get_platlists_by_id(f'{playlist_id}'))
 
 '''
 Starting server with port - 8888

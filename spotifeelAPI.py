@@ -1,8 +1,5 @@
 from flask import Flask, jsonify, redirect, request, url_for, render_template, session
-import yaml
-import os
-import json
-import promptGPT
+import yaml, playlists, os, json, promptGPT
 from app import app
 
 # Dictionary of emotions mapped to their respective IDs
@@ -71,7 +68,7 @@ def get_emotions():
     return emotions
 
 def get_playlists():
-    return "playlists"
+    return playlists.get_playlists()
 
 def get_platlists_by_id():
     return "playlist(id)"
