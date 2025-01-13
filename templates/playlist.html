@@ -31,11 +31,12 @@
   <div class="container" id="playlist_container">
 
     <!--Carousell with playlist information-->
-    {% if songs_for_playlist%}
-    {% for songs in songs_for_playlist%}
+    {% if song_info%}
+    {% for song in song_info%}
     <div class="playlist_item w-25">
-      {% set song = songs[0].split(',') %}
-      <p id="print_song">{{song[0]}} - {{song[1]}}</p>
+      <h4 id="print_song">{{song.title}}</h4>
+      <h5 id="print_artist">{{song.artist}}</h5>
+      <img src="{{song.image_url}}" alt="album cover">
     </div>
     {%endfor%}
     {%endif%}

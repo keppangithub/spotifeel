@@ -189,14 +189,16 @@ class SpotifyAPI:
                 
                 query = f"track:{title} artist:{artist}"
                                 
-                uri = self.search_track(query)
-                
+                uri, image_url = self.search_track(query)
+    
                 if uri:
                     collected_uris.append(uri)
                     song_info.append({
                         'title': title,
-                        'artist': artist
+                        'artist': artist,
+                        'image_url': image_url
                     })
+                    
                     
             if not collected_uris:
                 print("No valid tracks found to add to playlist")
@@ -208,7 +210,7 @@ class SpotifyAPI:
             
         requests.post(query_url, headers=req_header, json=req_body)
         
-        return collected_uris, song_info
+        return song_info
     
     def search_track(self, query: str) -> str | None:
         '''
@@ -238,11 +240,14 @@ class SpotifyAPI:
                 
                 if 'tracks' in data and 'items' in data['tracks']:
                     track_uri = data['tracks']['items'][0]['uri']
-                    return track_uri
+                    track_image = data['tracks']['items'][0]['album']['images'][0]['url']
+                    
+                    return track_uri, track_image
+                
                 
                 else:
                     print("No tracks found.")
-                    return None
+                    return None, None
                 
             else:
                 print(f"Error: {result.status_code}")

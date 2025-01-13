@@ -143,9 +143,6 @@ def verify():
     return render_template('verify.html', title=title, button1=button1, button2=button2)
 
 
-
-
-
 @app.route('/feelings', methods=['GET'])
 def get_all_emotions():
     '''
@@ -200,8 +197,6 @@ def post_playlist(emotionId):
     user.add_to_playlist(new_playlist_id, songs_for_playlist)
 
     playlist = user.get_user_playlist(new_playlist_id)
-
-
 
     formatted_playlist = {
         "name": playlist["name"],
