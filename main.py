@@ -114,10 +114,10 @@ def playlist():
         user.get_user_information()
         songs_for_playlist = promptGPT.create_playlist(feeling)
         new_playlist_id = user.create_new_playlist(user.user_id, f'{feeling.capitalize()} - {today}')
-        user.add_to_playlist(new_playlist_id, songs_for_playlist)
-        display_feeling = feeling.capitalize()    
+        song_info = user.add_to_playlist(new_playlist_id, songs_for_playlist)
+        display_feeling = feeling.capitalize()
             
-        return render_template('playlist.html', songs_for_playlist=songs_for_playlist, display_feeling=display_feeling, today=today)
+        return render_template('playlist.html', song_info=song_info, display_feeling=display_feeling, today=today)
 
 
 
@@ -166,8 +166,6 @@ def postPlaylist(emotionId):
     user.add_to_playlist(new_playlist_id, songs_for_playlist)
 
     playlist = user.get_user_playlist(new_playlist_id)
-
-
 
     formatted_playlist = {
         "name": playlist["name"],
