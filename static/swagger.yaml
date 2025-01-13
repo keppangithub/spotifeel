@@ -9,7 +9,7 @@ servers:
 security:
   - BearerAuth: []
 paths:
-  /feelings:
+  /emotions:
     get:
       summary: Retrieve all emotions
       description: Retrieves a list of all emotions supported by the API
@@ -23,7 +23,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Emotions'
 
-  /feelings/{emotionId}:
+  /emotions/{emotionId}:
     get:
       summary: Retrieve emotion by ID
       description: Retrieves a specific emotion based on its ID
@@ -46,7 +46,7 @@ paths:
         '404':
           description: Emotion with the specified ID does not exist
 
-  /playlist/{emotionId}/add:
+  /playlists/{emotionId}/add:
     post:
       security:
         - BearerAuth: []
@@ -85,11 +85,11 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Playlist_list_item'
+                  $ref: '#/components/schemas/Playlist_Summary'
 
   /playlists/{id}:
     get:
-      summary: Retrieve a specific playlist
+      summary: Retrieve a URI to a specific playlist
       description: Returns a single playlist based on the ID.
       parameters:
         - name: search_id
@@ -97,22 +97,20 @@ paths:
           required: true
       responses:
         '200':
-          description: List of all playlists
+          description: Selected playlist
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Playlist'
+                properties:
+                  uri:
+                    type: string
+
                   
 
 
 components:
   schemas:
     Emotions:
-      type: object
-      properties:
-        emotions:
           type: array
           items:
             type: object
@@ -122,7 +120,7 @@ components:
               description:
                 type: string
             example:
-              id: 1
+              id: 7
               description: "Happy"
 
     Emotion:
@@ -140,9 +138,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Song'
-        spotifyUrl:
+        uri:
           type: string
-          description: URL to the playlist on Spotify
+          description: URI to the playlist on Spotify
     
     Song:
       type: object
@@ -154,10 +152,10 @@ components:
         uri: 
           type: string
 
-    Playlist_list_item:
+    Playlist_Summary:
       type: object
       properties:
         id:
           type: integer
-        URI:
+        uri:
           type: string

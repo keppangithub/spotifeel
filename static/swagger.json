@@ -17,7 +17,7 @@
     }
   ],
   "paths": {
-    "/feelings": {
+    "/emotions": {
       "get": {
         "summary": "Retrieve all emotions",
         "description": "Retrieves a list of all emotions supported by the API",
@@ -38,7 +38,7 @@
         }
       }
     },
-    "/feelings/{emotionId}": {
+    "/emotions/{emotionId}": {
       "get": {
         "summary": "Retrieve emotion by ID",
         "description": "Retrieves a specific emotion based on its ID",
@@ -72,7 +72,7 @@
         }
       }
     },
-    "/playlist/{emotionId}": {
+    "/playlists/{emotionId}/add": {
       "post": {
         "security": [
           {
@@ -126,7 +126,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Playlist_list_item"
+                    "$ref": "#/components/schemas/Playlist_Summary"
                   }
                 }
               }
@@ -137,7 +137,7 @@
     },
     "/playlists/{id}": {
       "get": {
-        "summary": "Retrieve a specific playlist",
+        "summary": "Retrieve a URI to a specific playlist",
         "description": "Returns a single playlist based on the ID.",
         "parameters": [
           {
@@ -148,13 +148,14 @@
         ],
         "responses": {
           "200": {
-            "description": "List of all playlists",
+            "description": "Selected playlist",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Playlist"
+                  "properties": {
+                    "uri": {
+                      "type": "string"
+                    }
                   }
                 }
               }
@@ -167,25 +168,20 @@
   "components": {
     "schemas": {
       "Emotions": {
-        "type": "object",
-        "properties": {
-          "emotions": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "integer"
-                },
-                "description": {
-                  "type": "string"
-                }
-              },
-              "example": {
-                "id": 1,
-                "description": "Happy"
-              }
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "description": {
+              "type": "string"
             }
+          },
+          "example": {
+            "id": 7,
+            "description": "Happy"
           }
         }
       },
@@ -209,9 +205,9 @@
               "$ref": "#/components/schemas/Song"
             }
           },
-          "spotifyUrl": {
+          "uri": {
             "type": "string",
-            "description": "URL to the playlist on Spotify"
+            "description": "URI to the playlist on Spotify"
           }
         }
       },
@@ -229,13 +225,13 @@
           }
         }
       },
-      "Playlist_list_item": {
+      "Playlist_Summary": {
         "type": "object",
         "properties": {
           "id": {
             "type": "integer"
           },
-          "URI": {
+          "uri": {
             "type": "string"
           }
         }

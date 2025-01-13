@@ -143,7 +143,7 @@ def verify():
     return render_template('verify.html', title=title, button1=button1, button2=button2)
 
 
-@app.route('/feelings', methods=['GET'])
+@app.route('/emotions', methods=['GET'])
 def get_all_emotions():
     '''
     Gets all available emotions from the API.
@@ -153,7 +153,7 @@ def get_all_emotions():
     '''
     return jsonify(spotifeelAPI.get_emotions())
 
-@app.route('/feelings/<int:emotionId>', methods=['GET'])
+@app.route('/emotions/<int:emotionId>', methods=['GET'])
 def get_emotion_by_id(emotionId):
     '''
     Gets a specific emotion by its ID from the API.
@@ -220,8 +220,8 @@ def get_all_playlists():
     return jsonify(spotifeelAPI.get_playlists())
 
 @app.route('/playlists/<int:id>', methods=['GET'])
-def get_playlist_by_id(playlist_id):
-    return jsonify(spotifeelAPI.get_platlists_by_id(f'{playlist_id}'))
+def get_playlist_by_id(id):
+    return jsonify(spotifeelAPI.get_playlists_by_id(id))
 
 '''
 Starting server with port - 8888

@@ -1,29 +1,32 @@
-import os
+import os, json
 
-file_name="playlist.txt"
+file_name="playlist.json"
 playlists = []
 id = 0
 
 if os.path.exists(file_name):
     with open(file_name, 'r') as file:
-        playlists = file.readlines()
+        playlists = json.load(file)
         if playlists:
             last_entry = playlists[-1]
-            id = int(last_entry.split(",")[0])
+            id = last_entry['id'] + 1 
 
 
 def add_to_playlist(uri):
     global id 
-    playlist = [id, uri]
+    playlist = {'id': id, 'uri': uri}
     playlists.append(playlist)
-    with open(file_name, 'a') as file:
-        file.write(f"{id},{uri}\n")
+    with open(file_name, 'w') as file:
+        json.dump(playlists, file, indent=4)
     id+=1
 
 
 def get_playlists():
     return playlists
 
-def get_platlists_by_id(search_id):
-    return playlists(search_id)
-
+def get_playlists_by_id(search_id : int):
+    print(search_id)
+    for playlist in playlists:
+        if playlist['id'] == search_id:
+            print("playlist found")
+            return playlist['uri']
