@@ -1,9 +1,11 @@
-Requirements:
-- Python module: requests (2.32.3)
-- Python module: dotenv (1.0.1)
-- Python module: openai (1.59.3)
-- Python module: flask-swagger-ui (4.11.1)
-- Python module: pyyaml
+#Spotifeel
+
+Required python modules:
+- requests (2.32.3)
+- dotenv (1.0.1)
+- openai (1.59.3)
+- flask-swagger-ui (4.11.1)
+- pyyaml
 - Flask
 
 In order to run the mashup service you need to create a .env file in which you should put the received keys like this
