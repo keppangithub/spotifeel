@@ -34,7 +34,8 @@
     {% if song_info%}
     {% for song in song_info%}
     <div class="playlist_item w-25">
-      <p id="print_song">{{song.title}} - {{song.artist}}</p>
+      <h4 id="print_song">{{song.title}}</h4>
+      <h5 id="print_artist">{{song.artist}}</h5>
       <img src="{{song.image_url}}" alt="album cover">
     </div>
     {%endfor%}

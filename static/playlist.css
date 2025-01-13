@@ -9,9 +9,9 @@
 .playlist_item {
     background-color: #69306D !important;
     border-radius: 200px;
-    min-width: 300px;
-    height: 300px;
-    padding: 80px 60px;
+    min-width: 350px;
+    height: 350px;
+    padding: 100px 60px;
 
     display: flex;
     flex-direction: column;
@@ -26,6 +26,13 @@
     font-family: "Montserrat", serif;
     text-align: center;
     margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.playlist_item>#print_artist{
+    color: #F3D7ED;
+    font-family: "Montserrat", serif;
+    text-align: center;
 }
 
 .playlist_item img{
