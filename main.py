@@ -7,7 +7,7 @@ from app import app, user
 from flask_swagger_ui import get_swaggerui_blueprint
 
 '''Set the path for Swagger documentation'''
-SWAGGER_URL = '/swagger'
+SWAGGER_URL = '/docs'
 API_URL = '/static/swagger.json'
 
 ''' Configure Swagger UI blueprint with application name '''
@@ -18,7 +18,7 @@ swaggerui_blueprint = get_swaggerui_blueprint(
         'app_name': "Spotifeel API"
     }
 )
-app.register_blueprint(swaggerui_blueprint, url_prefix='/swagger')
+app.register_blueprint(swaggerui_blueprint, url_prefix='/docs')
 
 @app.route('/login')
 def login_page():
@@ -86,13 +86,14 @@ def index():
 @app.route('/playlist', methods=['POST'])
 def playlist():
     '''
+    Method used to create a playlist using GPT and post to Spotify. 
     Check if user is logged in.
     If the user is not logged in redirect them to the login page.
 
     Check if the user choose to stay in the feeling or wanted the opposite feeling.
     Create a playlist based on the choosen feeling.
 
-    returns:
+    Returns:
     - if not logged in: return redirect to login.html
     - if logged in: return redirect to playlist.html
 
@@ -115,44 +116,56 @@ def playlist():
         songs_for_playlist = promptGPT.create_playlist(feeling)
         new_playlist_id = user.create_new_playlist(user.user_id, f'{feeling.capitalize()} - {today}')
         user.add_to_playlist(new_playlist_id, songs_for_playlist)
-        display_feeling = feeling.capitalize()    
-            
+        display_feeling = feeling.capitalize()
+
         return render_template('playlist.html', songs_for_playlist=songs_for_playlist, display_feeling=display_feeling, today=today)
 
 
 
-@app.route("/verify")
-def verify():
-    '''
-    returns:
-    - verify.html
-    '''
-    response = request.args.get('response', None)
 
-    if response is None:
-        return redirect(url_for('index'))
 
-    feeling = feelings.get_feelings(response)
-    session['feeling'] = response
-
-    if len(feeling) == 3:
-        title, button1, button2 = feeling
-
-    else:
-        title, button1, button2 = "Error", "Invalid", "Response"
-
-    return render_template('verify.html', title=title, button1=button1, button2=button2)
 
 @app.route('/feelings', methods=['GET'])
 def getAllEmotions():
+    '''
+    Gets all available emotions from the API.
+
+    Returns:
+    - JSON response of all emotions.
+    '''
     return jsonify(spotifeelAPI.getEmotions())
 
 @app.route('/feelings/<int:emotionId>', methods=['GET'])
 def getEmotionById(emotionId):
+    '''
+    Gets a specific emotion by its ID from the API.
+
+    Parameters:
+    - emotionId (int): The ID of the desired emotion.
+
+    Returns:
+    - JSON response containing the emotion with the specified ID.
+    '''
     return jsonify(spotifeelAPI.getEmotionById(f'{emotionId}'))
 
 @app.route('/playlists/<int:emotionId>', methods=['POST', 'GET'])
 def postPlaylist(emotionId):
+    '''
+    Creates a playlist based on a specific emotion and adds it to the user's Spotify account.
+
+    - Checks if the user is logged in; if not, redirects to the login page.
+    - Retrieves the emotion associated with the given ID.
+    - Uses GPT to generate a playlist based on the emotion.
+    - Creates and saves the playlist in the user's Spotify account.
+    - Formats the playlist for API response.
+
+    Parameters:
+    - emotionId (int): The ID of the emotion to create the playlist for.
+
+    Returns:
+    - Redirect to login page if the user is not logged in.
+    - JSON response containing the formatted playlist.
+    '''
     if 'user_token' not in session:
         print("ERROR: user is not logged in")
         return redirect('/login')
@@ -186,6 +199,8 @@ def postPlaylist(emotionId):
     return jsonify(formatted_playlist)
 
 
-# Starta servern
+'''
+Starting server with port - 8888
+'''
 if __name__ == '__main__':
     app.run(debug=True, port=8888)

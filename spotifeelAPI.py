@@ -5,6 +5,7 @@ import json
 import promptGPT
 from app import app
 
+# Dictionary of emotions mapped to their respective IDs
 emotions = {
         "1": "Furious",
         "2": "Frustrated",
@@ -21,27 +22,50 @@ emotions = {
         "13": "Anxious"
     }
 
-'''Sets the file paths for the YAML and JSON file'''
+# Set file paths for YAML and JSON API documentation files
 yaml_file_path = os.path.join(os.getcwd(), 'static', 'swagger.yaml')
 json_file_path = os.path.join(os.getcwd(), 'static', 'swagger.json')
 
-'''Reads the Yaml file for API documentation'''
+# Read the YAML file containing API documentation
 with open(yaml_file_path, 'r') as yaml_file:
     SWAGGER_SPEC = yaml.safe_load(yaml_file)
-    
-'''Writes the API documentation to a JSON file'''
+
+# Write the API documentation to a JSON file for serving as static content
 with open(json_file_path, 'w') as json_file:
     json.dump(SWAGGER_SPEC, json_file, indent=2)
 
 
 '''Routing for API documentation'''
-@app.route('/static/swagger.json')
+@app.route('/docs/static/swagger.json')
 def swagger_json():
+    """
+    Route to serve the API documentation in JSON format.
+
+    Returns:
+        JSON: The API documentation as a JSON response.
+    """
     return jsonify(SWAGGER_SPEC)
 
-'''Returns a given emotion based on its ID'''
+
+
 def getEmotionById(emotionId):
+    '''
+   Retrieves a specific emotion based on its ID.
+
+    Args:
+        emotionId (str): The ID of the emotion to retrieve.
+
+    Returns:
+        str: The emotion corresponding to the provided ID.
+    '''
     return emotions[emotionId]
 
+
 def getEmotions():
+    '''
+    Retrieves the complete dictionary of emotions.
+
+    Returns:
+        dict: A dictionary containing all emotions with their IDs as keys.
+    '''
     return emotions
