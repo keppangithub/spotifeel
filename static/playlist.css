@@ -47,4 +47,9 @@
     font-weight: bold;
     margin: 20px 10px;
     display: block;
+    text-decoration: none;
+}
+
+#feeling_date:hover{
+    color: #F3D7ED;
 }
