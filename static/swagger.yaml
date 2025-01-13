@@ -46,7 +46,7 @@ paths:
         '404':
           description: Emotion with the specified ID does not exist
 
-  /playlist/{emotionId}:
+  /playlist/{emotionId}/add:
     post:
       security:
         - BearerAuth: []
@@ -85,7 +85,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Playlist_item'
+                  $ref: '#/components/schemas/Playlist_list_item'
 
   /playlists/{id}:
     get:
@@ -134,8 +134,6 @@ components:
     Playlist:
       type: object
       properties:
-        id:
-          type: string
         name:
           type: string
         songs:
@@ -149,10 +147,14 @@ components:
     Song:
       type: object
       properties:
+        artist:
+          type: string
         name:
           type: string
+        uri: 
+          type: string
 
-    Playlist_item:
+    Playlist_list_item:
       type: object
       properties:
         id:

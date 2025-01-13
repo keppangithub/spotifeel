@@ -166,7 +166,7 @@ def get_emotion_by_id(emotionId):
     '''
     return jsonify(spotifeelAPI.get_emotion_by_id(f'{emotionId}'))
 
-@app.route('/playlists/<int:emotionId>', methods=['POST', 'GET'])
+@app.route('/playlists/<int:emotionId>/add', methods=['POST', 'GET'])
 def post_playlist(emotionId):
     '''
     Creates a playlist based on a specific emotion and adds it to the user's Spotify account.

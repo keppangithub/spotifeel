@@ -126,7 +126,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Playlist_item"
+                    "$ref": "#/components/schemas/Playlist_list_item"
                   }
                 }
               }
@@ -200,9 +200,6 @@
       "Playlist": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
           "name": {
             "type": "string"
           },
@@ -221,12 +218,18 @@
       "Song": {
         "type": "object",
         "properties": {
+          "artist": {
+            "type": "string"
+          },
           "name": {
+            "type": "string"
+          },
+          "uri": {
             "type": "string"
           }
         }
       },
-      "Playlist_item": {
+      "Playlist_list_item": {
         "type": "object",
         "properties": {
           "id": {
