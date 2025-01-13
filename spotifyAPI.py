@@ -251,11 +251,11 @@ class SpotifyAPI:
                 
             else:
                 print(f"Error: {result.status_code}")
-                return None
+                return None, None
             
         except Exception as e:
             print(f'Error: {e}')
-            return None
+            return None, None
         
     def get_user_playlist(self, playlistID):
         query_url = f"{self.base_url}/playlists/{playlistID}"
