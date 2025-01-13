@@ -118,11 +118,6 @@ def playlist():
             
         return render_template('playlist.html', song_info=song_info, display_feeling=display_feeling, today=today)
 
-
-
-
-
-
 @app.route('/feelings', methods=['GET'])
 def get_all_emotions():
     '''
