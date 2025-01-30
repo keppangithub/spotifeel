@@ -30,6 +30,6 @@ CLIENT_ID='PUT KEY HERE'\
 CLIENT_SECRET='PUT KEY HERE'\
 OPENAI_API_KEY='PUT KEY HERE'
 
-Next step is to run the file main.py. Then go to <http://localhost:8888> where the website will be running.
+Next step is to run the file main.py. Then go to <http://127.0.0.1:8888> where the website will be running.
 
-To view the API documentation run main.py and go to this URL <http://localhost:8888>, make sure you are logged in and then go to this URL  <http://localhost:8888/docs>.
+To view the API documentation run main.py and go to this URL <http://127.0.0.1:8888>, make sure you are logged in and then go to this URL  <http://127.0.0.1:8888/docs>.

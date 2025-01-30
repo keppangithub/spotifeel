@@ -72,12 +72,7 @@
         }
       }
     },
-<<<<<<< HEAD
-
     "/playlists/{emotionId}/add": {
-=======
-    "/playlist/{emotionId}/add": {
->>>>>>> RedirectUserToCompletePlaylist
       "post": {
         "security": [
           {
