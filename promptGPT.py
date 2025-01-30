@@ -10,8 +10,8 @@ prompt_counter = 0
 def is_emotion_valid(emotion: str) -> bool:
     '''
     Check if the emotion received from the 'run_prompt' function is one of the valid feelings.
-    
-    Valid feelings: 
+
+    Valid feelings:
     - Furious
     - Frustrated
     - Horrified
@@ -25,26 +25,26 @@ def is_emotion_valid(emotion: str) -> bool:
     - Unhappy
     - Scared
     - Anxious
-    
+
     returns:
     - Boolean (depending on if the feeling received is valid or not)
     '''
     valid_feelings = ['furious', 'frustrated', 'horrified', 'disappointed', 'euphoric', 'loving', 'happy', 'useless', 'regretful', 'dejected', 'unhappy', 'scared','anxious']
-    
+
     if emotion.lower() in valid_feelings:
         return True
-    
-    else: 
+
+    else:
         return False
 
 
 def run_prompt(text: str) -> str:
     '''
     Take the user input, diary entry, as an argument. Use OPEN AI API to get back the emotion which corresponds best with the user input.
-    
+
     Check if the emotion is valid via the is_emotion_valid function.
-    
-    returns: 
+
+    returns:
     - emotion (str)
     '''
     completion = client.chat.completions.create(
@@ -59,10 +59,10 @@ def run_prompt(text: str) -> str:
 )
     response_content = completion.choices[0].message
     emotion = str(response_content).split("content='")[1].split("'")[0]
-    
+
     if is_emotion_valid(emotion):
         return emotion
-    
+
     else:
         if(prompt_counter<10):
             run_prompt(text)
@@ -72,10 +72,10 @@ def create_playlist(emotion: str) -> list:
     '''
     Get six recommended songs based on a received emotion (argument).
     Manipulate them to a specific format and add to the list formated_songs
-    
+
     parameter:
     - emotions (str)
-    
+
     returns:
     - formated_songs (list)
     '''
@@ -95,15 +95,15 @@ def create_playlist(emotion: str) -> list:
 ]
 )
     songs = completion.choices[0].message.content
-    
+
     formated_songs = []
-    
+
     for song in songs.split("\n"):
         if ". " in song:
             title_artist = song.split(". ", 1)[1]
             title_artist = title_artist.replace('"', '')
             title_artist = title_artist.replace(' by ', ',')
-            
-            formated_songs.append([title_artist])           
-    
+
+            formated_songs.append([title_artist])
+
     return formated_songs
