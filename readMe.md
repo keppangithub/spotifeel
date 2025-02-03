@@ -18,7 +18,7 @@ Spotifeel is a mashup service that combines APIs from Spotify and OpenAI to crea
 
 ### Installation process
 
-**Make sure pip3 is latest version.**
+**Make sure you have the latest version of pip3**
 ```
 python3 -m pip install --upgrade pip
 python3 -m venv venv
@@ -41,4 +41,5 @@ OPENAI_API_KEY='PUT KEY HERE'
 
 Next step is to run the file main.py. Then go to <http://127.0.0.1:8888> where the website will be running.
 
-To view the API documentation run main.py and go to this URL <http://127.0.0.1:8888>, make sure you are logged in and then go to this URL  <http://127.0.0.1:8888/docs>.
+**API Documentation**
+To view the API documentation run main.py and go to this URL <http://127.0.0.1:8888>, make sure you are logged in and then go to this URL: <http://127.0.0.1:8888/docs>
