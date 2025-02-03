@@ -41,5 +41,5 @@ OPENAI_API_KEY='PUT KEY HERE'
 
 Next step is to run the file main.py. Then go to <http://127.0.0.1:8888> where the website will be running.
 
-**API Documentation**
+**API Documentation**\
 To view the API documentation run main.py and go to this URL <http://127.0.0.1:8888>, make sure you are logged in and then go to this URL: <http://127.0.0.1:8888/docs>
