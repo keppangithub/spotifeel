@@ -19,9 +19,11 @@ Spotifeel is a mashup service that combines APIs from Spotify and OpenAI to crea
 ### Installation process
 
 **Make sure pip3 is latest version.**
+```
 python3 -m pip install --upgrade pip
 python3 -m venv venv
 pip3 install -r requirements.txt
+```
 
 Firstly upgrade pip - python.exe -m pip install --upgrade pip
 Then install all modules by typing - pip install -r requirements.txt
