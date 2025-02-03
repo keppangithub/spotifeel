@@ -2,9 +2,10 @@
 
 Spotifeel is a mashup service that combines APIs from Spotify and OpenAI to create personalized playlists based on the user's mood.
 
-## Languages
+## Programming Languages
 
 - Python
+- JavaScript
 
 ### Required python modules
 
