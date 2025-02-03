@@ -25,7 +25,7 @@ python3 -m venv venv
 pip3 install -r requirements.txt
 ```
 
-Firstly upgrade pip - python.exe -m pip install --upgrade pip
+Firstly upgrade pip - python.exe -m pip install --upgrade pip\
 Then install all modules by typing - pip install -r requirements.txt
 
 **In order to run the mashup service you need to create a .env file in which you should put the received keys like this**\
