@@ -30,7 +30,7 @@ class SpotifyAPI:
         self.user_id = None
 
 
-    def set_acces_token(self, token):
+    def set_access_token(self, token):
         self.access_token = token
 
     def is_user_logged_in(self) -> bool:
@@ -54,7 +54,7 @@ class SpotifyAPI:
         Returns:
         - auth_url (str)
         '''
-        scope = 'user-read-private user-read-email playlist-modify-public'
+        scope = 'user-read-private user-read-email playlist-modify-public playlist-modify-private'
 
         query_params = {
             'client_id': self.client_id,
@@ -140,21 +140,20 @@ class SpotifyAPI:
         Returns:
         - playlist_id (str)
         '''
-        query_url = self.base_url + f'/users/{user_id}/playlists'
 
+        query_url = self.base_url + f'/users/{user_id}/playlists'
         req_headers = {
             'Authorization': 'Bearer ' + self.access_token,
-            'name' : new_playlist_name
+            'Content-Type': 'application/json'
             }
 
         req_data = {
             'name': new_playlist_name
             }
-
+        
         result = requests.post(query_url, headers=req_headers, json=req_data)
-
-        result = result.json()
-        playlist_id = result['id']
+        result_json = result.json()
+        playlist_id = result_json['id']
 
         return playlist_id
 

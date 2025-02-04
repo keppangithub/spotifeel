@@ -111,8 +111,7 @@ def playlist():
             feeling = feelings.negated_feeling(feeling)
 
         #Create playlist, OPEN & Spotify work together
-        '''
-                 today = date.today()
+        today = date.today()
         user.get_user_information()
         songs_for_playlist = promptGPT.create_playlist(feeling)
         new_playlist_id = user.create_new_playlist(user.user_id, f'{feeling.capitalize()} - {today}')
@@ -121,7 +120,6 @@ def playlist():
 
 
         playlists.add_to_playlist(new_playlist_id)
-          '''
 
 
         return render_template('playlist.html', new_playlist_id=new_playlist_id, song_info=song_info, display_feeling=display_feeling, today=today)
@@ -192,9 +190,9 @@ def get_playlists():
         print(f"Error: {e}")
 
     if json_data is None:
-        return jsonify(spotifeelAPI.get_playlists()), 201
+        return jsonify(spotifeelAPI.get_loaded_playlist()), 201
     else:
-        playlist = spotifeelAPI.get_playlists()
+        playlist = spotifeelAPI.get_loaded_playlist()
         try:
             return jsonify(playlist[playlist_id])
         except Exception as e:
@@ -210,8 +208,7 @@ def post_playlists():
             return jsonify({"error": "Missing or invalid authorization token"}), 401
 
     access_token = auth_header.split(' ')[1]
-    user.set_acces_token(access_token)
-    print(f"{session}")
+    user.set_access_token(access_token)
 
     try:
         json_data = request.get_json(force=True)
@@ -224,8 +221,8 @@ def post_playlists():
             return jsonify({"error": "'number' is required and must be an integer between 1 and 13"}), 400
 
 
-        emotionId = int(json_data["emotion_id"])
-        feeling = spotifeelAPI.get_emotion_by_id(emotionId)
+        emotion_id = int(json_data["emotion_id"])
+        feeling = spotifeelAPI.get_emotion_by_id(emotion_id)
         today = date.today()
         user.get_user_information()
         songs_for_playlist = promptGPT.create_playlist(feeling)
@@ -252,7 +249,7 @@ def post_playlists():
 
         return jsonify(formatted_playlist), 201
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Detailed Error: {e}")
         return jsonify({"error": "Internal Server Error"}), 500
 
 

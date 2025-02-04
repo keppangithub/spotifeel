@@ -33,9 +33,11 @@ def load_playlists_txt():
             return []
     return []
 
-def get_playlists():
+def get_loaded_playlist():
     return load_playlists_txt()
 
+def get_playlists():
+    return playlists
 
 
 def add_to_playlist(uri):

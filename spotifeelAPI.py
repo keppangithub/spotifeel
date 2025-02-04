@@ -68,6 +68,10 @@ def get_emotions():
     '''
     return emotions
 
+
+def get_loaded_playlist():
+    return playlists.get_loaded_playlist()
+
 def get_playlists():
     return playlists.get_playlists()
 
