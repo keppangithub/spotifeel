@@ -30,6 +30,9 @@ class SpotifyAPI:
         self.user_id = None
 
 
+    def set_acces_token(self, token):
+        self.access_token = token
+
     def is_user_logged_in(self) -> bool:
         '''
         Check if user is logged in by seeing if a code has been generated from the redirectToAuthCodeFlow method.

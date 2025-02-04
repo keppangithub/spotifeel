@@ -3,6 +3,8 @@ from datetime import date
 import promptGPT, feelings, spotifeelAPI, playlists
 from app import app, user
 from flask_swagger_ui import get_swaggerui_blueprint
+import os
+import requests
 
 '''Set the path for Swagger documentation'''
 SWAGGER_URL = '/docs'
@@ -109,7 +111,8 @@ def playlist():
             feeling = feelings.negated_feeling(feeling)
 
         #Create playlist, OPEN & Spotify work together
-        today = date.today()
+        '''
+                 today = date.today()
         user.get_user_information()
         songs_for_playlist = promptGPT.create_playlist(feeling)
         new_playlist_id = user.create_new_playlist(user.user_id, f'{feeling.capitalize()} - {today}')
@@ -118,6 +121,8 @@ def playlist():
 
 
         playlists.add_to_playlist(new_playlist_id)
+          '''
+
 
         return render_template('playlist.html', new_playlist_id=new_playlist_id, song_info=song_info, display_feeling=display_feeling, today=today)
 
@@ -167,54 +172,6 @@ def get_emotion_by_id(emotionId):
     '''
     return jsonify(spotifeelAPI.get_emotion_by_id(f'{emotionId}'))
 
-@app.route('/playlists/<int:emotionId>/add', methods=['POST', 'GET'])
-def post_playlist(emotionId):
-    '''
-    Creates a playlist based on a specific emotion and adds it to the user's Spotify account.
-
-    - Checks if the user is logged in; if not, redirects to the login page.
-    - Retrieves the emotion associated with the given ID.
-    - Uses GPT to generate a playlist based on the emotion.
-    - Creates and saves the playlist in the user's Spotify account.
-    - Formats the playlist for API response.
-
-    Parameters:
-    - emotionId (int): The ID of the emotion to create the playlist for.
-
-    Returns:
-    - Redirect to login page if the user is not logged in.
-    - JSON response containing the formatted playlist.
-    '''
-    if 'user_token' not in session:
-        print("ERROR: user is not logged in")
-        return redirect('/login')
-
-    feeling = spotifeelAPI.get_emotion_by_id(f'{emotionId}')
-
-    today = date.today()
-    user.get_user_information()
-    songs_for_playlist = promptGPT.create_playlist(feeling)
-    new_playlist_id = user.create_new_playlist(user.user_id, f'{feeling.capitalize()} - {today}')  # Skapa ny playlist
-    user.add_to_playlist(new_playlist_id, songs_for_playlist)
-
-    playlist = user.get_user_playlist(new_playlist_id)
-
-    formatted_playlist = {
-        "name": playlist["name"],
-        "uri": playlist["uri"],
-        "songs": []
-    }
-
-    for item in playlist["tracks"]["items"]:
-        formatted_song = {
-            "name": item["track"]["name"],
-            "artist": ', '.join(artist["name"] for artist in item["track"]["artists"]),
-            "uri": item["track"]["uri"]
-        }
-        formatted_playlist["songs"].append(formatted_song)
-
-    return jsonify(formatted_playlist)
-
 
 @app.route('/playlists', methods=['GET'])
 def get_all_playlists():
@@ -223,6 +180,68 @@ def get_all_playlists():
 @app.route('/playlists/<int:id>', methods=['GET'])
 def get_playlist_by_id(id):
     return jsonify(spotifeelAPI.get_playlists_by_id(id))
+
+
+
+@app.route('/playlists', methods=['POST'])
+def post_playlist():
+
+    auth_header = request.headers.get('Authorization')
+    
+    if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({"error": "Missing or invalid authorization token"}), 401
+        
+    access_token = auth_header.split(' ')[1]
+    user.set_acces_token(access_token)
+
+        
+    try:
+        json_data = request.get_json(force=True)
+        
+        if not json_data:
+            return jsonify({"error": "Request must be Json"}), 400
+        
+        if not "emotion_id" in json_data or not isinstance(json_data["emotion_id"], int) or not (1 <= json_data["emotion_id"] <= 13):
+            return jsonify({"error": "'number' is required and must be an integer between 1 and 13"}), 400
+        '''
+        if access_token not in session:
+            print("ERROR: user is not logged in")
+            return redirect('/login')
+        '''
+        emotionId = int(json_data["emotion_id"])
+
+        feeling = spotifeelAPI.get_emotion_by_id(emotionId)
+
+
+        today = date.today()
+        user.get_user_information()
+        songs_for_playlist = promptGPT.create_playlist(feeling)
+        new_playlist_id = user.create_new_playlist(user.user_id, f'{feeling.capitalize()} - {today}')  # Skapa ny playlist
+        user.add_to_playlist(new_playlist_id, songs_for_playlist)
+
+        playlist = user.get_user_playlist(new_playlist_id)
+
+        formatted_playlist = {
+            "name": playlist["name"],
+            "uri": playlist["uri"],
+            "songs": []
+        }
+
+        for item in playlist["tracks"]["items"]:
+            formatted_song = {
+                "name": item["track"]["name"],
+                "artist": ', '.join(artist["name"] for artist in item["track"]["artists"]),
+                "uri": item["track"]["uri"]
+            }
+            formatted_playlist["songs"].append(formatted_song)
+
+        print(jsonify(formatted_playlist))
+
+        return jsonify(formatted_playlist), 201
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"error": "Internal Server Error"}), 500
+
 
 '''
 Starting server with port - 8888

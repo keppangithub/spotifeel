@@ -55,7 +55,8 @@ def get_emotion_by_id(emotion_id):
     Returns:
         str: The emotion corresponding to the provided ID.
     '''
-    return emotions[emotion_id]
+    
+    return emotions.get(str(emotion_id))
 
 
 def get_emotions():
