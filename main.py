@@ -182,15 +182,27 @@ def get_emotions():
 
 
 @app.route('/playlists', methods=['GET'])
-def get_all_playlists():
-    return jsonify(spotifeelAPI.get_playlists())
+def get_playlists():
 
-@app.route('/playlists/<int:id>', methods=['GET'])
-def get_playlist_by_id(id):
-    return jsonify(spotifeelAPI.get_playlists_by_id(id))
+    json_data = None;
+    try:
+        json_data = request.get_json()
+        playlist_id = int(json_data['playlist_id'])
+    except Exception as e:
+        print(f"Error: {e}")
+
+    if json_data is None:
+        return jsonify(spotifeelAPI.get_playlists()), 201
+    else:
+        playlist = spotifeelAPI.get_playlists()
+        try:
+            return jsonify(playlist[playlist_id])
+        except Exception as e:
+            return jsonify({"error" : "Invalid id"})
+
 
 @app.route('/playlists', methods=['POST'])
-def post_playlist():
+def post_playlists():
 
     auth_header = request.headers.get('Authorization')
 
@@ -199,30 +211,25 @@ def post_playlist():
 
     access_token = auth_header.split(' ')[1]
     user.set_acces_token(access_token)
-
+    print(f"{session}")
 
     try:
         json_data = request.get_json(force=True)
+        print(json_data)
 
         if not json_data:
             return jsonify({"error": "Request must be Json"}), 400
 
         if not "emotion_id" in json_data or not isinstance(json_data["emotion_id"], int) or not (1 <= json_data["emotion_id"] <= 13):
             return jsonify({"error": "'number' is required and must be an integer between 1 and 13"}), 400
-        '''
-        if access_token not in session:
-            print("ERROR: user is not logged in")
-            return redirect('/login')
-        '''
+
+
         emotionId = int(json_data["emotion_id"])
-
         feeling = spotifeelAPI.get_emotion_by_id(emotionId)
-
-
         today = date.today()
         user.get_user_information()
         songs_for_playlist = promptGPT.create_playlist(feeling)
-        new_playlist_id = user.create_new_playlist(user.user_id, f'{feeling.capitalize()} - {today}')  # Skapa ny playlist
+        new_playlist_id = user.create_new_playlist(user.user_id, f'{feeling.capitalize()} - {today}')
         user.add_to_playlist(new_playlist_id, songs_for_playlist)
 
         playlist = user.get_user_playlist(new_playlist_id)
