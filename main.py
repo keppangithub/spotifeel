@@ -148,29 +148,37 @@ def verify():
 
     return render_template('verify.html', title=title, button1=button1, button2=button2)
 
-
 @app.route('/emotions', methods=['GET'])
-def get_all_emotions():
-    '''
-    Gets all available emotions from the API.
+def get_emotions():
+    emotion_id = 0;
+    data = None;
+    prompt = None;
+    try:
+        data = request.get_json()
+        try:
+            emotion_id = int(data['emotion_id'])
+        except Exception as e:
+            print(f"Error: {e}")
+        try:
+            prompt = str(data['prompt'])
+        except Exception as e:
+            print(f"Error: {e}")
 
-    Returns:
-    - JSON response of all emotions.
-    '''
-    return jsonify(spotifeelAPI.get_emotions())
+    except Exception as e:
+        print(f"Error: {e}")
 
-@app.route('/emotions/<int:emotionId>', methods=['GET'])
-def get_emotion_by_id(emotionId):
-    '''
-    Gets a specific emotion by its ID from the API.
 
-    Parameters:
-    - emotionId (int): The ID of the desired emotion.
+    if data is None:
+        return jsonify(spotifeelAPI.get_emotions())
 
-    Returns:
-    - JSON response containing the emotion with the specified ID.
-    '''
-    return jsonify(spotifeelAPI.get_emotion_by_id(f'{emotionId}'))
+    if emotion_id != 0:
+        if not (1 <= emotion_id <= 13):
+            return jsonify({"error": "Invalid emotion ID"}), 400
+
+        return jsonify(spotifeelAPI.get_emotion_by_id(emotion_id))
+
+    if prompt is not None:
+        return jsonify(promptGPT.run_prompt(prompt))
 
 
 @app.route('/playlists', methods=['GET'])
@@ -181,26 +189,24 @@ def get_all_playlists():
 def get_playlist_by_id(id):
     return jsonify(spotifeelAPI.get_playlists_by_id(id))
 
-
-
 @app.route('/playlists', methods=['POST'])
 def post_playlist():
 
     auth_header = request.headers.get('Authorization')
-    
+
     if not auth_header or not auth_header.startswith('Bearer '):
             return jsonify({"error": "Missing or invalid authorization token"}), 401
-        
+
     access_token = auth_header.split(' ')[1]
     user.set_acces_token(access_token)
 
-        
+
     try:
         json_data = request.get_json(force=True)
-        
+
         if not json_data:
             return jsonify({"error": "Request must be Json"}), 400
-        
+
         if not "emotion_id" in json_data or not isinstance(json_data["emotion_id"], int) or not (1 <= json_data["emotion_id"] <= 13):
             return jsonify({"error": "'number' is required and must be an integer between 1 and 13"}), 400
         '''
