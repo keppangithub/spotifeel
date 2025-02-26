@@ -18,20 +18,43 @@ Spotifeel is a mashup service that combines APIs from Spotify and OpenAI to crea
 
 ### Installation process
 
-**Make sure you have the latest version of pip3**
+Note: You might have to write python3 instead of python for it to work
+
+**Make sure you have the latest version of pip**
+
 ```
-python3 -m pip install --upgrade pip
-python3 -m venv venv
-pip3 install -r requirements.txt
+python -m pip install --upgrade pip
 ```
 
-**Firstly upgrade pip - python.exe**
+**Start a virtual environment**\
+Linux/macOS
+
 ```
--m pip install --upgrade pip
+python -m venv venv
 ```
-**Then install all modules by typing**
+
+Windows
+
 ```
--m pip install -r requirements.txt
+python -m venv myenv
+```
+
+**Activate the virtual environment**
+Linux/macOS
+
+```
+. venv/bin/activate
+```
+
+Windows
+
+```
+venv\Scripts\activate
+```
+
+**Install the required Python packages**
+```
+pip install -r requirements.txt
 ```
 
 **In order to run the mashup service you need to create a .env file in which you should put the received keys like this**\
