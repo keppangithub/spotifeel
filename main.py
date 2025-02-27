@@ -5,7 +5,7 @@ from app import app, user
 from flask_swagger_ui import get_swaggerui_blueprint
 import os
 import requests
-import API.playlist_API_TMP as spotifeelAPI_playlist
+import API.playlist_API as spotifeelAPI_playlist
 '''Set the path for Swagger documentation'''
 SWAGGER_URL = '/docs'
 API_URL = '/static/swagger.json'
@@ -177,54 +177,6 @@ def get_emotions():
 
     if prompt is not None:
         return jsonify(promptGPT.run_prompt(prompt))
-
-
-@app.route('/playlist<int:id>', methods=['GET'])
-def get_playlists_id(id):
-    emotion_id = id;
-
-    
-
-
-@app.route('/playlists', methods=['GET'])
-def get_playlists():
-    json_data = None;
-    try:
-        json_data = request.get_json()
-        playlist_id = int(json_data['playlist_id'])
-    except Exception as e:
-        print(f"Error: {e}")
-
-    if json_data is None:
-        return jsonify(spotifeelAPI.get_loaded_playlist()), 201
-    else:
-        playlist = spotifeelAPI.get_loaded_playlist()
-        try:
-            return jsonify(playlist[playlist_id])
-        except Exception as e:
-            return jsonify({"error" : "Invalid id"})
-
-
-@app.route('/playlists', methods=['POST'])
-def post_playlists():
-    auth_header = request.headers.get('Authorization')
-    if not auth_header or not auth_header.startswith('Bearer '):
-            return jsonify({"error": "Missing or invalid authorization token"}), 401
-    
-    access_token = auth_header.split(' ')[1]
-    try:
-        json_data = request.get_json(force=True)
-        if not json_data:
-            return jsonify({"error": "Request must be Json"}), 400
-        
-        validate_data = spotifeelAPI_playlist.validate_playlist_json(json_data)
-        if validate_data is True:
-            return jsonify({spotifeelAPI_playlist.post_playlist(access_token, json_data)}), 201
-        else:
-            return jsonify({"error": validate_data}), 400
-        
-    except Exception as e:
-        return jsonify({"error": "Unexpected error"}), 500
 
 
 

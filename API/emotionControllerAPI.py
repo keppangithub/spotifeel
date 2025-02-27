@@ -57,7 +57,7 @@ def get_id(emotion : str) ->str:
    return emotionAPI.get_id_by_name(emotion)
 
 def get_emotion(id: int) ->str:
-    return emotionAPI.get_emotion_by_id(id)
+    return emotionAPI.get_emotion_by_id_json(id)
 
 def get_emotions():
     return emotionAPI.emotions_json

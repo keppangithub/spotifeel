@@ -1,7 +1,7 @@
 import os, json
 
-file_name="playlist.json"
-txt_file="playlist.txt"
+file_name="API/playlist.json"
+txt_file="API/playlist.txt"
 playlists = []
 id = 0
 
@@ -56,3 +56,4 @@ def get_playlists_by_id(search_id : int):
         if playlist['id'] == search_id:
             print("playlist found")
             return playlist['uri']
+    return 'No playlist found'

@@ -34,7 +34,7 @@ def get_id_by_name(name: str) -> str:
             return json.dumps({"id": e.id})
     return json.dumps({"error": "Emotion not found"})
 
-def get_emotion_by_id(emotion_id: int) -> str:
+def get_emotion_by_id_json(emotion_id: int) -> str:
     '''
     Retrieves an emotion based on its ID.
     Returns JSON with emotion name or an error message if not found.
@@ -45,3 +45,9 @@ def get_emotion_by_id(emotion_id: int) -> str:
     return json.dumps({"error": "Emotion not found"})
 
 emotions_json = json.dumps([e.to_dict() for e in emotions], indent=10)
+
+def get_emotion_by_id(id: int):
+    for emotion in emotions:
+        if emotion.id == id:
+            return emotion.name
+    return 'Unvalid emotion'

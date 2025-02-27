@@ -1,10 +1,8 @@
-# Eftersom denna fil ligger i API-mappen
 from flask import Flask, jsonify, request
-# Importera moduler från samma mapp (API)
 import promptGPT
 import emotionControllerAPI
-# Om denna import inte fungerar, använd:
-# from . import promptGPT, spotifeelAPI
+import spotifeelAPI as spotifeel
+import playlist_API as playlist_tmp
 
 app = Flask(__name__)
 
@@ -48,6 +46,40 @@ def get_opposite_emotion(id):
         return jsonify({"error": "Invalid emotion ID"}), 400
         
     return emotionControllerAPI.negated_feeling_id(id)
+
+
+
+@app.route('/playlists/<int:id>', methods=['GET'])
+def get_playlists_id(id):
+    
+    return playlist_tmp.get_playlist_id(int(id))
+
+@app.route('/playlists', methods=['GET'])
+def get_playlists():
+    return playlist_tmp.get_playlist()
+
+
+@app.route('/playlists', methods=['POST'])
+def post_playlists():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({"error": "Missing or invalid authorization token"}), 401
+    
+    access_token = auth_header.split(' ')[1]
+    try:
+        json_data = request.get_json(force=True)
+        if not json_data:
+            return jsonify({"error": "Request must be Json"}), 400
+        
+        validate_data = playlist_tmp.validate_playlist_json(json_data)
+        if validate_data is True:
+            return jsonify({playlist_tmp.post_playlist(access_token, json_data)}), 201
+        else:
+            return jsonify({"error": validate_data}), 400
+        
+    except Exception as e:
+        return jsonify({"error": "Unexpected error"}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
