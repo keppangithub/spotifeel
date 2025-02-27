@@ -1,8 +1,9 @@
 from flask import Flask, redirect, render_template, request, jsonify, url_for, session
-
-from spotifeelApplication import app, controller
+from app import app
+from clientController import clientController
 from flask_swagger_ui import get_swaggerui_blueprint
 
+controller = clientController()
 
 '''Set the path for Swagger documentation'''
 SWAGGER_URL = '/docs'

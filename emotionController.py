@@ -17,8 +17,8 @@ class EmotionController:
         - a message (str)
         '''
         
-        for category, emotion in self.emotions.items():
-            if emotion in self.emotions:
+        for category, emotion_list in self.emotions.items():
+            if emotion in emotion_list:
                 
                 if category == "happy":
                     return ["Det verkar som du haft en bra dag idag!", "Fortsätt i samma vibe", "Lugna ner"]
