@@ -1,5 +1,5 @@
 from flask import Flask
-from spotifyAPI import SpotifyAPI
+from API.spotifyAPI import SpotifyAPI
 
 '''Initialize the Flask application'''
 app = Flask(__name__)

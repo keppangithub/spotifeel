@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, redirect, request, url_for, render_template, session
-import yaml, playlists, os, json, promptGPT
+import yaml, API.playlists as playlists, os, json, API.promptGPT as promptGPT
 from app import app
 
 # Dictionary of emotions mapped to their respective IDs

@@ -1,6 +1,6 @@
 from flask import Flask, redirect, render_template, request, jsonify, url_for, session
 from datetime import date
-import promptGPT, feelings, spotifeelAPI, playlists
+import API.promptGPT as promptGPT, feelings, API.spotifeelAPI as spotifeelAPI, API.playlists as playlists
 from app import app, user
 from flask_swagger_ui import get_swaggerui_blueprint
 import os
