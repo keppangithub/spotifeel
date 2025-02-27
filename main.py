@@ -6,6 +6,11 @@ from flask_swagger_ui import get_swaggerui_blueprint
 import os
 import requests
 import API.playlist_API as spotifeelAPI_playlist
+
+from application import app, controller
+from flask_swagger_ui import get_swaggerui_blueprint
+
+
 '''Set the path for Swagger documentation'''
 SWAGGER_URL = '/docs'
 API_URL = '/static/swagger.json'
@@ -22,107 +27,23 @@ app.register_blueprint(swaggerui_blueprint, url_prefix='/docs')
 
 @app.route('/login')
 def login_page():
-    '''Return template login.html'''
-    return render_template('login.html')
+    return controller.login_page()
 
 @app.route('/oauth_spotify')
 def oauth_spotify():
-    '''
-    Get auth_url via the login() function in the class SpotifyApi
-
-    Redirect user to the login Spotify's login via Spotify API
-
-    '''
-    auth_url = user.redirectToAuthCodeFlow()
-    return redirect(auth_url)
+    return controller.oauth_spotify()
 
 @app.route('/callback')
 def login_callback():
-    '''
-    The user has been redirected to this endpoint after having logged in to Spotify
-
-    Check if the code has been received from the method redirectToAuthCodeFlow() from the class SpotifyApi
-    Exchange the received code with an access token via the method login_callback() from the class SpotifyApi
-
-    Redirect user to the index page
-
-    '''
-    if 'error' in request.args:
-            return jsonify({'error': request.args['error']})
-
-    if 'code' in request.args:
-        code = request.args['code']
-        user.login_callback(code)
-
-        return redirect('/')
+    return controller.login_callback()
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-    '''
-    Check if user is logged in.
-    If the user is not logged in redirect them to the login page.
-
-    Else get and store userID in object.
-
-    If GET, Get todays date and return chat page.
-    If POST, Get user diary input and run the prompt via OPEN AI API and redirect user to the verify page.
-
-    '''
-    if not user.is_user_logged_in():
-        print("ERROR: user is not logged in")
-        return redirect ('/login')
-
+    if request.method == 'POST':
+        return controller.post_index()
+        
     else:
-        user.get_user_information()
-        if request.method == 'POST':
-            userPrompt = request.form.get('userPrompt')
-            response = promptGPT.run_prompt(userPrompt)
-
-            return redirect(url_for('verify', response=response))
-
-        today = date.today()
-        return render_template('chat.html', today=today)
-
-@app.route('/playlist', methods=['POST'])
-def playlist():
-    '''
-    Method used to create a playlist using GPT and post to Spotify.
-    Check if user is logged in.
-    If the user is not logged in redirect them to the login page.
-
-    Check if the user choose to stay in the feeling or wanted the opposite feeling.
-    Create a playlist based on the choosen feeling.
-
-    Returns:
-    - if not logged in: return redirect to login.html
-    - if logged in: return redirect to playlist.html
-
-    '''
-    if not user.is_user_logged_in():
-        print("ERROR: user is not logged in")
-        return redirect ('/login')
-
-    else:
-        data = request.get_json()
-        action = data.get("message")
-        feeling = session.get('feeling')
-
-        if action == "false":
-            feeling = feelings.negated_feeling(feeling)
-
-        #Create playlist, OPEN & Spotify work together
-        today = date.today()
-        user.get_user_information()
-        songs_for_playlist = promptGPT.create_playlist(feeling)
-        new_playlist_id = user.create_new_playlist(user.user_id, f'{feeling.capitalize()} - {today}')
-        song_info = user.add_to_playlist(new_playlist_id, songs_for_playlist)
-        display_feeling = feeling.capitalize()
-
-
-        playlists.add_to_playlist(new_playlist_id)
-
-
-        return render_template('playlist.html', new_playlist_id=new_playlist_id, song_info=song_info, display_feeling=display_feeling, today=today)
+        return controller.get_index()
 
 @app.route("/verify")
 def verify():
@@ -178,8 +99,11 @@ def get_emotions():
     if prompt is not None:
         return jsonify(promptGPT.run_prompt(prompt))
 
+    return controller.verify_emotion()
 
-
+@app.route('/playlist', methods=['POST'])
+def playlist():
+    return controller.playlist()
 
 '''
 Starting server with port - 8888
