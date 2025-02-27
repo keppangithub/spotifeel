@@ -5,7 +5,7 @@ from app import app, user
 from flask_swagger_ui import get_swaggerui_blueprint
 import os
 import requests
-
+import API.playlist_API_TMP as spotifeelAPI_playlist
 '''Set the path for Swagger documentation'''
 SWAGGER_URL = '/docs'
 API_URL = '/static/swagger.json'
@@ -179,9 +179,15 @@ def get_emotions():
         return jsonify(promptGPT.run_prompt(prompt))
 
 
+@app.route('/playlist<int:id>', methods=['GET'])
+def get_playlists_id(id):
+    emotion_id = id;
+
+    
+
+
 @app.route('/playlists', methods=['GET'])
 def get_playlists():
-
     json_data = None;
     try:
         json_data = request.get_json()
@@ -201,56 +207,26 @@ def get_playlists():
 
 @app.route('/playlists', methods=['POST'])
 def post_playlists():
-
     auth_header = request.headers.get('Authorization')
-
     if not auth_header or not auth_header.startswith('Bearer '):
             return jsonify({"error": "Missing or invalid authorization token"}), 401
-
+    
     access_token = auth_header.split(' ')[1]
-    user.set_access_token(access_token)
-
     try:
         json_data = request.get_json(force=True)
-        print(json_data)
-
         if not json_data:
             return jsonify({"error": "Request must be Json"}), 400
-
-        if not "emotion_id" in json_data or not isinstance(json_data["emotion_id"], int) or not (1 <= json_data["emotion_id"] <= 13):
-            return jsonify({"error": "'number' is required and must be an integer between 1 and 13"}), 400
-
-
-        emotion_id = int(json_data["emotion_id"])
-        feeling = spotifeelAPI.get_emotion_by_id(emotion_id)
-        today = date.today()
-        user.get_user_information()
-        songs_for_playlist = promptGPT.create_playlist(feeling)
-        new_playlist_id = user.create_new_playlist(user.user_id, f'{feeling.capitalize()} - {today}')
-        user.add_to_playlist(new_playlist_id, songs_for_playlist)
-
-        playlist = user.get_user_playlist(new_playlist_id)
-
-        formatted_playlist = {
-            "name": playlist["name"],
-            "uri": playlist["uri"],
-            "songs": []
-        }
-
-        for item in playlist["tracks"]["items"]:
-            formatted_song = {
-                "name": item["track"]["name"],
-                "artist": ', '.join(artist["name"] for artist in item["track"]["artists"]),
-                "uri": item["track"]["uri"]
-            }
-            formatted_playlist["songs"].append(formatted_song)
-
-        print(jsonify(formatted_playlist))
-
-        return jsonify(formatted_playlist), 201
+        
+        validate_data = spotifeelAPI_playlist.validate_playlist_json(json_data)
+        if validate_data is True:
+            return jsonify({spotifeelAPI_playlist.post_playlist(access_token, json_data)}), 201
+        else:
+            return jsonify({"error": validate_data}), 400
+        
     except Exception as e:
-        print(f"Detailed Error: {e}")
-        return jsonify({"error": "Internal Server Error"}), 500
+        return jsonify({"error": "Unexpected error"}), 500
+
+
 
 
 '''
