@@ -1,6 +1,6 @@
 from flask import Flask, redirect, render_template, request, jsonify, url_for, session
 
-from application import app, controller
+from spotifeelApplication import app, controller
 from flask_swagger_ui import get_swaggerui_blueprint
 
 
