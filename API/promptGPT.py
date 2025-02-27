@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from openai import OpenAI
 import os
+import emotionControllerAPI
 
 load_dotenv()
 key = os.getenv('OPENAI_API_KEY')
@@ -68,7 +69,15 @@ def run_prompt(text: str) -> str:
             run_prompt(text)
             prompt_counter+1
 
-def create_playlist(emotion: str) -> list:
+def create_playlist(input) -> list:
+    emotion = None
+
+    if isinstance(input,int):
+        print(input)
+        emotion = emotionControllerAPI.get_regular_emotion(input)
+    else:
+        emotion=input
+    
     '''
     Get six recommended songs based on a received emotion (argument).
     Manipulate them to a specific format and add to the list formated_songs
@@ -88,7 +97,7 @@ def create_playlist(emotion: str) -> list:
       "content": [
         {
           "type": "text",
-          "text": '"'+emotion+'"'
+          "text": '"'+str(emotion)+'"'
         }
       ]
     }
