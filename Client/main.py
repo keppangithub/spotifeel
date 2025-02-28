@@ -1,12 +1,11 @@
 from flask import Flask, redirect, render_template, request, jsonify, url_for, session
-from datetime import date
-from app import app, user
-from flask_swagger_ui import get_swaggerui_blueprint
-import os
-
-from application import app, controller
 from flask_swagger_ui import get_swaggerui_blueprint
 
+from app import app
+from clientController import clientController
+from flask_swagger_ui import get_swaggerui_blueprint
+
+controller = clientController()
 
 '''Set the path for Swagger documentation'''
 SWAGGER_URL = '/docs'

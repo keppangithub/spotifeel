@@ -1,7 +1,6 @@
 from flask import Flask, redirect, render_template, request, jsonify, url_for, session
-from API.Client.application import emotionController, user
+from spotifeelApplication import emotionController, user
 from datetime import date
-import promptGPT
 
 class clientController:
     @staticmethod
@@ -58,6 +57,7 @@ class clientController:
         else:
             user.get_user_information()
             userPrompt = request.form.get('userPrompt')
+            
             response = promptGPT.run_prompt(userPrompt)
 
             return redirect(url_for('verify', response=response))
