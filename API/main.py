@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 import promptGPT
 import emotionControllerAPI
-import spotifeelAPI as spotifeel
+import Client.spotifeelAPI as spotifeel
 import playlist_API as playlist_tmp
 
 app = Flask(__name__)
