@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 import promptGPT
 import emotionControllerAPI
-import Client.spotifeelAPI as spotifeel
+import spotifeelAPI as spotifeel
 import playlist_API as playlist_tmp
 from werkzeug.exceptions import BadRequest, NotFound, InternalServerError
 
@@ -69,6 +69,7 @@ def generate_emotion():
         return jsonify({"error": "Missing parameter", "message": "Required parameter 'prompt' missing"}), 400
     
     prompt = str(data.get('prompt'))
+    print(prompt)
     if not prompt.strip():
         return jsonify({"error": "Invalid value", "message": "Prompt cannot be empty"}), 400
     
@@ -117,9 +118,6 @@ def get_emotion_by_str(emotion):
 @app.route('/emotions/<int:id>/opposite', methods=['GET'])
 @handle_exceptions
 def get_opposite_emotion(id):
-    if not isinstance(id, int):
-        return jsonify({"error": "Invalid parameter", "message": "Emotion ID must be an integer"}), 400
-    
     if not (1 <= id <= 13):
         return jsonify({"error": "Invalid parameter", "message": "Emotion ID must be between 1 and 13"}), 400
     
@@ -127,6 +125,18 @@ def get_opposite_emotion(id):
         result = emotionControllerAPI.negated_feeling_id(id)
         if not result:
             return jsonify({"error": "Processing error", "message": f"Could not find opposite for emotion ID {id}"}), 422
+        return result
+    except Exception as e:
+        app.logger.error(f"Error finding opposite emotion for ID {id}: {str(e)}")
+        raise
+
+@app.route('/emotions/<string:emotion>/opposite', methods=['GET'])
+@handle_exceptions
+def get_opposite_emotion_by(emotion):    
+    try:
+        result = emotionControllerAPI.negated_feeling_str(emotion)
+        if not result:
+            return jsonify({"error": "Processing error", "message": f"Could not find opposite for emotion {emotion}"}), 422
         return result
     except Exception as e:
         app.logger.error(f"Error finding opposite emotion for ID {id}: {str(e)}")

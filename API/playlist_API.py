@@ -1,7 +1,7 @@
 from flask import jsonify
 from spotify_API import Spotify_API_TMP
 from datetime import date
-import Client.spotifeelAPI as spotifeel
+import spotifeelAPI as spotifeel
 
 
 

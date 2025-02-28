@@ -4,6 +4,7 @@ from flask_swagger_ui import get_swaggerui_blueprint
 from app import app
 from clientController import clientController
 from flask_swagger_ui import get_swaggerui_blueprint
+import emotionController
 
 controller = clientController()
 
@@ -43,25 +44,7 @@ def index():
 
 @app.route("/verify")
 def verify():
-    '''
-    returns:
-    - verify.html
-    '''
-    response = request.args.get('response', None)
-
-    if response is None:
-        return redirect(url_for('index'))
-
-    feeling = feelings.get_feelings(response)
-    session['feeling'] = response
-
-    if len(feeling) == 3:
-        title, button1, button2 = feeling
-
-    else:
-        title, button1, button2 = "Error", "Invalid", "Response"
-
-    return render_template('verify.html', title=title, button1=button1, button2=button2)
+    return controller.verify_emotion()
 
 
 @app.route('/playlist', methods=['POST'])

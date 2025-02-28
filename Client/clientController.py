@@ -1,6 +1,8 @@
 from flask import Flask, redirect, render_template, request, jsonify, url_for, session
-from spotifeelApplication import emotionController, user
+import requests
+from spotifeelApplication import user
 from datetime import date
+import emotionController
 
 class clientController:
     @staticmethod
@@ -57,10 +59,23 @@ class clientController:
         else:
             user.get_user_information()
             userPrompt = request.form.get('userPrompt')
-            
-            response = promptGPT.run_prompt(userPrompt)
+            print(userPrompt)
 
-            return redirect(url_for('verify', response=response))
+        response = requests.post('http://127.0.0.1:5000/emotions/generate',
+                        json={'prompt': userPrompt},
+                        headers={'Content-Type': 'application/json'})
+
+        # Print the raw response before parsing as JSON
+        print("Status code:", response.status_code)
+        print("Raw response:", response.text)
+
+        # Only try to parse JSON if we get a successful response
+        if response.status_code == 200:
+            response_data = response.json()
+            print(response_data)
+            return redirect(url_for('verify', response=response_data))
+        else:
+            print(f"Error: API returned status code {response.status_code}")
     
     @staticmethod
     def get_index():
@@ -83,7 +98,8 @@ class clientController:
 
         if response is None:
             return redirect(url_for('index'))
-
+        
+        response = str(response)
         emotion = emotionController.get_emotions(response)
         session['emotion'] = response
 
@@ -120,17 +136,23 @@ class clientController:
             emotion = session.get('emotion')
 
             if action == "false":
-                emotion = emotionController.negated_feeling(emotion)
-
+                emotion = requests.post(f'http://127.0.0.1:5000/emotions/{emotion}/opposite')
+                emotion = emotion.json()
             #Create playlist, OPEN & Spotify work together
             today = date.today()
             user.get_user_information()
-            songs_for_playlist = promptGPT.create_playlist(emotion)
-            new_playlist_id = user.create_new_playlist(user.user_id, f'{emotion.capitalize()} - {today}')
-            song_info = user.add_to_playlist(new_playlist_id, songs_for_playlist)
-            display_feeling = emotion.capitalize()
+            songs_for_playlist = requests.post(f'http://127.0.0.1:5000/song-recommendations/{emotion}',
+                        headers={'Content-Type': 'application/json'})
+            if songs_for_playlist.status_code == 200:
+                response_data = songs_for_playlist.json()
+                print("Response data")
+                print(response_data)
 
-            user.add_to_playlist(new_playlist_id)
+            emotion = str(emotion)
+
+            new_playlist_id = user.create_new_playlist(user.user_id, f'{emotion.capitalize()} - {today}')
+            song_info = user.add_to_playlist(new_playlist_id, response_data)
+            display_feeling = emotion.capitalize()
             
             return render_template('playlist.html', new_playlist_id=new_playlist_id, song_info=song_info, display_feeling=display_feeling, today=today)
         

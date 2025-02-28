@@ -8,12 +8,12 @@ yaml_file_path = os.path.join(os.getcwd(), 'static', 'swagger.yaml')
 json_file_path = os.path.join(os.getcwd(), 'static', 'swagger.json')
 
 # Read the YAML file containing API documentation
-with open(yaml_file_path, 'r') as yaml_file:
+'''with open(yaml_file_path, 'r') as yaml_file:
     SWAGGER_SPEC = yaml.safe_load(yaml_file)
 
 # Write the API documentation to a JSON file for serving as static content
 with open(json_file_path, 'w') as json_file:
-    json.dump(SWAGGER_SPEC, json_file, indent=2)
+    json.dump(SWAGGER_SPEC, json_file, indent=2)'''
 
 def get_loaded_playlist():
     return playlists.get_loaded_playlist()
