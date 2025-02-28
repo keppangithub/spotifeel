@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request
 import promptGPT
 import emotionControllerAPI
-import spotifeelAPI as spotifeel
 import playlist_API as playlist_tmp
 from werkzeug.exceptions import BadRequest, NotFound, InternalServerError
 

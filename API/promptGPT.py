@@ -68,6 +68,8 @@ def run_prompt(text: str) -> str:
         if(prompt_counter<10):
             run_prompt(text)
             prompt_counter+1
+        else:
+            return "Error, couldn't define a feeling."
 
 def create_playlist(input) -> list:
     emotion = None
