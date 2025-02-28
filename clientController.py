@@ -1,5 +1,5 @@
 from flask import Flask, redirect, render_template, request, jsonify, url_for, session
-from application import emotionController, user
+from spotifeelApplication import emotionController, user
 from datetime import date
 import promptGPT
 

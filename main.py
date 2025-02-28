@@ -8,8 +8,11 @@ import requests
 import API.playlist_API as spotifeelAPI_playlist
 
 from application import app, controller
+from app import app
+from clientController import clientController
 from flask_swagger_ui import get_swaggerui_blueprint
 
+controller = clientController()
 
 '''Set the path for Swagger documentation'''
 SWAGGER_URL = '/docs'
