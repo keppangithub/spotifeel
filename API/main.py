@@ -137,7 +137,7 @@ def get_opposite_emotion_by(emotion):
         result = emotionControllerAPI.negated_feeling_str(emotion)
         if not result:
             return jsonify({"error": "Processing error", "message": f"Could not find opposite for emotion {emotion}"}), 422
-        return result
+        return jsonify(result)
     except Exception as e:
         app.logger.error(f"Error finding opposite emotion for ID {id}: {str(e)}")
         raise
@@ -201,7 +201,7 @@ def post_playlists():
         
         validate_data = playlist_tmp.validate_playlist_json(json_data)
         if validate_data is True:
-            return jsonify({playlist_tmp.post_playlist(access_token, json_data)}), 201
+            return playlist_tmp.post_playlist(access_token, json_data), 201
         else:
             return jsonify({"error": validate_data}), 400
         

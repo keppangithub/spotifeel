@@ -115,4 +115,24 @@ def create_playlist(input) -> list:
 
             formated_songs.append([title_artist])
 
-    return formated_songs
+    
+    return format_playlist(formated_songs)
+
+def format_playlist(song_list):
+    tracks = {'tracks' : []}
+
+    for song in song_list:
+        if len(song) != 1:
+            continue
+
+        track_info = song[0].split(",")
+        track_name = track_info[0].strip()
+        track_artist = track_info[1].strip()
+
+        track = {
+            "titel": track_name,
+            "artists": track_artist
+        }
+        tracks['tracks'].append(track)
+    
+    return tracks

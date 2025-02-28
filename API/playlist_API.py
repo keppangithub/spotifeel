@@ -24,19 +24,18 @@ def get_playlist_id(id):
     return jsonify(playlist[playlist_id]), 200
 
 def post_playlist(access_token, songs_for_playlist):
-    user = Spotify_API_TMP();
+    user = Spotify_API_TMP()
     user.set_access_token(access_token)
     user.get_user_information()
-
-    name = str(songs_for_playlist['name'])
+    name = str(songs_for_playlist.get('name'))
 
     today = date.today()
     new_playlist_id = user.create_new_playlist(user.user_id, f'{name} - {today}')
 
-    '''SE TILL SÅ FORMATERING ÄR RÄTT MOT JSON OBJEKT'''
-    user.add_to_playlist(new_playlist_id, songs_for_playlist)
+    tracks = user.add_tracks_to_playlist(new_playlist_id, songs_for_playlist.get('tracks'))
 
-    return 
+    json_data = {'playlist_id' : new_playlist_id, 'tracks' : tracks}
+    return json_data
 
 
 def validate_playlist_json(json_data):
@@ -45,28 +44,18 @@ def validate_playlist_json(json_data):
         return 'Json data is not valid'
     
     # Kontrollera om playlist-objektet finns och har rätt struktur
-    if not all(key in json_data for key in ['name', 'songs']):
+    if not all(key in json_data for key in ['name', 'tracks']):
         return 'Playlist format is not correct'
     
     # Kontrollera om songs är en lista
-    if not isinstance(json_data['songs'], list):
+    if not isinstance(json_data['tracks'], list):
         return 'Songs is not a list'
     
     # Kontrollera varje låt i listan
-    for song in json_data['songs']:
+    for tracks in json_data['tracks']:
         # Kontrollera om varje låt har alla nödvändiga attribut
-        if not all(key in song for key in ['track', 'artists']):
+        if not all(key in tracks for key in ['titel', 'artists']):
             return 'Song format is not correct'
-        
-        # Kontrollera om artists är en lista
-        if not isinstance(song['artists'], list):
-            return 'Artist is not a list'
-        
-        # Kontrollera varje artist i listan
-        for artist in song['artists']:
-            # Kontrollera om artist har namn
-            if 'name' not in artist:
-                return 'Artist is missing name'
     
     # Om alla kontroller passerat, returna True
     return True 

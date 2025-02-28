@@ -5,6 +5,9 @@ from datetime import date
 import emotionController
 
 class clientController:
+
+    base_url : str = 'http://127.0.0.1:5000'
+
     @staticmethod
     def login_page():
         '''Return template login.html'''
@@ -59,20 +62,15 @@ class clientController:
         else:
             user.get_user_information()
             userPrompt = request.form.get('userPrompt')
-            print(userPrompt)
 
-        response = requests.post('http://127.0.0.1:5000/emotions/generate',
+        response = requests.post(f'{clientController.base_url}/emotions/generate',
                         json={'prompt': userPrompt},
                         headers={'Content-Type': 'application/json'})
 
-        # Print the raw response before parsing as JSON
-        print("Status code:", response.status_code)
-        print("Raw response:", response.text)
 
         # Only try to parse JSON if we get a successful response
         if response.status_code == 200:
             response_data = response.json()
-            print(response_data)
             return redirect(url_for('verify', response=response_data))
         else:
             print(f"Error: API returned status code {response.status_code}")
@@ -131,28 +129,43 @@ class clientController:
             return redirect ('/login')
 
         else:
+
             data = request.get_json()
             action = data.get("message")
             emotion = session.get('emotion')
 
             if action == "false":
-                emotion = requests.post(f'http://127.0.0.1:5000/emotions/{emotion}/opposite')
+                emotion = requests.get(f'{clientController.base_url}/emotions/{emotion}/opposite')
                 emotion = emotion.json()
             #Create playlist, OPEN & Spotify work together
             today = date.today()
             user.get_user_information()
-            songs_for_playlist = requests.post(f'http://127.0.0.1:5000/song-recommendations/{emotion}',
+            songs_for_playlist = requests.post(f'{clientController.base_url}/song-recommendations/{emotion}',
                         headers={'Content-Type': 'application/json'})
+            emotion = str(emotion)
+            json_format = {'name' : 'name', 'tracks' : []}
             if songs_for_playlist.status_code == 200:
                 response_data = songs_for_playlist.json()
-                print("Response data")
-                print(response_data)
+                json_format = clientController.format_playlist(response_data, emotion)
 
-            emotion = str(emotion)
+            response = requests.post(f'{clientController.base_url}/playlists', 
+                                headers = {
+                                    'Authorization': 'Bearer ' + user.access_token,
+                                    "Content-Type": "application/json"
+                                },
+                                json=json_format)
 
-            new_playlist_id = user.create_new_playlist(user.user_id, f'{emotion.capitalize()} - {today}')
-            song_info = user.add_to_playlist(new_playlist_id, response_data)
-            display_feeling = emotion.capitalize()
-            
+            response = response.json()
+            new_playlist_id = response.get('playlist_id')
+            song_info = response.get('tracks')
+            display_feeling = emotion.capitalize() 
             return render_template('playlist.html', new_playlist_id=new_playlist_id, song_info=song_info, display_feeling=display_feeling, today=today)
-        
+
+
+    def format_playlist(tracks, emotion):
+        playlist = {'name' : f'{emotion}', 'tracks' : tracks['tracks']}
+
+        return playlist
+
+
+
