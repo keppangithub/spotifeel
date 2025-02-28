@@ -61,3 +61,6 @@ def get_emotion(id: int) ->str:
 
 def get_emotions():
     return emotionAPI.emotions_json
+
+def get_regular_emotion(id: int) ->str:
+    return emotionAPI.get_emotion_by_id(id)

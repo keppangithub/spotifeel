@@ -51,3 +51,16 @@ def get_emotion_by_id(id: int):
         if emotion.id == id:
             return emotion.name
     return 'Unvalid emotion'
+
+def get_emotion_by_id(emotion_id: int) -> str:
+    '''
+    Retrieves an emotion based on its ID.
+    Returns JSON with emotion name or an error message if not found.
+    '''
+    for e in emotions:
+        if e.id == emotion_id:
+            return e.name
+    return "error: Emotion not found"
+
+emotions_json = json.dumps([e.to_dict() for e in emotions], indent=10)
+
