@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, jsonify, url_for, session
+from flask import redirect, render_template, request, jsonify, url_for, session
 import requests
 from spotifeelApplication import user
 from datetime import date
