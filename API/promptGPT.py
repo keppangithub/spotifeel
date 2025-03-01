@@ -26,9 +26,12 @@ def is_emotion_valid(emotion: str) -> bool:
     - Unhappy
     - Scared
     - Anxious
+    
+    Args:
+        emotion (str): an emotion name.
 
-    returns:
-    - Boolean (depending on if the feeling received is valid or not)
+    Returns:
+        boolean: depending on if the feeling received is valid or not.
     '''
     valid_feelings = ['furious', 'frustrated', 'horrified', 'disappointed', 'euphoric', 'loving', 'happy', 'useless', 'regretful', 'dejected', 'unhappy', 'scared','anxious']
 
@@ -41,12 +44,14 @@ def is_emotion_valid(emotion: str) -> bool:
 
 def run_prompt(text: str) -> str:
     '''
-    Take the user input, diary entry, as an argument. Use OPEN AI API to get back the emotion which corresponds best with the user input.
-
+    Use OPEN AI's API to retrieve the emotion which best corresponds with the user input.
     Check if the emotion is valid via the is_emotion_valid function.
+    
+    Args:
+        text (str): users diary entry/prompt.
 
-    returns:
-    - emotion (str)
+    Returns:
+        emotion (str): an emotion name.
     '''
     completion = client.chat.completions.create(
      model="gpt-3.5-turbo",
@@ -68,28 +73,29 @@ def run_prompt(text: str) -> str:
         if(prompt_counter<10):
             run_prompt(text)
             prompt_counter+1
+            
         else:
             return "Error, couldn't define a feeling."
 
-def create_playlist(input) -> list:
+def create_playlist(input: int) -> list:
+    '''
+    Get six recommended songs based on a received emotion.
+    Manipulate them to a specific format and add to the list formated_songs
+
+    Args:
+        input (int): an emotion id.
+
+    Returns:
+        list: a list of formated playlists containing the title and the artist.
+    '''
     emotion = None
 
     if isinstance(input,int):
-        print(input)
         emotion = emotionControllerAPI.get_regular_emotion(input)
+        
     else:
         emotion=input
     
-    '''
-    Get six recommended songs based on a received emotion (argument).
-    Manipulate them to a specific format and add to the list formated_songs
-
-    parameter:
-    - emotions (str)
-
-    returns:
-    - formated_songs (list)
-    '''
     completion = client.chat.completions.create(
      model="gpt-3.5-turbo",
          messages=[
@@ -120,7 +126,16 @@ def create_playlist(input) -> list:
     
     return format_playlist(formated_songs)
 
-def format_playlist(song_list):
+def format_playlist(song_list: list) -> dict:
+    '''
+    Format a list of songs into a dictionary with a key called 'tracks' containing song information.
+
+    Args:
+        song_list (list): A list of songs with information about the artist and song title.
+        
+    Returns:
+        dict: A dictionary containing a key called 'tracks', which is a list of dictionaries. Each dictionary represents a song with 'titel' and 'artists' as keys.
+    '''
     tracks = {'tracks' : []}
 
     for song in song_list:
@@ -135,6 +150,7 @@ def format_playlist(song_list):
             "titel": track_name,
             "artists": track_artist
         }
+        
         tracks['tracks'].append(track)
     
     return tracks
