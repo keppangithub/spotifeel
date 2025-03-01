@@ -4,12 +4,36 @@ from datetime import date
 import spotifeelAPI as spotifeel
 
 def get_playlist():
-        playlist = spotifeel.get_loaded_playlist()
-        if (1 > len(playlist)):
-            return jsonify({"error": "No playlist has been created"}), 401
-        return jsonify(playlist), 200
+    '''
+    Check if any playlists have been created and loaded into the system.
+    Retrieve the list of loaded playlists.
+
+    Returns:
+        Response: A JSON response containing the list of loaded playlists if successful, or an error message with the appropriate HTTP status code.
+
+    Error Handling:
+        - 401: If no playlists have been created or loaded into the system.
+    '''
+    playlist = spotifeel.get_loaded_playlist()
+    
+    if (1 > len(playlist)):
+        return jsonify({"error": "No playlist has been created"}), 401
+    
+    return jsonify(playlist), 200
 
 def get_playlist_id(id):
+    '''
+    Retrieve a playlist by its ID.
+
+    Args:
+        id (int): a playlist ID.
+
+    Returns:
+        Response: A JSON response containing the requested playlist if successful, or an error message with the appropriate HTTP status code.
+
+    Error Handling:
+        - 401: If no playlist has been created or the provided ID is invalid.
+    '''
     playlist = spotifeel.get_loaded_playlist()
     if (1 > len(playlist)):
         return jsonify({"error": "No playlist has been created"}), 401
@@ -19,6 +43,7 @@ def get_playlist_id(id):
 
     playlist = spotifeel.get_loaded_playlist()
     playlist_id = int(id)
+    
     return jsonify(playlist[playlist_id]), 200
 
 def post_playlist(access_token, songs_for_playlist):
