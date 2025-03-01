@@ -57,23 +57,25 @@ class clientController:
         '''
         if not user.is_user_logged_in():
             print("ERROR: user is not logged in")
-            return redirect ('/login')
+            return redirect('/login')
 
         else:
             user.get_user_information()
             userPrompt = request.form.get('userPrompt')
 
-        response = requests.post(f'{clientController.base_url}/emotions/generate',
-                        json={'prompt': userPrompt},
-                        headers={'Content-Type': 'application/json'})
+            response = requests.post(f'{clientController.base_url}/emotions/generate',
+                                     json={'prompt': userPrompt},
+                                     headers={'Content-Type': 'application/json'})
 
 
         # Only try to parse JSON if we get a successful response
         if response.status_code == 200:
             response_data = response.json()
             return redirect(url_for('verify', response=response_data))
+        
         else:
             print(f"Error: API returned status code {response.status_code}")
+            return redirect('/')
     
     @staticmethod
     def get_index():
