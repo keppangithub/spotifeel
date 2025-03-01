@@ -8,12 +8,16 @@ id = 0
 if os.path.exists(file_name):
     with open(file_name, 'r') as file:
         playlists = json.load(file)
+        
         if playlists:
             last_entry = playlists[-1]
             id = last_entry['id'] + 1 
 
 def load_playlists_txt():
+    '''
+    '''
     global playlists, id
+    
     if os.path.exists(txt_file):
         try:
             with open(txt_file, 'r', encoding='utf-8') as file:
@@ -27,23 +31,33 @@ def load_playlists_txt():
                         })
                 if playlists:
                     id = max(p['id'] for p in playlists) + 1
+                    
                 return playlists
+            
         except Exception as e:
             print(f"Error loading playlists: {e}")
             return []
+        
     return []
 
 def get_loaded_playlist():
+    '''
+    '''
     return load_playlists_txt()
 
 def get_playlists():
+    '''
+    '''
     return playlists
 
 
 def add_to_playlist(uri):
+    '''
+    '''
     global id 
     playlist = {'id': id, 'uri': uri}
     playlists.append(playlist)
+    
     with open(file_name, 'w') as file:
         json.dump(playlists, file, indent=4)
     id+=1
@@ -51,9 +65,11 @@ def add_to_playlist(uri):
 
 
 def get_playlists_by_id(search_id : int):
-    print(search_id)
+    '''
+    '''
     for playlist in playlists:
         if playlist['id'] == search_id:
             print("playlist found")
             return playlist['uri']
+        
     return 'No playlist found'

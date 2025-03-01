@@ -174,8 +174,6 @@ def create_playlist_by_emotion(emotion):
         app.logger.error(f"Error creating playlist for emotion '{emotion}': {str(e)}")
         raise
 
-
-
 @app.route('/playlists/<int:id>', methods=['GET'])
 def get_playlists_id(id):
     
