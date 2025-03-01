@@ -16,10 +16,17 @@ with open(json_file_path, 'w') as json_file:
     json.dump(SWAGGER_SPEC, json_file, indent=2)'''
 
 def get_loaded_playlist():
+    '''
+    '''
     return playlists.get_loaded_playlist()
 
 def get_playlists():
+    '''
+    Returns the function 
+    '''
     return playlists.get_playlists()
 
 def get_playlists_by_id(id):
+    '''
+    '''
     return playlists.get_playlists_by_id(id)
