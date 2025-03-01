@@ -12,6 +12,17 @@ class Spotify_API_TMP:
         '''
         Intialises the SpotifyAPI object by loading environement
         variables and setting up the requored credentials and API URI.
+        
+        Attributes:
+            client_id (str): The client ID for the Spotify API.
+            client_secret (str): The client secret for the Spotify API.
+            redirect_uri (str): The redirect URI used for Spotify OAuth authentication.
+            auth_endpoint (str): The authorization endpoint URL for the Spotify API.
+            access_token (str): The OAuth access token for Spotify API.
+            refresh_token (str): The OAuth refresh token for Spotify API.
+            base_url (str): The base URL for Spotify's API.
+            token_url (str): The token URL for Spotify's OAuth token exchange.
+            user_id (str): The user ID for the authenticated Spotify user.
         '''
         load_dotenv()
 
@@ -33,22 +44,22 @@ class Spotify_API_TMP:
         '''
         Set value of the object property acess_token to the value of the token recived through Spotify's API.
         
-        Parameter:
-        - token: str
+        Arg:
+            token (str): the users acccess token.
         
         Returns:
-        - void
+            void
         '''
         self.access_token = token
 
 
     def get_user_information(self) -> None:
         '''
-        Get the user_id for the logged in user from the Spotify's API.
+        Get the user_id for the logged in user from Spotify's API.
         Store the user id in self.user_id
 
         Returns:
-        - void
+            void
         '''
         url = self.base_url + '/me'
         req_header = self.get_auth_header()
@@ -64,12 +75,12 @@ class Spotify_API_TMP:
         '''
         Create a new playlist via Spotify's API.
 
-        Parameters:
-        - user_id: str
-        - new_playlist_name: str
+        Args:
+            user_id (str): user ID.
+            new_playlist_name (str): the name of the new playlist.
 
         Returns:
-        - playlist_id: str
+            str: the ID of the newly created playlist
         '''
 
         query_url = self.base_url + f'/users/{user_id}/playlists'
@@ -94,12 +105,12 @@ class Spotify_API_TMP:
         '''
         Add tracks to a playlist via Spotify's API.
         
-        Parameters:
-        - playlist_id: str (ex. 3cEYpjA9oz9GiPac4AsH4n, from spotify)
-        - tracks_data: dict with tracks list (from JSON)
+        Args:
+            playlist_id (str): the playlist ID (ex. 3cEYpjA9oz9GiPac4AsH4n, from spotify).
+            tracks_data (dict): JSON-formatted list of tracks, where each track includes 'titel' (song title) and 'artists' (song artist).
         
         Returns:
-        - list of song info in a dictionary (title, artist, image_url) or False if error
+            list: song info in a dictionary (title, artist, image_url), or False if an error occurs.
         '''
         query_url = f"{self.base_url}/playlists/{playlist_id}/tracks"
         req_header = self.get_auth_header()
@@ -139,11 +150,11 @@ class Spotify_API_TMP:
         '''
         Search for a track via Spotify's API.
 
-        parameter:
-        - query: str
+        Args:
+            query (str): a query.
 
-        returns:
-        - None or track_id
+        Returns:
+            A track_id or None if not found.
         '''
         url = f"{self.base_url}/search"
 
@@ -183,9 +194,9 @@ class Spotify_API_TMP:
 
     def get_auth_header(self) -> dict:
         '''
-        Generates the authorization header for making requests to Spotify's API.
+        Generate the authorization header for making requests to Spotify's API.
 
         Returns:
-        - A dictionary containing the 'Authorization' header (dict)
+            dictionary: containing the 'Authorization' header.
         '''
         return {'Authorization': 'Bearer ' + self.access_token}
