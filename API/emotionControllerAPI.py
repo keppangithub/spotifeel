@@ -1,49 +1,50 @@
 import emotionAPI
-def negated_feeling_id(id: int) -> str:
+
+def negated_feeling_id(emotion_id: int) -> str:
     '''
-    Check which category the feeling received is a part of and return the opposite emotion.
+    Check which category the emotion received is a part of, and return the opposite emotion.
     
-    parameter:
-    - id (int)
+    Args:
+        id (int): an emotion id
     
-    returns:
-    - a feeling (str)
+    Returns:
+        str: an emotion or 'unknown' (if the emotion is not found).
     '''
-    feelings = {
+    emotions = {
         "happy": [5, 6, 7],
         "angry": [1, 2],
         "sad": [3, 4, 8, 9, 10, 11, 12, 13]
     }
     
-    if id in feelings["happy"]:
+    if emotion_id in emotions["happy"]:
         return "sad"
     
-    if id in feelings["angry"]:
+    if emotion_id in emotions["angry"]:
         return "chill"
     
-    if id in feelings["sad"]:
+    if emotion_id in emotions["sad"]:
         return "happy"
     
     return "unknown"
 
 
-def negated_feeling_str(feeling: str) -> str:
+def negated_feeling_str(emotion: str) -> str:
     '''
-    Check which category the feeling received is a part of and return the oposit emotion.
+    Check which category the emotion received is a part of, and return the opposit emotion.
     
-    parameter:
-    - a feeling (str)
+    Args:
+        emotion (str): an emotion name
     
-    returns:
-    - a feeling (str)
+    Returns:
+        str: an emotion name or 'unknown' (if the emotion is not found).
     '''
-    feelings = {
+    emotions = {
         "happy": ["euphoric", "loving", "happy", "Euphoric", "Loving", "Happy"],
         "angry": ["urious", "frustrated", "Furious", "Frustrated"],
         "sad": ["horrified", "disappointed", "useless", "regretful", "dejected", "unhappy", "scared", "anxious", "Horrified", "Disappointed", "Useless", "Regretful", "Dejected", "Unhappy", "Dcared", "Anxious"]
     } 
-    for category, feelings in feelings.items():
-        if feeling in feelings:
+    for category, emotions in emotions.items():
+        if emotion in emotions:
             if category == "happy":
                 return "sad"
             
@@ -52,15 +53,51 @@ def negated_feeling_str(feeling: str) -> str:
             
             if category == "sad":
                 return "happy"
+            
+        return "unknown"
 
-def get_id(emotion : str) ->str:
-   return emotionAPI.get_id_by_name(emotion)
+def get_id(emotion : str) -> str:
+    '''
+    Retrieve an emotion id based on a recieved emotion name.
+    
+    Args:
+        emotion (str): an emotion name
+    
+    Returns:
+        str: A JSON formated string containing either an id or an Error message (if the id is not found).
+    '''
+    return emotionAPI.get_id_by_name(emotion)
 
-def get_emotion(id: int) ->str:
-    return emotionAPI.get_emotion_by_id_json(id)
+def get_emotion(emotion_id: int) -> str:
+    '''
+    Retrieve an emotion name based on a recieved emotion id.
+    
+    Args:
+        emotion_id (int): an emotion id
+    
+    Returns:
+        str: A JSON formated string containing either a name or an Error message (if the name is not found).
+    '''
+    return emotionAPI.get_emotion_by_id_json(emotion_id)
 
 def get_emotions():
+    '''
+    Retrieve the list of emotions in JSON format.
+    
+    Returns:
+        str: A JSON string representing the list of emotions.
+    '''
     return emotionAPI.emotions_json
 
-def get_regular_emotion(id: int) ->str:
-    return emotionAPI.get_emotion_by_id(id)
+def get_regular_emotion(emotion_id: int) -> str:
+    '''
+    Retrieve an emotion based on its ID from the list of emotions. 
+
+    Args:
+        emotion_id (int): an emotion ID.
+    
+    Returns:
+        str: the name of the emotion or an error message (if the emotion was not found).
+
+    '''
+    return emotionAPI.get_emotion_by_id(emotion_id)
