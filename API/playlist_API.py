@@ -3,8 +3,6 @@ from spotify_API import Spotify_API_TMP
 from datetime import date
 import spotifeelAPI as spotifeel
 
-
-
 def get_playlist():
         playlist = spotifeel.get_loaded_playlist()
         if (1 > len(playlist)):
