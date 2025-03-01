@@ -60,7 +60,7 @@ pip install -r requirements.txt
 **In order to run the mashup service you need to create a .env file in which you should put the received keys like this**\
 CLIENT_ID='PUT KEY HERE'\
 CLIENT_SECRET='PUT KEY HERE'\
-OPENAI_API_KEY='PUT KEY HERE'
+OPENAI_API_KEY='PUT KEY HERE'\
 
 Run the file main.py **located in the API map** in a terminal.
 Next, run the file main.py **located in the client map** in another terminal.
