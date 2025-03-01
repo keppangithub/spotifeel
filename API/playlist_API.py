@@ -47,9 +47,23 @@ def get_playlist_id(id):
     return jsonify(playlist[playlist_id]), 200
 
 def post_playlist(access_token, songs_for_playlist):
+    '''
+    Create a new playlist and add tracks to it based on the provided data.
+
+    Args:
+        access_token (str): The access token used for authenticating the user with the Spotify API.
+        songs_for_playlist (dict): A dictionary containing the following keys:
+            - 'name': The name of the playlist to be created.
+            - 'tracks': A list of track IDs to be added to the playlist.
+
+    Returns:
+        dict: A dictionary containing the playlist ID of the newly created playlist as well as the list of tracks added.
+    '''
+    
     user = Spotify_API_TMP()
     user.set_access_token(access_token)
     user.get_user_information()
+    
     name = str(songs_for_playlist.get('name'))
 
     today = date.today()
@@ -58,28 +72,37 @@ def post_playlist(access_token, songs_for_playlist):
     tracks = user.add_tracks_to_playlist(new_playlist_id, songs_for_playlist.get('tracks'))
 
     json_data = {'playlist_id' : new_playlist_id, 'tracks' : tracks}
+    
     return json_data
 
-
 def validate_playlist_json(json_data):
-    # Kontrollera om json_data är ett objekt och inte None
+    '''
+    Validates the structure and content of the given playlist JSON data.
+
+    Args:
+        json_data (dict): A dictionary representing the playlist data, which must include:
+            - 'name': The name of the playlist (str).
+            - 'tracks': A list of songs to be added to the playlist. Each song must include:
+                - 'titel': The title of the song (str).
+                - 'artists': The artist(s) of the song (string).
+
+    Returns:
+        str or bool: 
+            - A string describing the error if the format is invalid.
+            - `True` if all checks pass and the format is correct.
+    '''
     if not json_data or not isinstance(json_data, dict):
         return 'Json data is not valid'
     
-    # Kontrollera om playlist-objektet finns och har rätt struktur
     if not all(key in json_data for key in ['name', 'tracks']):
         return 'Playlist format is not correct'
     
-    # Kontrollera om songs är en lista
     if not isinstance(json_data['tracks'], list):
         return 'Songs is not a list'
     
-    # Kontrollera varje låt i listan
     for tracks in json_data['tracks']:
-        # Kontrollera om varje låt har alla nödvändiga attribut
         if not all(key in tracks for key in ['titel', 'artists']):
             return 'Song format is not correct'
-    
-    # Om alla kontroller passerat, returna True
+
     return True 
 
