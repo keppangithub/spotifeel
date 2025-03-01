@@ -6,6 +6,7 @@ import base64
 
 import requests
 import json
+
 class Spotify_API_TMP:
     def __init__(self) -> None:
         '''
@@ -28,13 +29,22 @@ class Spotify_API_TMP:
 
         self.user_id = None
 
-    def set_access_token(self, token):
+    def set_access_token(self, token: str) -> None:
+        '''
+        Set value of the object property acess_token to the value of the token recived through Spotify's API.
+        
+        Parameter:
+        - token: str
+        
+        Returns:
+        - void
+        '''
         self.access_token = token
 
 
     def get_user_information(self) -> None:
         '''
-        Get the user_id for the logged in user from the SPotify API.
+        Get the user_id for the logged in user from the Spotify's API.
         Store the user id in self.user_id
 
         Returns:
@@ -44,6 +54,7 @@ class Spotify_API_TMP:
         req_header = self.get_auth_header()
         response = requests.get(url, headers=req_header)
         response = response.json()
+        
         self.user_id = response['id']
 
         return
@@ -58,10 +69,11 @@ class Spotify_API_TMP:
         - new_playlist_name: str
 
         Returns:
-        - playlist_id (str)
+        - playlist_id: str
         '''
 
         query_url = self.base_url + f'/users/{user_id}/playlists'
+        
         req_headers = {
             'Authorization': 'Bearer ' + self.access_token,
             'Content-Type': 'application/json'
@@ -81,11 +93,13 @@ class Spotify_API_TMP:
     def add_tracks_to_playlist(self, playlist_id: str, tracks_json: dict):
         '''
         Add tracks to a playlist via Spotify's API.
+        
         Parameters:
         - playlist_id: str (ex. 3cEYpjA9oz9GiPac4AsH4n, from spotify)
         - tracks_data: dict with tracks list (from JSON)
+        
         Returns:
-        - list of song info dictionaries or False if error
+        - list of song info in a dictionary (title, artist, image_url) or False if error
         '''
         query_url = f"{self.base_url}/playlists/{playlist_id}/tracks"
         req_header = self.get_auth_header()
@@ -123,10 +137,10 @@ class Spotify_API_TMP:
     
     def search_track(self, query: str) -> str | None:
         '''
-        Search for a track through the Spotify API.
+        Search for a track via Spotify's API.
 
         parameter:
-        - query (str)
+        - query: str
 
         returns:
         - None or track_id
@@ -169,7 +183,7 @@ class Spotify_API_TMP:
 
     def get_auth_header(self) -> dict:
         '''
-        Generates the authorization header for making requests to Spotify API.
+        Generates the authorization header for making requests to Spotify's API.
 
         Returns:
         - A dictionary containing the 'Authorization' header (dict)
