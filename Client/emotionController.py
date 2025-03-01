@@ -1,12 +1,13 @@
 def get_emotions(emotion: str) -> list:  
     '''
-    Check what category the emotion received from OPEN AI API is part of in order to return a relevant message to the user
+    Check what category the emotion received from OPEN AI API is part
+    of in order to return a relevant message to the user
     
-    parameter:
-    - a emotion (str)
+    Args:
+        emotion (str)
     
-    returns:
-    - a message (str)
+    Returns:
+        A message (str)
     '''
     emotions = {
     "happy": ["euphoric", "loving", "happy", "Euphoric", "Loving", "Happy"],
