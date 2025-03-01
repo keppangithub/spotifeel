@@ -62,8 +62,8 @@ CLIENT_ID='PUT KEY HERE'\
 CLIENT_SECRET='PUT KEY HERE'\
 OPENAI_API_KEY='PUT KEY HERE'
 
-Run the file main.py located **in the map API** in a terminal.
-Next, run the file main.py located **in the client map** in another terminal.
+Run the file main.py **located in the API map** in a terminal.
+Next, run the file main.py **located in the client map** in another terminal.
 
 Then go to <http://127.0.0.1:8888> where the website will be running.
 
