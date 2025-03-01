@@ -315,7 +315,7 @@ def get_opposite_emotion_by(emotion):
 def create_playlist_by_id(id):
     '''
     API endpoint - POST.
-    Create a playlist based on an emotion ID.
+    Get song recommendations from Open AI's API  based on an emotion ID.
 
     Args:
         id (int): An emotion ID.
@@ -351,7 +351,7 @@ def create_playlist_by_id(id):
 def create_playlist_by_emotion(emotion):
     '''
     API endpoint - POST.
-    Create a playlist based on an emotion name.
+    Get song recommendations from Open AI's API based on an emotion name.
 
     Args:
         emotion (str): an emotion name.
