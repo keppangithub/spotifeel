@@ -5,36 +5,49 @@ from datetime import date
 import emotionController
 
 class clientController:
+    '''
+    Controller class handling client-side functionality for the Spotifeel application.
+    Manages routing, authentication with Spotify, and emotion-based playlist generation.
+    '''
 
     base_url : str = 'http://127.0.0.1:5000'
 
     @staticmethod
     def login_page():
-        '''Return template login.html'''
+        '''        
+        Returns:
+            Rendered login.html template
+        '''
+
         return render_template('login.html')
     
     @staticmethod
     def oauth_spotify():
         '''
-        Get auth_url via the login() function in the class SpotifyApi
-
-        Redirect user to the login Spotify's login via Spotify API
-
+        Initiates Spotify OAuth authentication flow.
+        
+        Gets auth_url via the login() function in SpotifyApi class and
+        redirects user to Spotify's login page.
+        
+        Returns:
+            Redirect to Spotify authorization page
         '''
+
         auth_url = user.redirectToAuthCodeFlow()
         return redirect(auth_url)
     
     @staticmethod
     def login_callback():
         '''
-        The user has been redirected to this endpoint after having logged in to Spotify
-
-        Check if the code has been received from the method redirectToAuthCodeFlow() from the class SpotifyApi
-        Exchange the received code with an access token via the method login_callback() from the class SpotifyApi
-
-        Redirect user to the index page
-
+        Handles the callback after Spotify authentication.
+        
+        The user is redirected to this endpoint after logging in to Spotify.
+        Exchanges the received authorization code for an access token.
+        
+        Returns:
+            Redirect to index page on success or error JSON on failure
         '''
+
         if 'error' in request.args:
                 return jsonify({'error': request.args['error']})
 
@@ -47,14 +60,15 @@ class clientController:
     @staticmethod
     def post_index():
         '''
-        Check if user is logged in.
-        If the user is not logged in redirect them to the login page.
-
-        Else get and store userID in object.
-
-        If GET, Get todays date and return chat page.
-        If POST, Get user diary input and run the prompt via OPEN AI API and redirect user to the verify page.
+        Handles the callback after Spotify authentication.
+        
+        The user is redirected to this endpoint after logging in to Spotify.
+        Exchanges the received authorization code for an access token.
+        
+        Returns:
+            Redirect to index page on success or error JSON on failure
         '''
+
         if not user.is_user_logged_in():
             print("ERROR: user is not logged in")
             return redirect('/login')
@@ -79,6 +93,16 @@ class clientController:
     
     @staticmethod
     def get_index():
+        '''
+        Renders the main chat interface.
+        
+        Verifies user authentication and renders the chat template with today's date.
+        
+        Returns:
+            Rendered chat.html template or redirect to login page if user is not
+                authenticated
+        '''
+
         if not user.is_user_logged_in():
             print("ERROR: user is not logged in")
             return redirect ('/login')
@@ -91,9 +115,16 @@ class clientController:
     @staticmethod
     def verify_emotion():
         '''
-        returns:
-        - verify.html
+        Confirms detected emotions with the user.
+        
+        Retrieves emotion data from the request, parses it, and presents
+        options for the user to confirm or modify the detected emotions.
+        
+        Returns:
+            Rendered verify.html template with emotion options or redirect
+                to index if no emotion data is available
         '''
+
         response = request.args.get('response', None)
 
         if response is None:
@@ -114,18 +145,18 @@ class clientController:
     @staticmethod
     def playlist():
         '''
-        Method used to create a playlist using GPT and post to Spotify.
-        Check if user is logged in.
-        If the user is not logged in redirect them to the login page.
-
-        Check if the user choose to stay in the feeling or wanted the opposite feeling.
-        Create a playlist based on the choosen feeling.
-
+        Creates and displays a personalized Spotify playlist based on detected emotions.
+        
+        Checks user authentication, processes the user's emotion preference (stay with
+        current feeling or choose opposite), generates song recommendations using the
+        emotion API, and creates a Spotify playlist with those songs.
+        
         Returns:
-        - if not logged in: return redirect to login.html
-        - if logged in: return redirect to playlist.html
+            Rendered playlist.html template with created playlist details or redirect to
+                login page if user is not authenticated
 
         '''
+
         if not user.is_user_logged_in():
             print("ERROR: user is not logged in")
             return redirect ('/login')
@@ -165,8 +196,22 @@ class clientController:
 
 
     def format_playlist(tracks, emotion):
-        playlist = {'name' : f'{emotion}', 'tracks' : tracks['tracks']}
+        '''
+        Formats track data for playlist creation.
+        
+        Takes track information and emotion type to create a properly
+        formatted playlist object for the Spotify API.
+        
+        Args:
+            tracks (dict): Dictionary containing track information from the 
+            recommendation API emotion (str): The emotion label for naming
+            the playlist
+            
+        Returns:
+            dict: Formatted playlist dictionary with name and tracks
+        '''
 
+        playlist = {'name' : f'{emotion}', 'tracks' : tracks['tracks']}
         return playlist
 
 
