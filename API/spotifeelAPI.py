@@ -15,18 +15,33 @@ json_file_path = os.path.join(os.getcwd(), 'static', 'swagger.json')
 with open(json_file_path, 'w') as json_file:
     json.dump(SWAGGER_SPEC, json_file, indent=2)'''
 
-def get_loaded_playlist():
+def get_loaded_playlist() ->list:
     '''
+    Call the function get_loaded_playlist()
+    
+    Returns:
+        list: A list of dictionaries, each representing a playlist with a playlist 'id' and 'uri'.
+        If an error occurs an empty list is returned.
     '''
     return playlists.get_loaded_playlist()
 
-def get_playlists():
+def get_playlists() -> list:
     '''
-    Returns the function 
+    Call the function get_playlists().
+    
+    Returns:
+        A list of dictionaries, each representing a playlist with a playlist 'id' and 'uri'.
     '''
     return playlists.get_playlists()
 
-def get_playlists_by_id(id):
+def get_playlists_by_id(id) -> str:
     '''
+    Call the function get_playlists_by_id.
+    
+    Args:
+        id (str): playlist id.
+        
+    Returns:
+        str: The URI of the playlist, or a message saying 'No playlist found' if not found.
     '''
     return playlists.get_playlists_by_id(id)
