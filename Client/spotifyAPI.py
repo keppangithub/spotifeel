@@ -127,7 +127,6 @@ class SpotifyAPI:
             response = response.json()
 
             self.user_id = response['id']
-            return response.status
             
         except Exception as e:
             print(f"Exception occured: {e}")
