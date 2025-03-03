@@ -201,7 +201,6 @@ class clientController:
             display_feeling = emotion.capitalize() 
             return render_template('playlist.html', new_playlist_id=new_playlist_id, song_info=song_info, display_feeling=display_feeling, today=today)
 
-
     def format_playlist(tracks, emotion):
         '''
         Formats track data for playlist creation.
