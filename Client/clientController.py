@@ -75,18 +75,16 @@ class clientController:
         else:
             try:
                 status = user.get_user_information()
+                print("status here")
+                print(status)
+            
+                userPrompt = request.form.get('userPrompt')
                 
-                if status == 200:
-                    userPrompt = request.form.get('userPrompt')
-
-                    response = requests.post(f'{clientController.base_url}/emotions/generate',
-                                            json={'prompt': userPrompt},
-                                            headers={'Content-Type': 'application/json'})
+                print("kommer vi hit?")
+                response = requests.post(f'{clientController.base_url}/emotions/generate',
+                                        json={'prompt': userPrompt},
+                                        headers={'Content-Type': 'application/json'})
                     
-                else:
-                    print(f"An error occurred: {status}")
-                    return redirect('/')
-                
             except Exception as e:
                 print(f"Exception : {e}")
 

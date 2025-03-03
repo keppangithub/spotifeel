@@ -125,16 +125,12 @@ class SpotifyAPI:
 
         try:
             response = requests.get(url, headers=req_header)
-            if response.status_code == 200:
+      
+            response = response.json()
 
-                response = response.json()
-
-                self.user_id = response['id']
-                return response.status_code
-                
-            else:
-                print(f"An Error ocurred, Status code: {response.status_code}")
-                return response.status_code
+            self.user_id = response['id']
+            return response.status
+    
             
         except Exception as e:
             print(f"Exception occured: {e}")
