@@ -1,5 +1,4 @@
 import emotionAPI
-
 def negated_feeling_id(emotion_id: int) -> str:
     '''
     Check which category the emotion received is a part of, and return the opposite emotion.
@@ -40,8 +39,8 @@ def negated_feeling_str(emotion: str) -> str:
     '''
     emotions = {
         "happy": ["euphoric", "loving", "happy", "Euphoric", "Loving", "Happy"],
-        "angry": ["urious", "frustrated", "Furious", "Frustrated"],
-        "sad": ["horrified", "disappointed", "useless", "regretful", "dejected", "unhappy", "scared", "anxious", "Horrified", "Disappointed", "Useless", "Regretful", "Dejected", "Unhappy", "Dcared", "Anxious"]
+        "angry": ["furious", "frustrated", "Furious", "Frustrated"],
+        "sad": ["horrified", "disappointed", "useless", "regretful", "dejected", "unhappy", "scared", "anxious", "Horrified", "Disappointed", "Useless", "Regretful", "Dejected", "Unhappy", "Scared", "Anxious"]
     } 
     for category, emotions in emotions.items():
         if emotion in emotions:

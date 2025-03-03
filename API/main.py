@@ -135,11 +135,11 @@ def get_emotions():
         app.logger.error(f"Error fetching emotions: {str(e)}")
         raise
 
-@app.route('/emotions/generate', methods=['POST'])
+@app.route('/analyze-emotion', methods=['GET'])
 @handle_exceptions
 def generate_emotion():
     '''
-    API endpoint - POST.
+    API endpoint - GET.
     Generate an emotion based on a user-provided prompt.
 
     Returns:
@@ -147,21 +147,13 @@ def generate_emotion():
 
     Error Handling:
         - 415: Unsupported Media Type if the Content-Type is not application/json.
-        - 400: Bad Request if the request body is empty or if the 'prompt' parameter is missing or empty.
         - 422: Unprocessable Entity if the prompt cannot generate a valid emotion.
-        - 500: Internal Server Error if an unexpected error occurs during processing.
     '''
     if not request.is_json:
         return jsonify({"error": "Unsupported media type", "message": "Content-Type must be application/json"}), 415
     
-    data = request.get_json()
-    if not data:
-        return jsonify({"error": "Bad request", "message": "Empty request body"}), 400
-    
-    if 'prompt' not in data:
-        return jsonify({"error": "Missing parameter", "message": "Required parameter 'prompt' missing"}), 400
-    
-    prompt = str(data.get('prompt'))
+    prompt = request.args.get('prompt')
+    print(f'prompt: {prompt}')
     
     if not prompt.strip():
         return jsonify({"error": "Invalid value", "message": "Prompt cannot be empty"}), 400
@@ -194,12 +186,11 @@ def get_emotion_by_id(id):
     Error Handling:
         - 400: Invalid parameter if the ID is not an integer or not between 1 and 13.
         - 404: Not Found if the emotion with the given ID is not found.
-        - 500: Internal Server Error if an unexpected error occurs during processing.
     '''
     if not isinstance(id, int):
         return jsonify({"error": "Invalid parameter", "message": "Emotion ID must be an integer"}), 400
     
-    if not (1 <= id <= 13):
+    if not (1 <= id <= 14):
         return jsonify({"error": "Invalid parameter", "message": "Emotion ID must be between 1 and 13"}), 400
 
     try:
@@ -230,7 +221,6 @@ def get_emotion_by_str(emotion):
     Error Handling:
         - 400: Invalid parameter if the emotion name is empty or only whitespace.
         - 404: Not Found if the emotion with the given name is not found.
-        - 500: Internal Server Error if an unexpected error occurs during processing.
     '''
     if not emotion or not emotion.strip():
         return jsonify({"error": "Invalid parameter", "message": "Emotion name cannot be empty"}), 400
@@ -263,9 +253,8 @@ def get_opposite_emotion(id):
     Error Handling:
         - 400: Invalid parameter if the emotion ID is not between 1 and 13.
         - 422: Processing error if the opposite emotion for the given ID could not be found.
-        - 500: Internal Server Error if an unexpected error occurs during processing.
     '''
-    if not (1 <= id <= 13):
+    if not (1 <= id <= 14):
         return jsonify({"error": "Invalid parameter", "message": "Emotion ID must be between 1 and 13"}), 400
     
     try:
@@ -295,7 +284,6 @@ def get_opposite_emotion_by(emotion):
 
     Error Handling:
         - 422: Processing error if the opposite emotion for the given name could not be found.
-        - 500: Internal Server Error if an unexpected error occurs during processing.
     '''
        
     try:
@@ -310,11 +298,11 @@ def get_opposite_emotion_by(emotion):
         app.logger.error(f"Error finding opposite emotion for ID {id}: {str(e)}")
         raise
 
-@app.route('/song-recommendations/<int:id>', methods=['POST'])
+@app.route('/song-recommendations/<int:id>', methods=['GET'])
 @handle_exceptions
 def create_playlist_by_id(id):
     '''
-    API endpoint - POST.
+    API endpoint - GET.
     Get song recommendations from Open AI's API  based on an emotion ID.
 
     Args:
@@ -326,12 +314,11 @@ def create_playlist_by_id(id):
     Error Handling:
         - 400: Invalid parameter if the emotion ID is not an integer or not between 1 and 13.
         - 422: Processing error if the playlist cannot be created for the given emotion ID.
-        - 500: Internal Server Error if an unexpected error occurs during processing.
     '''
     if not isinstance(id, int):
         return jsonify({"error": "Invalid parameter", "message": "Emotion ID must be an integer"}), 400
     
-    if not (1 <= id <= 13):
+    if not (1 <= id <= 14):
         return jsonify({"error": "Invalid parameter", "message": "Emotion ID must be between 1 and 13"}), 400
     
     try:
@@ -346,7 +333,7 @@ def create_playlist_by_id(id):
         app.logger.error(f"Error creating playlist for ID {id}: {str(e)}")
         raise
 
-@app.route('/song-recommendations/<string:emotion>', methods=['POST'])
+@app.route('/song-recommendations/<string:emotion>', methods=['GET'])
 @handle_exceptions
 def create_playlist_by_emotion(emotion):
     '''
@@ -362,7 +349,6 @@ def create_playlist_by_emotion(emotion):
     Error Handling:
         - 400: Invalid parameter if the emotion name is empty or only whitespace.
         - 422: Processing error if the playlist cannot be created for the given emotion name.
-        - 500: Internal Server Error if an unexpected error occurs during processing.
     '''
     if not emotion or not emotion.strip():
         return jsonify({"error": "Invalid parameter", "message": "Emotion name cannot be empty"}), 400
