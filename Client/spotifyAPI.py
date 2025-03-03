@@ -47,7 +47,7 @@ class SpotifyAPI:
             return True
 
     #Authorization Code Flow (https://developer.spotify.com/documentation/web-api/tutorials/code-flow)
-    def redirectToAuthCodeFlow(self) -> str:
+    def redirect_to_auth_code_flow(self) -> str:
         '''
         Use spotify's API to create a authorization URL through which a user can login to their Spotify Account (OAuth).
 
