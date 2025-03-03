@@ -33,7 +33,7 @@ class clientController:
             Redirect to Spotify authorization page
         '''
 
-        auth_url = user.redirectToAuthCodeFlow()
+        auth_url = user.redirect_to_auth_code_flow()
         return redirect(auth_url)
     
     @staticmethod
