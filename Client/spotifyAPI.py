@@ -120,8 +120,6 @@ class SpotifyAPI:
         url = self.base_url + '/me'
 
         req_header = self.get_auth_header()
-        
-        print(req_header)
 
         try:
             response = requests.get(url, headers=req_header)
@@ -130,12 +128,10 @@ class SpotifyAPI:
 
             self.user_id = response['id']
             return response.status
-    
             
         except Exception as e:
             print(f"Exception occured: {e}")
             return
-
 
     def create_new_playlist(self, user_id: str, new_playlist_name: str) -> str:
         '''
