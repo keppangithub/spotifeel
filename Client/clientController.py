@@ -74,13 +74,10 @@ class clientController:
 
         else:
             try:
-                status = user.get_user_information()
-                print("status here")
-                print(status)
+                user.get_user_information()
             
                 userPrompt = request.form.get('userPrompt')
                 
-                print("kommer vi hit?")
                 response = requests.post(f'{clientController.base_url}/emotions/generate',
                                         json={'prompt': userPrompt},
                                         headers={'Content-Type': 'application/json'})
@@ -177,13 +174,16 @@ class clientController:
             if action == "false":
                 emotion = requests.get(f'{clientController.base_url}/emotions/{emotion}/opposite')
                 emotion = emotion.json()
+                
             #Create playlist, OPEN & Spotify work together
             today = date.today()
             user.get_user_information()
+            
             songs_for_playlist = requests.post(f'{clientController.base_url}/song-recommendations/{emotion}',
                         headers={'Content-Type': 'application/json'})
             emotion = str(emotion)
             json_format = {'name' : 'name', 'tracks' : []}
+            
             if songs_for_playlist.status_code == 200:
                 response_data = songs_for_playlist.json()
                 json_format = clientController.format_playlist(response_data, emotion)
