@@ -68,18 +68,27 @@ class clientController:
         Returns:
             Redirect to index page on success or error JSON on failure
         '''
-
         if not user.is_user_logged_in():
             print("ERROR: user is not logged in")
             return redirect('/login')
 
         else:
-            user.get_user_information()
-            userPrompt = request.form.get('userPrompt')
+            try:
+                status = user.get_user_information()
+                
+                if status == 200:
+                    userPrompt = request.form.get('userPrompt')
 
-            response = requests.post(f'{clientController.base_url}/emotions/generate',
-                                     json={'prompt': userPrompt},
-                                     headers={'Content-Type': 'application/json'})
+                    response = requests.post(f'{clientController.base_url}/emotions/generate',
+                                            json={'prompt': userPrompt},
+                                            headers={'Content-Type': 'application/json'})
+                    
+                else:
+                    print(f"An error occurred: {status}")
+                    return redirect('/')
+                
+            except Exception as e:
+                print(f"Exception : {e}")
 
 
         # Only try to parse JSON if we get a successful response

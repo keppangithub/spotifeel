@@ -120,13 +120,25 @@ class SpotifyAPI:
         url = self.base_url + '/me'
 
         req_header = self.get_auth_header()
+        
+        print(req_header)
 
-        response = requests.get(url, headers=req_header)
-        response = response.json()
+        try:
+            response = requests.get(url, headers=req_header)
+            if response.status_code == 200:
 
-        self.user_id = response['id']
+                response = response.json()
 
-        return
+                self.user_id = response['id']
+                return response.status_code
+                
+            else:
+                print(f"An Error ocurred, Status code: {response.status_code}")
+                return response.status_code
+            
+        except Exception as e:
+            print(f"Exception occured: {e}")
+            return
 
 
     def create_new_playlist(self, user_id: str, new_playlist_name: str) -> str:
