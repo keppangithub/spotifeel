@@ -49,7 +49,7 @@ Linux/macOS
 Windows
 
 ```
-venv\Scripts\activate
+myenv\Scripts\activate
 ```
 
 **Install the required Python packages**
