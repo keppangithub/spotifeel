@@ -54,5 +54,3 @@ def add_to_playlist(uri: str) -> None:
         id += 1
     except IOError as e:
         print(f"Error writing to file {file_name}: {e}")
-
-print(get_playlists())
