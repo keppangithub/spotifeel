@@ -95,7 +95,8 @@ class clientController:
             print(f"Error: API returned status code {response.status_code}")
             
             error_message="Det gick tyvärr inte att skapa en spellista utifrån din text. Försök med ett nytt inlägg!"
-            return redirect(url_for('index', error_message=error_message))
+            today = date.today()
+            return render_template('chat.html', today=today, error_message=error_message)
     
     @staticmethod
     def get_index():
