@@ -190,7 +190,7 @@ def get_emotion_by_id(id):
     if not isinstance(id, int):
         return jsonify({"error": "Invalid parameter", "message": "Emotion ID must be an integer"}), 400
     
-    if not (1 <= id <= 14):
+    if not (1 <= id <= 13):
         return jsonify({"error": "Invalid parameter", "message": "Emotion ID must be between 1 and 13"}), 400
 
     try:
@@ -254,7 +254,7 @@ def get_opposite_emotion(id):
         - 400: Invalid parameter if the emotion ID is not between 1 and 13.
         - 422: Processing error if the opposite emotion for the given ID could not be found.
     '''
-    if not (1 <= id <= 14):
+    if not (1 <= id <= 13):
         return jsonify({"error": "Invalid parameter", "message": "Emotion ID must be between 1 and 13"}), 400
     
     try:
@@ -318,7 +318,7 @@ def create_playlist_by_id(id):
     if not isinstance(id, int):
         return jsonify({"error": "Invalid parameter", "message": "Emotion ID must be an integer"}), 400
     
-    if not (1 <= id <= 14):
+    if not (1 <= id <= 13):
         return jsonify({"error": "Invalid parameter", "message": "Emotion ID must be between 1 and 13"}), 400
     
     try:
