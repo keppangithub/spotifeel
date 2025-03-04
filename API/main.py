@@ -263,7 +263,7 @@ def get_opposite_emotion(id):
         if not result:
             return jsonify({"error": "Processing error", "message": f"Could not find opposite for emotion ID {id}"}), 422
         
-        return result
+        return jsonify(result)
     
     except Exception as e:
         app.logger.error(f"Error finding opposite emotion for ID {id}: {str(e)}")

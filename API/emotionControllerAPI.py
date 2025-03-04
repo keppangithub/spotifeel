@@ -53,7 +53,7 @@ def negated_feeling_str(emotion: str) -> str:
             if category == "sad":
                 return "happy"
             
-        return "unknown"
+    return "unknown"
 
 def get_id(emotion : str) -> str:
     '''
