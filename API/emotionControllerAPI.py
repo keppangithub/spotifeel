@@ -16,13 +16,13 @@ def negated_feeling_id(emotion_id: int) -> str:
     }
     
     if emotion_id in emotions["happy"]:
-        return "sad"
+        return emotionAPI.get_emotion_by_id_json(11)
     
     if emotion_id in emotions["angry"]:
-        return "chill"
+        return emotionAPI.get_emotion_by_id_json(6)
     
     if emotion_id in emotions["sad"]:
-        return "happy"
+        return emotionAPI.get_emotion_by_id_json(7)
     
     return "unknown"
 
@@ -45,13 +45,13 @@ def negated_feeling_str(emotion: str) -> str:
     for category, emotions in emotions.items():
         if emotion in emotions:
             if category == "happy":
-                return "sad"
+                return emotionAPI.get_emotion_by_id_json(11)
             
             if category == "angry":
-                return "chill"
+                return emotionAPI.get_emotion_by_id_json(6)
             
             if category == "sad":
-                return "happy"
+                return emotionAPI.get_emotion_by_id_json(7)
             
     return "unknown"
 
@@ -99,4 +99,10 @@ def get_regular_emotion(emotion_id: int) -> str:
         str: the name of the emotion or an error message (if the emotion was not found).
 
     '''
+
+    for emotion in emotionAPI.emotions:
+        if emotion.id == id:
+            return emotion.name
+        
+    return 'Invalid emotion'
     return emotionAPI.get_emotion_by_id(emotion_id)
