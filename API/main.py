@@ -135,7 +135,7 @@ def get_emotions():
         app.logger.error(f"Error fetching emotions: {str(e)}")
         raise
 
-@app.route('/analyze-emotion', methods=['GET'])
+@app.route('/recommend/emotion', methods=['GET'])
 @handle_exceptions
 def generate_emotion():
     '''
@@ -298,7 +298,7 @@ def get_opposite_emotion_by(emotion):
         app.logger.error(f"Error finding opposite emotion for ID {id}: {str(e)}")
         raise
 
-@app.route('/song-recommendations/<int:id>', methods=['GET'])
+@app.route('/recommend/songs/<int:id>', methods=['GET'])
 @handle_exceptions
 def create_playlist_by_id(id):
     '''
@@ -333,7 +333,7 @@ def create_playlist_by_id(id):
         app.logger.error(f"Error creating playlist for ID {id}: {str(e)}")
         raise
 
-@app.route('/song-recommendations/<string:emotion>', methods=['GET'])
+@app.route('/recommend/songs/<string:emotion>', methods=['GET'])
 @handle_exceptions
 def create_playlist_by_emotion(emotion):
     '''

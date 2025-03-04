@@ -72,8 +72,7 @@ def run_prompt(text: str) -> str:
     else:
         if(prompt_counter<10):
             run_prompt(text)
-            prompt_counter+1
-            
+            prompt_counter+1  
         else:
             return "Error, couldn't define a feeling."
 
