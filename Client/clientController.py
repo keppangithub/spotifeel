@@ -54,7 +54,7 @@ class clientController:
         if 'code' in request.args:
             code = request.args['code']
             user.login_callback(code)
-
+ 
             return redirect('/')
         
     @staticmethod
@@ -83,6 +83,7 @@ class clientController:
                     
             except Exception as e:
                 print(f"Exception : {e}")
+                
 
 
         # Only try to parse JSON if we get a successful response
@@ -92,7 +93,9 @@ class clientController:
         
         else:
             print(f"Error: API returned status code {response.status_code}")
-            return redirect('/')
+            
+            error_message="Det gick tyvärr inte att skapa en spellista utifrån din text. Försök med ett nytt inlägg!"
+            return redirect(url_for('index', error_message=error_message))
     
     @staticmethod
     def get_index():
@@ -113,7 +116,10 @@ class clientController:
         else:
             user.get_user_information()
             today = date.today()
-            return render_template('chat.html', today=today)
+            
+            error_message = request.args.get('error_message', None)
+        
+            return render_template('chat.html', today=today, error_message=error_message)
         
     @staticmethod
     def verify_emotion():
