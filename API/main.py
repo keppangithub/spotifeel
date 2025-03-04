@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 import promptGPT
 import emotionControllerAPI
-import playlist_API as playlist_tmp
+import playlist_API as playlist_API
 from werkzeug.exceptions import BadRequest, NotFound, InternalServerError
 
 app = Flask(__name__)
@@ -263,7 +263,7 @@ def get_opposite_emotion(id):
         if not result:
             return jsonify({"error": "Processing error", "message": f"Could not find opposite for emotion ID {id}"}), 422
         
-        return jsonify(result)
+        return result
     
     except Exception as e:
         app.logger.error(f"Error finding opposite emotion for ID {id}: {str(e)}")
@@ -292,7 +292,7 @@ def get_opposite_emotion_by(emotion):
         if not result:
             return jsonify({"error": "Processing error", "message": f"Could not find opposite for emotion {emotion}"}), 422
         
-        return jsonify(result)
+        return result
     
     except Exception as e:
         app.logger.error(f"Error finding opposite emotion for ID {id}: {str(e)}")
@@ -378,7 +378,7 @@ def get_playlists_id(id):
         Response: A JSON response containing the requested playlist if successful, or an error message with the appropriate HTTP status code.
 
     '''
-    return playlist_tmp.get_playlist_id(int(id))
+    return playlist_API.get_playlist_id(int(id))
 
 @app.route('/playlists', methods=['GET'])
 def get_playlists():
@@ -389,7 +389,7 @@ def get_playlists():
     Returns:
         Response: A JSON response containing the list of loaded playlists if successful, or an error message with the appropriate HTTP status code.
     '''
-    return playlist_tmp.get_playlist()
+    return playlist_API.get_playlist()
 
 
 @app.route('/playlists', methods=['POST'])
@@ -419,10 +419,10 @@ def post_playlists():
         if not json_data:
             return jsonify({"error": "Request must be Json"}), 400
         
-        validate_data = playlist_tmp.validate_playlist_json(json_data)
+        validate_data = playlist_API.validate_playlist_json(json_data)
         
         if validate_data is True:
-            return playlist_tmp.post_playlist(access_token, json_data), 201
+            return playlist_API.post_playlist(access_token, json_data), 201
         
         else:
             return jsonify({"error": validate_data}), 400

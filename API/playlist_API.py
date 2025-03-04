@@ -1,7 +1,7 @@
 from flask import jsonify
 from spotify_API import Spotify_API_TMP
 from datetime import date
-import spotifeelAPI as spotifeel
+import playlists as playlists
 
 def get_playlist():
     '''
@@ -14,7 +14,7 @@ def get_playlist():
     Error Handling:
         - 401: If no playlists have been created or loaded into the system.
     '''
-    playlist = spotifeel.get_loaded_playlist()
+    playlist = playlists.get_loaded_playlist()
     
     if (1 > len(playlist)):
         return jsonify({"error": "No playlist has been created"}), 401
@@ -34,15 +34,15 @@ def get_playlist_id(id):
     Error Handling:
         - 401: If no playlist has been created or the provided ID is invalid.
     '''
-    playlist = spotifeel.get_loaded_playlist()
+    playlist = playlists.get_loaded_playlist()
     if (1 > len(playlist)):
         return jsonify({"error": "No playlist has been created"}), 401
     
     if not (1 <= id <= len(playlist)):
         return jsonify({"error": "Invalid playlist ID"}), 401
 
-    playlist = spotifeel.get_loaded_playlist()
-    playlist_id = int(id)
+    playlist = playlists.get_playlists()
+    playlist_id = int(id) - 1
     
     return jsonify(playlist[playlist_id]), 200
 
@@ -68,11 +68,13 @@ def post_playlist(access_token, songs_for_playlist):
 
     today = date.today()
     new_playlist_id = user.create_new_playlist(user.user_id, f'{name} - {today}')
+    uri = str(new_playlist_id)
 
     tracks = user.add_tracks_to_playlist(new_playlist_id, songs_for_playlist.get('tracks'))
 
     json_data = {'playlist_id' : new_playlist_id, 'tracks' : tracks}
     
+    playlists.add_to_playlist(uri)
     return json_data
 
 def validate_playlist_json(json_data):

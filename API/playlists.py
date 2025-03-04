@@ -89,6 +89,9 @@ def add_to_playlist(uri: str) -> None:
     
     with open(file_name, 'w') as file:
         json.dump(playlists, file, indent=4)
+    with open(txt_file, 'w', encoding='utf-8') as file:
+        for playlist in playlists:
+            file.write(f"{playlist['id']},{playlist['uri']}\n")
         
     id+=1
 

@@ -173,6 +173,7 @@ class clientController:
             if action == "false":
                 emotion = requests.get(f'{clientController.base_url}/emotions/{emotion}/opposite')
                 emotion = emotion.json()
+                emotion = emotion.get('name')
                 
             #Create playlist, OPEN & Spotify work together
             today = date.today()
