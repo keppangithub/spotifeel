@@ -4,7 +4,8 @@ info:
   description: API for managing emotions and generating playlists
   version: 1.0.0
 servers:
-  - url: https://api.example.com
+  - url: http://localhost:8888
+    description: Local server
 
 paths:
   /emotions:
@@ -146,7 +147,7 @@ paths:
                   name:
                     type: string
 
-  /emotions/generate:
+  /recommend/emotion:
     post:
       summary: Generate an emotion based on a user-provided prompt
       operationId: generateEmotion
