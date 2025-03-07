@@ -1,160 +1,37 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "1.0.0",
     "title": "Spotifeel",
-    "description": "API for retrieving playlists based on emotions"
+    "description": "API for retrieving playlists based on  emotions",
+    "version": "1.0.0"
   },
   "servers": [
     {
-      "description": "Local server",
-      "url": "http://localhost:8888"
-    }
-  ],
-  "security": [
-    {
-      "BearerAuth": []
+      "url": "http://localhost:8888",
+      "description": "Local server"
     }
   ],
   "paths": {
     "/emotions": {
       "get": {
-        "summary": "Retrieve all emotions",
-        "description": "Retrieves a list of all emotions supported by the API",
+        "summary": "Retrieve a list of all emotions",
+        "operationId": "getEmotions",
         "responses": {
           "200": {
-            "description": "List of all emotions",
+            "description": "A list of emotions",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Emotions"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/emotions/{emotionId}": {
-      "get": {
-        "summary": "Retrieve emotion by ID",
-        "description": "Retrieves a specific emotion based on its ID",
-        "parameters": [
-          {
-            "name": "emotionId",
-            "in": "path",
-            "required": true,
-            "description": "ID for emotions: 1=furious, 2=frustrated, 3=horrified, 4=disappointed, 5=euphoric, 6=loving, 7=happy, 8=useless, 9=regretful, 10=dejected, 11=unhappy, 12=scared, 13=anxious",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 13
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Emotion found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Emotion"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Emotion with the specified ID does not exist"
-          }
-        }
-      }
-    },
-    "/playlists/{emotionId}/add": {
-      "post": {
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
-        "summary": "Create a playlist based on emotion",
-        "description": "Creates a new playlist based on the user's emotion and returns the created playlist",
-        "parameters": [
-          {
-            "name": "emotionId",
-            "in": "path",
-            "required": true,
-            "description": "ID for emotions: 1=furious, 2=frustrated, 3=horrified, 4=disappointed, 5=euphoric, 6=loving, 7=happy, 8=useless, 9=regretful, 10=dejected, 11=unhappy, 12=scared, 13=anxious",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 13
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Playlist created and found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Playlist"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "User must be logged in to create a playlist"
-          },
-          "404": {
-            "description": "Emotion with the specified ID does not exist"
-          }
-        }
-      }
-    },
-    "/playlists": {
-      "get": {
-        "summary": "Retrieve all created playlists",
-        "description": "Returns all playlist in a list with their ID and URI if there is any playlists created.",
-        "responses": {
-          "200": {
-            "description": "List of all playlists",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Playlist_Summary"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/playlists/{id}": {
-      "get": {
-        "summary": "Retrieve a URI to a specific playlist",
-        "description": "Returns a single playlist based on the ID.",
-        "parameters": [
-          {
-            "name": "search_id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Selected playlist",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "uri": {
-                      "type": "string"
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
                     }
                   }
                 }
@@ -163,76 +40,189 @@
           }
         }
       }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Emotions": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "id": {
+    },
+    "/emotions/{id}": {
+      "get": {
+        "summary": "Retrieve a specific emotion by ID",
+        "operationId": "getEmotionById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
               "type": "integer"
-            },
-            "description": {
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An emotion",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/emotions/{emotion}": {
+      "get": {
+        "summary": "Retrieve a specific emotion by name",
+        "operationId": "getEmotionByName",
+        "parameters": [
+          {
+            "name": "emotion",
+            "in": "path",
+            "required": true,
+            "schema": {
               "type": "string"
             }
-          },
-          "example": {
-            "id": 7,
-            "description": "Happy"
           }
-        }
-      },
-      "Emotion": {
-        "type": "object",
-        "properties": {
-          "description": {
-            "type": "string"
-          }
-        }
-      },
-      "Playlist": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "songs": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Song"
+        ],
+        "responses": {
+          "200": {
+            "description": "An emotion ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer"
+                }
+              }
             }
-          },
-          "uri": {
-            "type": "string",
-            "description": "URI to the playlist on Spotify"
+          }
+        }
+      }
+    },
+    "/emotions/{id}/opposite": {
+      "get": {
+        "summary": "Retrieve the opposite emotion by ID",
+        "operationId": "getOppositeEmotionById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The opposite emotion",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/emotions/{emotion}/opposite": {
+      "get": {
+        "summary": "Retrieve the opposite emotion by name",
+        "operationId": "getOppositeEmotionByName",
+        "parameters": [
+          {
+            "name": "emotion",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The opposite emotion",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/playlists": {
+      "get": {
+        "summary": "Retrieve all playlists of the current user",
+        "operationId": "getAllPlaylists",
+        "responses": {
+          "200": {
+            "description": "A list of playlists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
-      "Song": {
-        "type": "object",
-        "properties": {
-          "artist": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "uri": {
-            "type": "string"
+      "post": {
+        "summary": "Create a new playlist on the user's Spotify account",
+        "operationId": "createPlaylist",
+        "responses": {
+          "201": {
+            "description": "Playlist created successfully"
           }
         }
-      },
-      "Playlist_Summary": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "uri": {
-            "type": "string"
+      }
+    },
+    "/playlists/{id}": {
+      "get": {
+        "summary": "Retrieve a specific playlist by ID",
+        "operationId": "getPlaylistById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A playlist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
