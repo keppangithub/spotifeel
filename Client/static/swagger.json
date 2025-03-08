@@ -40,6 +40,50 @@
                 {
                   "id": 2,
                   "name": "Frustrated"
+                },
+                {
+                  "id": 3,
+                  "name": "Horrified"
+                },
+                {
+                  "id": 4,
+                  "name": "Disappointed"
+                },
+                {
+                  "id": 5,
+                  "name": "Euphoric"
+                },
+                {
+                  "id": 6,
+                  "name": "Loving"
+                },
+                {
+                  "id": 7,
+                  "name": "Happy"
+                },
+                {
+                  "id": 8,
+                  "name": "Useless"
+                },
+                {
+                  "id": 9,
+                  "name": "Regretful"
+                },
+                {
+                  "id": 10,
+                  "name": "Dejected"
+                },
+                {
+                  "id": 11,
+                  "name": "Unhappy"
+                },
+                {
+                  "id": 12,
+                  "name": "Scared"
+                },
+                {
+                  "id": 13,
+                  "name": "Anxious"
                 }
               ]
             }
