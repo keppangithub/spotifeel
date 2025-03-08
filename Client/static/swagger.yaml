@@ -303,3 +303,6 @@ paths:
                   titel: Cry Me a River
         '404':
           description: Emotion not found
+
+securityDefinitions:
+  spotify_au
