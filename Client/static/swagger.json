@@ -8,7 +8,7 @@
   "host": "localhost:8888",
   "basePath": "/",
   "schemes": [
-    "https"
+    "http"
   ],
   "produces": [
     "application/json"
