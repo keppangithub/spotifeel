@@ -16,9 +16,11 @@
   "consumes": [
     "application/json"
   ],
+
   "x-swagger-ui-config": {
     "supportedSubmitMethods": []
   },
+
   "paths": {
     "/emotions": {
       "get": {
@@ -53,7 +55,52 @@
                 {
                   "id": 2,
                   "name": "Frustrated"
+                },
+                {
+                  "id": 3,
+                  "name": "Happy"
+                },
+                {
+                  "id": 4,
+                  "name": "Furious"
+                },
+                {
+                  "id": 5,
+                  "name": "Frustrated"
+                },
+                {
+                  "id": 6,
+                  "name": "Horrified"
+                },
+                {
+                  "id": 7,
+                  "name": "Disappointed"
+                },
+                {
+                  "id": 8,
+                  "name": "Useless"
+                },
+                {
+                  "id": 9,
+                  "name": "Regretful"
+                },
+                {
+                  "id": 10,
+                  "name": "Dejected"
+                },
+                {
+                  "id": 11,
+                  "name": "Unhappy"
+                },
+                {
+                  "id": 12,
+                  "name": "Scared"
+                },
+                {
+                  "id": 13,
+                  "name": "Anxious"
                 }
+
               ]
             }
           }
