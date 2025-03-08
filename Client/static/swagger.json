@@ -16,6 +16,9 @@
   "consumes": [
     "application/json"
   ],
+  "x-swagger-ui-config": {
+    "supportedSubmitMethods": []
+  },
   "paths": {
     "/emotions": {
       "get": {
@@ -28,7 +31,17 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Emotion"
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "Unique identifier for the emotion"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the emotion"
+                  }
+                }
               }
             },
             "examples": {
@@ -40,50 +53,6 @@
                 {
                   "id": 2,
                   "name": "Frustrated"
-                },
-                {
-                  "id": 3,
-                  "name": "Horrified"
-                },
-                {
-                  "id": 4,
-                  "name": "Disappointed"
-                },
-                {
-                  "id": 5,
-                  "name": "Euphoric"
-                },
-                {
-                  "id": 6,
-                  "name": "Loving"
-                },
-                {
-                  "id": 7,
-                  "name": "Happy"
-                },
-                {
-                  "id": 8,
-                  "name": "Useless"
-                },
-                {
-                  "id": 9,
-                  "name": "Regretful"
-                },
-                {
-                  "id": 10,
-                  "name": "Dejected"
-                },
-                {
-                  "id": 11,
-                  "name": "Unhappy"
-                },
-                {
-                  "id": 12,
-                  "name": "Scared"
-                },
-                {
-                  "id": 13,
-                  "name": "Anxious"
                 }
               ]
             }
@@ -109,7 +78,17 @@
           "200": {
             "description": "A specific emotion",
             "schema": {
-              "$ref": "#/definitions/Emotion"
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "Unique identifier for the emotion"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of the emotion"
+                }
+              }
             },
             "examples": {
               "application/json": {
@@ -179,7 +158,17 @@
           "200": {
             "description": "The opposite emotion",
             "schema": {
-              "$ref": "#/definitions/Emotion"
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "Unique identifier for the emotion"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of the emotion"
+                }
+              }
             },
             "examples": {
               "application/json": {
@@ -212,7 +201,17 @@
           "200": {
             "description": "The opposite emotion",
             "schema": {
-              "$ref": "#/definitions/Emotion"
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "Unique identifier for the emotion"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of the emotion"
+                }
+              }
             },
             "examples": {
               "application/json": {
@@ -238,7 +237,17 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Playlist"
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "Unique identifier for the playlist"
+                  },
+                  "uri": {
+                    "type": "string",
+                    "description": "Spotify URI for the playlist"
+                  }
+                }
               }
             },
             "examples": {
@@ -284,7 +293,17 @@
                 "tracks": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/Track"
+                    "type": "object",
+                    "properties": {
+                      "artists": {
+                        "type": "string",
+                        "description": "Name of the artist"
+                      },
+                      "titel": {
+                        "type": "string",
+                        "description": "Title of the track"
+                      }
+                    }
                   }
                 }
               }
@@ -303,7 +322,17 @@
                 "tracks": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/Track"
+                    "type": "object",
+                    "properties": {
+                      "artists": {
+                        "type": "string",
+                        "description": "Name of the artist"
+                      },
+                      "titel": {
+                        "type": "string",
+                        "description": "Title of the track"
+                      }
+                    }
                   }
                 }
               }
@@ -356,7 +385,17 @@
           "200": {
             "description": "A specific playlist",
             "schema": {
-              "$ref": "#/definitions/Playlist"
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "Unique identifier for the playlist"
+                },
+                "uri": {
+                  "type": "string",
+                  "description": "Spotify URI for the playlist"
+                }
+              }
             },
             "examples": {
               "application/json": {
@@ -432,7 +471,17 @@
                 "tracks": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/Track"
+                    "type": "object",
+                    "properties": {
+                      "artists": {
+                        "type": "string",
+                        "description": "Name of the artist"
+                      },
+                      "titel": {
+                        "type": "string",
+                        "description": "Title of the track"
+                      }
+                    }
                   }
                 }
               }
@@ -481,7 +530,17 @@
                 "tracks": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/Track"
+                    "type": "object",
+                    "properties": {
+                      "artists": {
+                        "type": "string",
+                        "description": "Name of the artist"
+                      },
+                      "titel": {
+                        "type": "string",
+                        "description": "Title of the track"
+                      }
+                    }
                   }
                 }
               }
@@ -517,47 +576,6 @@
         "playlist-modify-private": "Create private playlists",
         "playlist-read-private": "Read private playlists",
         "playlist-modify-public": "Create public playlists"
-      }
-    }
-  },
-  "definitions": {
-    "Emotion": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "description": "Unique identifier for the emotion"
-        },
-        "name": {
-          "type": "string",
-          "description": "Name of the emotion"
-        }
-      }
-    },
-    "Playlist": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "description": "Unique identifier for the playlist"
-        },
-        "uri": {
-          "type": "string",
-          "description": "Spotify URI for the playlist"
-        }
-      }
-    },
-    "Track": {
-      "type": "object",
-      "properties": {
-        "artists": {
-          "type": "string",
-          "description": "Name of the artist"
-        },
-        "titel": {
-          "type": "string",
-          "description": "Title of the track"
-        }
       }
     }
   }
