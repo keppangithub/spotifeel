@@ -3,16 +3,16 @@ info:
   title: Emotion-Based Music Recommendation API
   description: API for managing emotions and generating music recommendations based on emotions
   version: 1.0.0
-host: api.example.com
+host: localhost:8888
 basePath: /
 schemes:
-  - https
+  - http
 produces:
   - application/json
 consumes:
   - application/json
 x-swagger-ui-config:
-  supportedSubmitMethods: []  # Empty array disables "Try it out" for all methods
+  supportedSubmitMethods: [] 
 paths:
   /emotions:
     get:
@@ -26,13 +26,19 @@ paths:
             type: array
             items:
               type: object
+              properties:
+                id:
+                  type: integer
+                  description: Unique identifier for the emotion
+                name:
+                  type: string
+                  description: Name of the emotion
           examples:
             application/json:
               - id: 1
                 name: Furious
               - id: 2
                 name: Frustrated
-  
   /emotions/{id}:
     get:
       summary: Get emotion by ID
@@ -48,14 +54,20 @@ paths:
         '200':
           description: A specific emotion
           schema:
-              type: object
+            type: object
+            properties:
+              id:
+                type: integer
+                description: Unique identifier for the emotion
+              name:
+                type: string
+                description: Name of the emotion
           examples:
             application/json:
               id: 7
               name: Happy
         '404':
           description: Emotion not found
-  
   /emotions/{name}:
     get:
       summary: Get emotion ID by name
@@ -80,7 +92,6 @@ paths:
               id: 7
         '404':
           description: Emotion not found
-  
   /emotions/{id}/opposite:
     get:
       summary: Get opposite emotion by ID
@@ -96,14 +107,20 @@ paths:
         '200':
           description: The opposite emotion
           schema:
-            type: string
+            type: object
+            properties:
+              id:
+                type: integer
+                description: Unique identifier for the emotion
+              name:
+                type: string
+                description: Name of the emotion
           examples:
             application/json:
               id: 11
               name: Unhappy
         '404':
           description: Emotion not found
-  
   /emotions/{name}/opposite:
     get:
       summary: Get opposite emotion by name
@@ -119,14 +136,20 @@ paths:
         '200':
           description: The opposite emotion
           schema:
-            $ref: '#/definitions/Emotion'
+            type: object
+            properties:
+              id:
+                type: integer
+                description: Unique identifier for the emotion
+              name:
+                type: string
+                description: Name of the emotion
           examples:
             application/json:
               id: 7
               name: Happy
         '404':
           description: Emotion not found
-  
   /playlists:
     get:
       summary: Get all playlists
@@ -138,7 +161,14 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Playlist'
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: Unique identifier for the playlist
+                uri:
+                  type: string
+                  description: Spotify URI for the playlist
           examples:
             application/json:
               - id: 1
@@ -149,7 +179,6 @@ paths:
           description: Unauthorized
       security:
         - spotify_auth: []
-    
     post:
       summary: Create a playlist
       description: Create a new playlist on the user's Spotify account
@@ -168,7 +197,14 @@ paths:
               tracks:
                 type: array
                 items:
-                  $ref: '#/definitions/Track'
+                  type: object
+                  properties:
+                    artists:
+                      type: string
+                      description: Name of the artist
+                    titel:
+                      type: string
+                      description: Title of the track
       responses:
         '201':
           description: Playlist created
@@ -180,7 +216,14 @@ paths:
               tracks:
                 type: array
                 items:
-                  $ref: '#/definitions/Track'
+                  type: object
+                  properties:
+                    artists:
+                      type: string
+                      description: Name of the artist
+                    titel:
+                      type: string
+                      description: Title of the track
           examples:
             application/json:
               playlist_id: 7CY7BLvxnRa2X64BxRggJN
@@ -195,7 +238,6 @@ paths:
           description: Unauthorized
       security:
         - spotify_auth: []
-  
   /playlists/{id}:
     get:
       summary: Get playlist by ID
@@ -211,7 +253,14 @@ paths:
         '200':
           description: A specific playlist
           schema:
-            $ref: '#/definitions/Playlist'
+            type: object
+            properties:
+              id:
+                type: integer
+                description: Unique identifier for the playlist
+              uri:
+                type: string
+                description: Spotify URI for the playlist
           examples:
             application/json:
               id: 1
@@ -222,7 +271,6 @@ paths:
           description: Playlist not found
       security:
         - spotify_auth: []
-  
   /recommendations/emotion:
     get:
       summary: Get emotion recommendation
@@ -243,7 +291,6 @@ paths:
             application/json: happy
         '400':
           description: Bad request
-  
   /recommendations/songs/{id}:
     get:
       summary: Get song recommendations by emotion ID
@@ -264,7 +311,14 @@ paths:
               tracks:
                 type: array
                 items:
-                  $ref: '#/definitions/Track'
+                  type: object
+                  properties:
+                    artists:
+                      type: string
+                      description: Name of the artist
+                    titel:
+                      type: string
+                      description: Title of the track
           examples:
             application/json:
               tracks:
@@ -274,7 +328,6 @@ paths:
                   titel: Cry Me a River
         '404':
           description: Emotion not found
-  
   /recommendations/songs/{emotion}:
     get:
       summary: Get song recommendations by emotion name
@@ -295,7 +348,14 @@ paths:
               tracks:
                 type: array
                 items:
-                  $ref: '#/definitions/Track'
+                  type: object
+                  properties:
+                    artists:
+                      type: string
+                      description: Name of the artist
+                    titel:
+                      type: string
+                      description: Title of the track
           examples:
             application/json:
               tracks:
@@ -305,6 +365,12 @@ paths:
                   titel: Cry Me a River
         '404':
           description: Emotion not found
-
 securityDefinitions:
-  spotify_au
+  spotify_auth:
+    type: oauth2
+    flow: implicit
+    authorizationUrl: https://accounts.spotify.com/authorize
+    scopes:
+      playlist-modify-private: Create private playlists
+      playlist-read-private: Read private playlists
+      playlist-modify-public: Create public playlists
