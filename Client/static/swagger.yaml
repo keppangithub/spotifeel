@@ -11,6 +11,8 @@ produces:
   - application/json
 consumes:
   - application/json
+x-swagger-ui-config:
+  supportedSubmitMethods: []  # Empty array disables "Try it out" for all methods
 paths:
   /emotions:
     get:
