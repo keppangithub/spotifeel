@@ -78,7 +78,7 @@ class clientController:
             
                 userPrompt = request.form.get('userPrompt')
                 
-                response = requests.get(f'{clientController.base_url}/recommendation/emotion?prompt={userPrompt}',
+                response = requests.get(f'{clientController.base_url}/recommendations/emotion?prompt={userPrompt}',
                                         headers={'Content-Type': 'application/json'})
                     
             except Exception as e:
@@ -186,7 +186,7 @@ class clientController:
             today = date.today()
             user.get_user_information()
             
-            songs_for_playlist = requests.get(f'{clientController.base_url}/recommendation/songs/{emotion}',
+            songs_for_playlist = requests.get(f'{clientController.base_url}/recommendations/songs/{emotion}',
                         headers={'Content-Type': 'application/json'})
             emotion = str(emotion)
             json_format = {'name' : 'name', 'tracks' : []}
