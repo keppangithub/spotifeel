@@ -1,41 +1,104 @@
 {
-  "openapi": "3.0.0",
+  "swagger": "2.0",
   "info": {
-    "title": "Spotifeel",
-    "description": "API for retrieving playlists based on  emotions",
+    "title": "Emotion-Based Music Recommendation API",
+    "description": "API for managing emotions and generating music recommendations based on emotions",
     "version": "1.0.0"
   },
-  "servers": [
-    {
-      "url": "http://localhost:8888",
-      "description": "Local server"
-    }
+  "host": "localhost:8888",
+  "basePath": "/",
+  "schemes": [
+    "http"
   ],
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "x-swagger-ui-config": {
+    "supportedSubmitMethods": []
+  },
   "paths": {
     "/emotions": {
       "get": {
-        "summary": "Retrieve a list of all emotions",
+        "summary": "Get all emotions",
+        "description": "Retrieve a list of all emotions that the API uses",
         "operationId": "getEmotions",
         "responses": {
           "200": {
             "description": "A list of emotions",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "integer"
-                      },
-                      "name": {
-                        "type": "string"
-                      }
-                    }
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "Unique identifier for the emotion"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the emotion"
                   }
                 }
               }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "id": 1,
+                  "name": "Furious"
+                },
+                {
+                  "id": 2,
+                  "name": "Frustrated"
+                },
+                {
+                  "id": 3,
+                  "name": "Happy"
+                },
+                {
+                  "id": 4,
+                  "name": "Furious"
+                },
+                {
+                  "id": 5,
+                  "name": "Frustrated"
+                },
+                {
+                  "id": 6,
+                  "name": "Horrified"
+                },
+                {
+                  "id": 7,
+                  "name": "Disappointed"
+                },
+                {
+                  "id": 8,
+                  "name": "Useless"
+                },
+                {
+                  "id": 9,
+                  "name": "Regretful"
+                },
+                {
+                  "id": 10,
+                  "name": "Dejected"
+                },
+                {
+                  "id": 11,
+                  "name": "Unhappy"
+                },
+                {
+                  "id": 12,
+                  "name": "Scared"
+                },
+                {
+                  "id": 13,
+                  "name": "Anxious"
+                }
+              ]
             }
           }
         }
@@ -43,135 +106,246 @@
     },
     "/emotions/{id}": {
       "get": {
-        "summary": "Retrieve a specific emotion by ID",
+        "summary": "Get emotion by ID",
+        "description": "Retrieve a specific emotion by its ID",
         "operationId": "getEmotionById",
         "parameters": [
           {
             "name": "id",
             "in": "path",
+            "description": "ID of the emotion to retrieve",
             "required": true,
-            "schema": {
-              "type": "integer"
-            }
+            "type": "integer"
           }
         ],
         "responses": {
           "200": {
-            "description": "An emotion",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
+            "description": "A specific emotion",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "Unique identifier for the emotion"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of the emotion"
                 }
               }
+            },
+            "examples": {
+              "application/json": {
+                "id": 7,
+                "name": "Happy"
+              }
             }
+          },
+          "404": {
+            "description": "Emotion not found"
           }
         }
       }
     },
-    "/emotions/{emotion}": {
+    "/emotions/{name}": {
       "get": {
-        "summary": "Retrieve a specific emotion by name",
+        "summary": "Get emotion ID by name",
+        "description": "Retrieve a specific emotion ID by its name",
         "operationId": "getEmotionByName",
         "parameters": [
           {
-            "name": "emotion",
+            "name": "name",
             "in": "path",
+            "description": "Name of the emotion to retrieve",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "An emotion ID",
-            "content": {
-              "application/json": {
-                "schema": {
+            "description": "The ID of the emotion",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
                   "type": "integer"
                 }
               }
+            },
+            "examples": {
+              "application/json": {
+                "id": 7
+              }
             }
+          },
+          "404": {
+            "description": "Emotion not found"
           }
         }
       }
     },
     "/emotions/{id}/opposite": {
       "get": {
-        "summary": "Retrieve the opposite emotion by ID",
+        "summary": "Get opposite emotion by ID",
+        "description": "Retrieve the opposite emotion for a given emotion ID",
         "operationId": "getOppositeEmotionById",
         "parameters": [
           {
             "name": "id",
             "in": "path",
+            "description": "ID of the emotion to find the opposite for",
             "required": true,
-            "schema": {
-              "type": "integer"
-            }
+            "type": "integer"
           }
         ],
         "responses": {
           "200": {
             "description": "The opposite emotion",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "Unique identifier for the emotion"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of the emotion"
                 }
               }
+            },
+            "examples": {
+              "application/json": {
+                "id": 11,
+                "name": "Unhappy"
+              }
             }
+          },
+          "404": {
+            "description": "Emotion not found"
           }
         }
       }
     },
-    "/emotions/{emotion}/opposite": {
+    "/emotions/{name}/opposite": {
       "get": {
-        "summary": "Retrieve the opposite emotion by name",
+        "summary": "Get opposite emotion by name",
+        "description": "Retrieve the opposite emotion for a given emotion name",
         "operationId": "getOppositeEmotionByName",
         "parameters": [
           {
-            "name": "emotion",
+            "name": "name",
             "in": "path",
+            "description": "Name of the emotion to find the opposite for",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "The opposite emotion",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "Unique identifier for the emotion"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of the emotion"
                 }
               }
+            },
+            "examples": {
+              "application/json": {
+                "id": 7,
+                "name": "Happy"
+              }
             }
+          },
+          "404": {
+            "description": "Emotion not found"
           }
         }
       }
     },
     "/playlists": {
       "get": {
-        "summary": "Retrieve all playlists of the current user",
-        "operationId": "getAllPlaylists",
+        "summary": "Get all playlists",
+        "description": "Retrieve all playlists created by the current user",
+        "operationId": "getPlaylists",
         "responses": {
           "200": {
             "description": "A list of playlists",
-            "content": {
-              "application/json": {
-                "schema": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "Unique identifier for the playlist"
+                  },
+                  "uri": {
+                    "type": "string",
+                    "description": "Spotify URI for the playlist"
+                  }
+                }
+              }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "id": 1,
+                  "uri": "7CY7BLvxnRa2X64BxRggJN"
+                },
+                {
+                  "id": 2,
+                  "uri": "3ZE0WhqnsrdZHMKqZ4pCZx"
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "spotify_auth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create a playlist",
+        "description": "Create a new playlist on the user's Spotify account",
+        "operationId": "createPlaylist",
+        "parameters": [
+          {
+            "name": "playlist",
+            "in": "body",
+            "description": "Playlist to create",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "happy"
+                },
+                "tracks": {
                   "type": "array",
                   "items": {
                     "type": "object",
                     "properties": {
-                      "id": {
-                        "type": "integer"
+                      "artists": {
+                        "type": "string",
+                        "description": "Name of the artist"
                       },
-                      "name": {
-                        "type": "string"
+                      "titel": {
+                        "type": "string",
+                        "description": "Title of the track"
                       }
                     }
                   }
@@ -179,52 +353,273 @@
               }
             }
           }
-        }
-      },
-      "post": {
-        "summary": "Create a new playlist on the user's Spotify account",
-        "operationId": "createPlaylist",
+        ],
         "responses": {
           "201": {
-            "description": "Playlist created successfully"
+            "description": "Playlist created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "playlist_id": {
+                  "type": "string"
+                },
+                "tracks": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "artists": {
+                        "type": "string",
+                        "description": "Name of the artist"
+                      },
+                      "titel": {
+                        "type": "string",
+                        "description": "Title of the track"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "playlist_id": "7CY7BLvxnRa2X64BxRggJN",
+                "tracks": [
+                  {
+                    "artists": "Robyn",
+                    "titel": "Dancing On My Own"
+                  },
+                  {
+                    "artists": "Justin Timberlake",
+                    "titel": "Cry Me a River"
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
-        }
+        },
+        "security": [
+          {
+            "spotify_auth": []
+          }
+        ]
       }
     },
     "/playlists/{id}": {
       "get": {
-        "summary": "Retrieve a specific playlist by ID",
+        "summary": "Get playlist by ID",
+        "description": "Retrieve a specific playlist by its ID",
         "operationId": "getPlaylistById",
         "parameters": [
           {
             "name": "id",
             "in": "path",
+            "description": "ID of the playlist to retrieve",
             "required": true,
-            "schema": {
-              "type": "integer"
-            }
+            "type": "integer"
           }
         ],
         "responses": {
           "200": {
-            "description": "A playlist",
-            "content": {
+            "description": "A specific playlist",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "Unique identifier for the playlist"
+                },
+                "uri": {
+                  "type": "string",
+                  "description": "Spotify URI for the playlist"
+                }
+              }
+            },
+            "examples": {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "name": {
-                      "type": "string"
+                "id": 1,
+                "uri": "29TyOo4cPCydCPpGpVXBdA"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Playlist not found"
+          }
+        },
+        "security": [
+          {
+            "spotify_auth": []
+          }
+        ]
+      }
+    },
+    "/recommendations/emotion": {
+      "get": {
+        "summary": "Get emotion recommendation",
+        "description": "Generate an emotion based on a user prompt",
+        "operationId": "getEmotionRecommendation",
+        "parameters": [
+          {
+            "name": "prompt",
+            "in": "query",
+            "description": "User text prompt for emotion analysis",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The recommended emotion",
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "application/json": "happy"
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/recommendations/songs/{id}": {
+      "get": {
+        "summary": "Get song recommendations by emotion ID",
+        "description": "Generate song recommendations based on an emotion ID",
+        "operationId": "getSongRecommendationsById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the emotion for recommendations",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Track recommendations",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tracks": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "artists": {
+                        "type": "string",
+                        "description": "Name of the artist"
+                      },
+                      "titel": {
+                        "type": "string",
+                        "description": "Title of the track"
+                      }
                     }
                   }
                 }
               }
+            },
+            "examples": {
+              "application/json": {
+                "tracks": [
+                  {
+                    "artists": "Robyn",
+                    "titel": "Dancing On My Own"
+                  },
+                  {
+                    "artists": "Justin Timberlake",
+                    "titel": "Cry Me a River"
+                  }
+                ]
+              }
             }
+          },
+          "404": {
+            "description": "Emotion not found"
           }
         }
+      }
+    },
+    "/recommendations/songs/{emotion}": {
+      "get": {
+        "summary": "Get song recommendations by emotion name",
+        "description": "Generate song recommendations based on an emotion name",
+        "operationId": "getSongRecommendationsByEmotion",
+        "parameters": [
+          {
+            "name": "emotion",
+            "in": "path",
+            "description": "Name of the emotion for recommendations",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Track recommendations",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tracks": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "artists": {
+                        "type": "string",
+                        "description": "Name of the artist"
+                      },
+                      "titel": {
+                        "type": "string",
+                        "description": "Title of the track"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "tracks": [
+                  {
+                    "artists": "Robyn",
+                    "titel": "Dancing On My Own"
+                  },
+                  {
+                    "artists": "Justin Timberlake",
+                    "titel": "Cry Me a River"
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "Emotion not found"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "spotify_auth": {
+      "type": "oauth2",
+      "flow": "implicit",
+      "authorizationUrl": "https://accounts.spotify.com/authorize",
+      "scopes": {
+        "playlist-modify-private": "Create private playlists",
+        "playlist-read-private": "Read private playlists",
+        "playlist-modify-public": "Create public playlists"
       }
     }
   }
