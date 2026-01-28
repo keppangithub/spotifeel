@@ -29,4 +29,4 @@ class TestAppExists:
         
     def test_app_is_testing(self, client):
         """Test that app is in testing mode"""
-        assert app.config['TESTING'] == True
+        assert app.config['TESTING']

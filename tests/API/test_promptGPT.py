@@ -7,25 +7,25 @@ class TestIsEmotionValid:
     
     def test_valid_emotion_lowercase(self):
         """Test that valid lowercase emotions return True"""
-        assert promptGPT.is_emotion_valid("happy") == True
-        assert promptGPT.is_emotion_valid("furious") == True
-        assert promptGPT.is_emotion_valid("anxious") == True
+        assert promptGPT.is_emotion_valid("happy")
+        assert promptGPT.is_emotion_valid("furious")
+        assert promptGPT.is_emotion_valid("anxious")
         
     def test_valid_emotion_uppercase(self):
         """Test that valid uppercase emotions return True"""
-        assert promptGPT.is_emotion_valid("HAPPY") == True
-        assert promptGPT.is_emotion_valid("FURIOUS") == True
+        assert promptGPT.is_emotion_valid("HAPPY")
+        assert promptGPT.is_emotion_valid("FURIOUS")
         
     def test_valid_emotion_mixed_case(self):
         """Test that valid mixed case emotions return True"""
-        assert promptGPT.is_emotion_valid("Happy") == True
-        assert promptGPT.is_emotion_valid("Furious") == True
+        assert promptGPT.is_emotion_valid("Happy")
+        assert promptGPT.is_emotion_valid("Furious")
         
     def test_invalid_emotion(self):
         """Test that invalid emotions return False"""
-        assert promptGPT.is_emotion_valid("excited") == False
-        assert promptGPT.is_emotion_valid("bored") == False
-        assert promptGPT.is_emotion_valid("") == False
+        assert not promptGPT.is_emotion_valid("excited")
+        assert not promptGPT.is_emotion_valid("bored")
+        assert not promptGPT.is_emotion_valid("")
         
     def test_all_valid_emotions(self):
         """Test all valid emotions from the list"""
@@ -35,7 +35,7 @@ class TestIsEmotionValid:
             'dejected', 'unhappy', 'scared', 'anxious'
         ]
         for emotion in valid_emotions:
-            assert promptGPT.is_emotion_valid(emotion) == True
+            assert promptGPT.is_emotion_valid(emotion)
 
 
 class TestFormatPlaylist:
