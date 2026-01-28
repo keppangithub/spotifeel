@@ -57,6 +57,26 @@ myenv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+**Running Tests**
+
+The project includes unit tests using pytest. To run the tests:
+
+```
+pytest
+```
+
+To run tests with coverage report:
+
+```
+pytest --cov --cov-report=term
+```
+
+To run tests with detailed output:
+
+```
+pytest -v
+```
+
 **In order to run the mashup service you need to create a .env file in which you should put the received keys like this**\
 CLIENT_ID='PUT KEY HERE'\
 CLIENT_SECRET='PUT KEY HERE'\

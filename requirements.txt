@@ -4,3 +4,6 @@ openai==1.59.3
 flask-swagger-ui==4.11.1
 pyyaml==6.0.2
 Flask==3.1.0
+pytest==7.4.3
+pytest-cov==4.1.0
+pytest-mock==3.12.0
